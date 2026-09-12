@@ -2,7 +2,7 @@ const heartField = document.querySelector('#heart-field');
 const celebrateButton = document.querySelector('#celebrate-button');
 const toast = document.querySelector('#toast');
 const noteText = document.querySelector('#note-text');
-const memoryPreview = document.querySelector('#memory-preview');
+const littleLetterPreview = document.querySelector('#little-letter-preview');
 
 const reminders = [
   'You are one of my favorite plot twists. ♡',
@@ -91,9 +91,9 @@ celebrateButton.addEventListener('click', () => {
   showToast(reminder);
 });
 
-document.querySelectorAll('.memory-file').forEach((file) => {
+document.querySelectorAll('.little-letter-file').forEach((file) => {
   file.addEventListener('click', () => {
-    memoryPreview.textContent = file.dataset.memory;
+    littleLetterPreview.textContent = file.dataset.letter;
   });
 });
 

@@ -364,12 +364,12 @@ h1 em { color: #ec4c91; font-style: normal; }
 .note-signoff span { color: #ef4a91; font-size: 18px; }
 .is-hidden { display: none; }
 
-.memories-window { left: 50%; top: 50%; }
-.memories-body { display: grid; gap: 8px; }
-.memory-file { padding: 8px; border: 1px solid transparent; background: transparent; text-align: left; cursor: pointer; font-size: 11px; }
-.memory-file:hover, .memory-file:focus { color: white; background: #d83d82; border: 1px dotted white; outline: 0; }
-.memory-file span { margin-right: 7px; }
-.memory-preview { min-height: 48px; margin: 8px 0 0; padding: 12px; border: 2px inset #ffd0e2; background: #fff; font-size: 10px; line-height: 1.5; }
+.little-letters-window { left: 50%; top: 50%; }
+.little-letters-body { display: grid; gap: 8px; }
+.little-letter-file { padding: 8px; border: 1px solid transparent; background: transparent; text-align: left; cursor: pointer; font-size: 11px; }
+.little-letter-file:hover, .little-letter-file:focus { color: white; background: #d83d82; border: 1px dotted white; outline: 0; }
+.little-letter-file span { margin-right: 7px; }
+.little-letter-preview { min-height: 66px; margin: 8px 0 0; padding: 13px; border: 2px inset #ffd0e2; background: #fff; font-size: 10px; line-height: 1.6; }
 
 .letter-window {
   position: fixed;
@@ -503,7 +503,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   .card-label { font-size: 16px; }
   .online { width: 100%; margin-top: -10px; }
   .taskbar-item { display: none; }
-  .memories-window { left: 50%; top: 50%; }
+  .little-letters-window { left: 50%; top: 50%; }
   .letter-body { max-height: calc(100vh - 100px); padding: 26px 22px; font-size: 14px; }
 }
 

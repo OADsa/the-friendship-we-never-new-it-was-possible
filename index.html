@@ -9,7 +9,7 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=3" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
@@ -17,9 +17,9 @@
 
     <main class="desktop">
       <section class="desktop-icons" aria-label="Desktop shortcuts">
-        <button class="desktop-icon" data-open="memories-window" type="button">
+        <button class="desktop-icon" data-open="little-letters-window" type="button">
           <span class="folder-icon" aria-hidden="true"><span></span></span>
-          <span>our memories</span>
+          <span>little letters</span>
         </button>
         <button class="desktop-icon" data-open="note-window" type="button">
           <span class="note-icon" aria-hidden="true">♥</span>
@@ -103,24 +103,27 @@
         </div>
       </section>
 
-      <section class="window mini-window memories-window is-hidden" id="memories-window" aria-labelledby="memories-title">
+      <section class="window mini-window little-letters-window is-hidden" id="little-letters-window" aria-labelledby="little-letters-title">
         <header class="title-bar">
-          <div class="title-bar-label"><span>📁</span><span id="memories-title">C:\OUR_MEMORIES</span></div>
+          <div class="title-bar-label"><span>📁</span><span id="little-letters-title">C:\LITTLE_LETTERS</span></div>
           <div class="window-controls">
-            <button class="close-window" type="button" aria-label="Close memories">×</button>
+            <button class="close-window" type="button" aria-label="Close little letters">×</button>
           </div>
         </header>
-        <div class="window-body memories-body">
-          <button class="memory-file" type="button" data-memory="The day we realized we could tell each other anything.">
-            <span>🖼️</span> first_laugh.jpg
+        <div class="window-body little-letters-body">
+          <button class="little-letter-file" type="button" data-letter="I’m really glad you’re here. That’s all—just something I hope you never forget. ♡">
+            <span>💌</span> for_you.txt
           </button>
-          <button class="memory-file" type="button" data-memory="Every little check-in that said: I’m still here.">
-            <span>💌</span> tiny_things.txt
+          <button class="little-letter-file" type="button" data-letter="You never have to be anything other than yourself with me. I like you exactly as you are.">
+            <span>🌷</span> be_yourself.txt
           </button>
-          <button class="memory-file" type="button" data-memory="More good days are still downloading…">
-            <span>✨</span> the_future.gif
+          <button class="little-letter-file" type="button" data-letter="If today feels heavy, remember you don’t have to carry everything alone. I’m always one message away.">
+            <span>♥</span> open_when_sad.txt
           </button>
-          <p class="memory-preview" id="memory-preview">Select a memory to preview.</p>
+          <button class="little-letter-file" type="button" data-letter="No special reason. I just wanted to remind you that you matter to me—a lot.">
+            <span>✨</span> just_because.txt
+          </button>
+          <p class="little-letter-preview" id="little-letter-preview">Choose a little letter to read. ♡</p>
         </div>
       </section>
 
@@ -166,6 +169,6 @@
     </footer>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js"></script>
+    <script src="script.js?v=3"></script>
   </body>
 </html>
