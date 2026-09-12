@@ -435,14 +435,15 @@ const valhallaFiles = [
     body: ['Jack saw blue threaded with gold inside the hidden boy.', 'Sasaki found memories removed with surgical precision.', 'Buddha predicted that one particular detective would find him.', 'Keeper’s note: “The missing piece is not an object.”'],
     prompt: 'What was the Keeper truly investigating?',
     hint: 'The Keeper says the missing piece is not an object. Look for who was removed from history.',
+    choices: ['A MURDER WEAPON', 'A DISAPPEARED PERSON', 'A STOLEN CROWN'],
     accepted: ['A DISAPPEARED PERSON', 'DISAPPEARED PERSON', 'A PERSON', 'DEKDEK'], correct: 'A DISAPPEARED PERSON',
     success: 'Case direction corrected: the murder concealed a second crime—the erasure of a living person.'
   },
   {
-    number: '03', date: 'DATE REDACTED', title: 'THE INTENDED DETECTIVE', kind: 'FIRST-LETTER MESSAGE',
-    body: ['Broken records wait for her.', 'Every false trail will test her.', 'Memory will lead her below.', 'Because she notices who is missing.', 'Under no crown will she stop.', 'Name her, and the final seal breaks.'],
-    prompt: 'The first letters identify the person this case was left for. Who?',
-    hint: 'The start of every sentence spells the name of the detective.',
+    number: '03', date: 'DATE REDACTED', title: 'THE INTENDED DETECTIVE', kind: 'MATHEMATICAL NAME CODE',
+    body: ['The final seal contains six unfinished calculations:', '(3 × 4) − 10 = ___', '(18 ÷ 3) − 1 = ___', '(4 × 4) − 3 = ___', '(10 ÷ 2) − 3 = ___', '(6 × 4) − 3 = ___', '(5 × 3) − 1 = ___', 'Solve every blank, then convert the six answers using A=1, B=2, C=3…'],
+    prompt: 'What name appears after every equation has been solved and decoded?',
+    hint: 'Work through each equation separately. Once you have six numbers, match each one to its position in the alphabet.',
     accepted: ['BEMBUN'], correct: 'BEMBUN',
     success: 'The file was addressed to Bembun before the murder happened. The Keeper chose his detective in advance.'
   },
@@ -817,7 +818,18 @@ function renderValhallaCase() {
       .sort((first, second) => Number(first.number) - Number(second.number))
       .map((item) => `<span class="${solvedFiles.has(item.number) ? 'is-solved' : item.number === file.number ? 'is-current' : ''}">${item.number}</span>`)
       .join('');
-    const body = file.body.map((line) => `<p>${line}</p>`).join('');
+    const body = file.body.map((line) => `<p class="${file.kind === 'MATHEMATICAL NAME CODE' && line.includes('=') ? 'archive-equation' : ''}">${line}</p>`).join('');
+    const answerControl = file.choices
+      ? `<div class="deduction-list valhalla-choice-list">
+          ${file.choices.map((choice) => `<button class="deduction-option valhalla-answer" type="button" data-case2-choice="${choice}">${choice}</button>`).join('')}
+        </div>`
+      : `<form class="valhalla-input-form" id="case2-answer-form" autocomplete="off">
+          <label for="case2-answer-input">Type your deduction</label>
+          <div class="valhalla-input-row">
+            <input id="case2-answer-input" name="deduction" type="text" placeholder="enter your answer..." aria-describedby="case2-feedback" required />
+            <button class="pixel-button primary-button" type="submit">submit</button>
+          </div>
+        </form>`;
     mysteryScreen.innerHTML = `
       <article class="case-panel valhalla-panel">
         <div class="archive-order" aria-label="Recovered file order">${order}</div>
@@ -825,13 +837,7 @@ function renderValhallaCase() {
         <h2 class="case-heading">${file.title}</h2>
         <div class="archive-document">${body}</div>
         <p class="case-copy puzzle-prompt"><strong>${file.prompt}</strong></p>
-        <form class="valhalla-input-form" id="case2-answer-form" autocomplete="off">
-          <label for="case2-answer-input">Type your deduction</label>
-          <div class="valhalla-input-row">
-            <input id="case2-answer-input" name="deduction" type="text" placeholder="enter your answer..." aria-describedby="case2-feedback" required />
-            <button class="pixel-button primary-button" type="submit">submit</button>
-          </div>
-        </form>
+        ${answerControl}
         <button class="valhalla-clue-button" type="button" data-case2-clue aria-expanded="false">need a clue?</button>
         <p class="valhalla-clue" id="case2-clue" hidden>${file.hint}</p>
         <p class="case-feedback" id="case2-feedback" aria-live="polite">The archive is waiting for your deduction.</p>
@@ -1085,6 +1091,27 @@ function submitValhallaDeduction(form) {
   }, 1400);
 }
 
+function submitValhallaChoice(button) {
+  const file = valhallaFiles[case2Stage - 2];
+  const feedback = document.querySelector('#case2-feedback');
+  document.querySelectorAll('[data-case2-choice]').forEach((choice) => choice.classList.remove('is-wrong'));
+
+  if (button.dataset.case2Choice !== file.correct) {
+    button.classList.add('is-wrong');
+    feedback.textContent = 'The archive rejects that deduction. Compare it with every piece of evidence.';
+    return;
+  }
+
+  document.querySelectorAll('[data-case2-choice]').forEach((choice) => { choice.disabled = true; });
+  button.classList.add('is-correct');
+  feedback.textContent = file.success;
+  window.setTimeout(() => {
+    case2Stage += 1;
+    renderMysteryGame();
+    playMysteryStageVoice(true);
+  }, 1400);
+}
+
 mysteryScreen.addEventListener('submit', (event) => {
   if (event.target.id !== 'case2-answer-form') return;
   event.preventDefault();
@@ -1100,6 +1127,7 @@ mysteryScreen.addEventListener('click', (event) => {
   const case2ActionButton = event.target.closest('[data-case2-action]');
   const case2PrologueButton = event.target.closest('[data-case2-prologue]');
   const case2ClueButton = event.target.closest('[data-case2-clue]');
+  const case2ChoiceButton = event.target.closest('[data-case2-choice]');
 
   if (activeMysteryCase === 2) {
     if (actionButton?.dataset.gameAction === 'case1') {
@@ -1131,6 +1159,11 @@ mysteryScreen.addEventListener('click', (event) => {
       clue.hidden = !willShow;
       case2ClueButton.setAttribute('aria-expanded', String(willShow));
       case2ClueButton.textContent = willShow ? 'hide clue' : 'need a clue?';
+      return;
+    }
+
+    if (case2ChoiceButton) {
+      submitValhallaChoice(case2ChoiceButton);
       return;
     }
 

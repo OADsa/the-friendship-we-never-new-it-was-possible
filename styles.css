@@ -548,11 +548,13 @@ h1 em { color: #ec4c91; font-style: normal; }
 .archive-order span.is-current { color: #171119; border-color: #f0d17f; background: #c09b4c; box-shadow: inset 2px 2px #e2c878; animation: archive-pulse 1s steps(2) infinite; }
 .archive-document { margin: 17px 0; padding: 18px; color: #332a26; border: 2px solid #8f743f; background: linear-gradient(rgba(249, 232, 190, .95), rgba(218, 195, 142, .95)), repeating-linear-gradient(0deg, transparent 0 25px, rgba(89,64,41,.18) 26px); box-shadow: 6px 6px #392c28; transform: rotate(-.25deg); }
 .archive-document p { margin: 6px 0; font: 600 10px/1.55 Georgia, serif; }
+.archive-document .archive-equation { margin: 7px 0; padding: 7px 10px; color: #241d1a; border: 1px dashed rgba(81, 61, 37, .55); background: rgba(255, 248, 218, .32); font: 700 13px/1.35 "Pixelify Sans", monospace; letter-spacing: .05em; }
 .puzzle-prompt { color: #f1dfaa !important; }
 .valhalla-answer { color: #dfd6d9; border-color: #8f7441 #2b222a #2b222a #8f7441; background: #211922; box-shadow: 3px 3px #050405; }
 .valhalla-answer:hover { color: #1a1218; background: #d1ad5a; }
 .valhalla-answer.is-correct { color: #fff7df; background: #6f6b32; }
 .valhalla-answer.is-wrong { background: #7d2638; }
+.valhalla-choice-list { margin-top: 12px; }
 .valhalla-panel .case-feedback { color: #d7bd78; }
 .valhalla-input-form { margin: 14px 0 10px; padding: 13px; border: 1px solid #735d35; background: rgba(0, 0, 0, .28); }
 .valhalla-input-form label { display: block; margin-bottom: 8px; color: #c8ae6b; font: 700 10px "Pixelify Sans", monospace; letter-spacing: .06em; text-transform: uppercase; }
