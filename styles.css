@@ -551,6 +551,18 @@ h1 em { color: #ec4c91; font-style: normal; }
 .valhalla-answer.is-correct { color: #fff7df; background: #6f6b32; }
 .valhalla-answer.is-wrong { background: #7d2638; }
 .valhalla-panel .case-feedback { color: #d7bd78; }
+.valhalla-input-form { margin: 14px 0 10px; padding: 13px; border: 1px solid #735d35; background: rgba(0, 0, 0, .28); }
+.valhalla-input-form label { display: block; margin-bottom: 8px; color: #c8ae6b; font: 700 10px "Pixelify Sans", monospace; letter-spacing: .06em; text-transform: uppercase; }
+.valhalla-input-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+.valhalla-input-row input { min-width: 0; min-height: 44px; padding: 9px 11px; color: #f6e8bd; border: 2px solid; border-color: #a78947 #3e3039 #3e3039 #a78947; outline: 0; background: #171119; font: 700 13px "Pixelify Sans", monospace; text-transform: uppercase; box-shadow: inset 2px 2px #09070a; }
+.valhalla-input-row input:focus { border-color: #f1d58c; box-shadow: 0 0 0 2px rgba(222, 183, 88, .18), inset 2px 2px #09070a; }
+.valhalla-input-form.is-wrong { animation: archive-reject .28s linear 2; border-color: #a9424e; }
+.valhalla-input-form.is-wrong input { border-color: #c7505d; }
+.valhalla-input-form.is-correct { border-color: #a8a65b; background: rgba(105, 110, 49, .2); }
+.valhalla-clue-button { margin: 2px 0 8px; padding: 7px 10px; color: #e3c77c; border: 1px dashed #8c713c; background: transparent; font: 700 10px "Pixelify Sans", monospace; cursor: pointer; }
+.valhalla-clue-button:hover, .valhalla-clue-button:focus-visible { color: #171019; background: #d4b665; outline: 0; }
+.valhalla-clue { margin: 0 0 10px; padding: 11px 13px; color: #ead89f; border-left: 4px solid #bd9848; background: rgba(110, 82, 38, .2); font: 700 10px/1.55 "Pixelify Sans", monospace; }
+@keyframes archive-reject { 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
 .found-scene { text-align: center; }
 .found-silhouette { width: 112px; height: 145px; margin: 18px auto; display: grid; place-items: center; color: #e0c475; border: 2px solid #806a3e; border-radius: 48% 48% 18% 18%; background: radial-gradient(circle at 50% 28%, #46333f 0 20%, #17121c 21% 100%); box-shadow: 0 0 35px rgba(206, 172, 88, .18); }
 .found-silhouette span { font: 700 27px Georgia, serif; }
@@ -1094,6 +1106,8 @@ h1 em { color: #ec4c91; font-style: normal; }
   .archive-order { gap: 3px; }
   .archive-order span { min-height: 25px; font-size: 8px; }
   .keeper-message { padding: 14px; font-size: 11px; }
+  .valhalla-input-row { grid-template-columns: 1fr; }
+  .valhalla-input-row .pixel-button { width: 100%; }
   .evidence-grid, .suspect-grid { gap: 7px; }
   .evidence-card, .suspect-card { min-height: 88px; padding: 10px; }
   .deduction-option { min-height: 56px; }

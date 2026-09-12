@@ -365,54 +365,93 @@ const valhallaSuspects = [
   { id: 'odin', mark: 'O', name: 'Odin', role: 'The All-Father', statement: '“There is no boy without a story.” His ravens repeat one word: “Forgotten.”' }
 ];
 
+const valhallaSuspectVoices = {
+  loki: { src: 'assets/audio/valhalla-loki.m4a', label: 'LOKI’S STATEMENT' },
+  jack: { src: 'assets/audio/valhalla-jack.m4a', label: 'JACK’S STATEMENT' },
+  sasaki: { src: 'assets/audio/valhalla-sasaki.m4a', label: 'SASAKI’S STATEMENT' },
+  poseidon: { src: 'assets/audio/valhalla-poseidon.m4a', label: 'POSEIDON’S STATEMENT' },
+  shiva: { src: 'assets/audio/valhalla-shiva.m4a', label: 'SHIVA’S STATEMENT' },
+  buddha: { src: 'assets/audio/valhalla-buddha.m4a', label: 'BUDDHA’S STATEMENT' },
+  zeus: { src: 'assets/audio/valhalla-zeus.m4a', label: 'ZEUS’S STATEMENT' },
+  odin: { src: 'assets/audio/valhalla-odin.m4a', label: 'ODIN’S STATEMENT' }
+};
+
+const valhallaPrologueVoices = [
+  { src: 'assets/audio/valhalla-prologue-1.m4a', label: 'SOMEONE WAS MISSING FROM ETERNITY' },
+  { src: 'assets/audio/valhalla-prologue-2.m4a', label: 'THE ARCHIVE BELL' },
+  { src: 'assets/audio/valhalla-prologue-3.m4a', label: 'THE SURVIVING FRAGMENT' },
+  { src: 'assets/audio/valhalla-prologue-4.m4a', label: 'THE SUMMONS' }
+];
+
+const valhallaStageVoices = {
+  1: { src: 'assets/audio/valhalla-eight-suspects.m4a', label: 'EIGHT SUSPECTS' },
+  2: { src: 'assets/audio/valhalla-keepers-last-verse.m4a', label: 'THE KEEPER’S LAST VERSE' },
+  3: { src: 'assets/audio/valhalla-shifted-name.m4a', label: 'THE SHIFTED NAME' },
+  4: { src: 'assets/audio/valhalla-numbered-door.m4a', label: 'THE NUMBERED DOOR' },
+  5: { src: 'assets/audio/valhalla-impossible-alibi.m4a', label: 'THE IMPOSSIBLE ALIBI' },
+  6: { src: 'assets/audio/valhalla-missing-piece.m4a', label: 'THE MISSING PIECE' },
+  7: { src: 'assets/audio/valhalla-intended-detective.m4a', label: 'THE INTENDED DETECTIVE' },
+  8: { src: 'assets/audio/valhalla-raven-order.m4a', label: 'THE RAVEN ORDER' },
+  9: { src: 'assets/audio/valhalla-bembun-finds-boy.m4a', label: 'BEMBUN FINDS THE BOY' },
+  10: { src: 'assets/audio/valhalla-what-did-dekdek-lose.m4a', label: 'WHAT DID DEKDEK LOSE?' },
+  11: { src: 'assets/audio/valhalla-keeper-last-message.m4a', label: 'THE RECORD KEEPER’S LAST MESSAGE' }
+};
+
 const valhallaFiles = [
   {
     number: '05', date: 'UNKNOWN', title: 'THE KEEPER’S LAST VERSE', kind: 'ACROSTIC',
     body: ['Find what the fire could not erase.', 'Inside the silence, a trail remains.', 'No god will speak the hidden name.', 'Dust guards the first truth.', 'Do not trust the order of these files.', 'Every beginning matters.', 'Keep only the first mark.', 'Do the same after the divide.', 'Every erased line still leaves a shape.', 'Keep looking.'],
-    prompt: 'Read the first letter of every line. What instruction survives?',
-    options: ['FIND DEKDEK', 'FOLLOW ODIN', 'CLOSE THE CASE'], correct: 'FIND DEKDEK',
+    prompt: 'A hidden instruction survived the fire. What does it say?',
+    hint: 'The beginning of each surviving line matters. Separate the message into two words.',
+    accepted: ['FIND DEKDEK', 'FINDDEKDEK'], correct: 'FIND DEKDEK',
     success: 'Identity fragment recovered: DEKDEK. No matching citizen exists in Valhalla’s official records.'
   },
   {
     number: '02', date: '3 DAYS BEFORE', title: 'THE SHIFTED NAME', kind: 'CAESAR CIPHER',
     body: ['A strip of paper was hidden beneath the Record Keeper’s desk:', 'GHNGHN', 'Margin note: “The throne stands three steps too far forward.”'],
     prompt: 'Shift every letter three places backward. What name appears?',
-    options: ['DEKDEK', 'BEMBUN', 'ODIN'], correct: 'DEKDEK',
+    hint: 'Move G back three letters to get D. Do the same to every character.',
+    accepted: ['DEKDEK'], correct: 'DEKDEK',
     success: 'The same erased name appears twice. Someone expected the first clue to be destroyed.'
   },
   {
     number: '07', date: '11:47 PM', title: 'THE NUMBERED DOOR', kind: 'NUMBER SEQUENCE',
     body: ['The forgotten archive door has no keyhole.', 'Its dial reads: 4–5–11 / 4–5–11', 'Use A=1, B=2, C=3…'],
     prompt: 'Which name opens the door?',
-    options: ['DEKDEK', 'LOKLOK', 'DREKON'], correct: 'DEKDEK',
+    hint: 'Turn each number into its matching alphabet letter, then read both groups together.',
+    accepted: ['DEKDEK'], correct: 'DEKDEK',
     success: 'The door opens. Behind it: a room deliberately removed from every map of Valhalla.'
   },
   {
     number: '01', date: 'NIGHT OF THE MURDER', title: 'THE IMPOSSIBLE ALIBI', kind: 'TIMELINE',
     body: ['11:41 — Shiva saw the Keeper carrying a ledger west.', '11:44 — Poseidon claims the western archive had been sealed since 11:30.', '11:46 — Sasaki saw fresh wet footprints leaving that archive.', '11:47 — The Record Keeper was killed.'],
     prompt: 'Whose statement cannot coexist with the physical timeline?',
-    options: ['SHIVA', 'POSEIDON', 'SASAKI'], correct: 'POSEIDON',
+    hint: 'Compare the claimed sealing time with the footprints seen leaving the archive.',
+    accepted: ['POSEIDON'], correct: 'POSEIDON',
     success: 'False alibi exposed. Poseidon concealed access to the archive—but the order came from higher authority.'
   },
   {
     number: '06', date: '12 YEARS ERASED', title: 'THE MISSING PIECE', kind: 'EVIDENCE MATCHING',
     body: ['Jack saw blue threaded with gold inside the hidden boy.', 'Sasaki found memories removed with surgical precision.', 'Buddha predicted that one particular detective would find him.', 'Keeper’s note: “The missing piece is not an object.”'],
     prompt: 'What was the Keeper truly investigating?',
-    options: ['A MURDER WEAPON', 'A DISAPPEARED PERSON', 'A STOLEN CROWN'], correct: 'A DISAPPEARED PERSON',
+    hint: 'The Keeper says the missing piece is not an object. Look for who was removed from history.',
+    accepted: ['A DISAPPEARED PERSON', 'DISAPPEARED PERSON', 'A PERSON', 'DEKDEK'], correct: 'A DISAPPEARED PERSON',
     success: 'Case direction corrected: the murder concealed a second crime—the erasure of a living person.'
   },
   {
     number: '03', date: 'DATE REDACTED', title: 'THE INTENDED DETECTIVE', kind: 'FIRST-LETTER MESSAGE',
     body: ['Broken records wait for her.', 'Every false trail will test her.', 'Memory will lead her below.', 'Because she notices who is missing.', 'Under no crown will she stop.', 'Name her, and the final seal breaks.'],
     prompt: 'The first letters identify the person this case was left for. Who?',
-    options: ['BEMBUN', 'BUDDHA', 'BRUNHILDE'], correct: 'BEMBUN',
+    hint: 'The start of every sentence spells the name of the detective.',
+    accepted: ['BEMBUN'], correct: 'BEMBUN',
     success: 'The file was addressed to Bembun before the murder happened. The Keeper chose his detective in advance.'
   },
   {
     number: '04', date: 'FUTURE CLASSIFIED', title: 'THE RAVEN ORDER', kind: 'MOTIVE',
     body: ['Recovered order: “Destroy every record. Leave the body alive. Let the story die.”', 'Zeus demanded the case be closed.', 'Odin alone knew the boy’s identity.', 'The Keeper disobeyed and preserved seven fragments.'],
     prompt: 'Who ordered Dekdek erased—and killed the Keeper for resisting?',
-    options: ['ZEUS', 'LOKI', 'ODIN'], correct: 'ODIN',
+    hint: 'Find the one who knew the boy’s identity and whose ravens echo the erased truth.',
+    accepted: ['ODIN'], correct: 'ODIN',
     success: 'Murderer identified: Odin. His goal was not death. It was to prevent Dekdek’s future by making him forgotten.'
   }
 ];
@@ -478,16 +517,15 @@ function setMysteryVoice(voice, autoplay = false) {
 
 function playMysteryStageVoice(autoplay = true) {
   if (activeMysteryCase === 2) {
-    mysteryVoiceAudio.pause();
-    mysteryVoiceAudio.removeAttribute('src');
-    mysteryVoiceAudio.load();
-    mysteryVoiceLabel.textContent = 'VALHALLA ARCHIVE — TEXT MODE';
-    mysteryVoiceProgress.style.width = '0%';
-    mysteryVoiceTime.textContent = '0:00';
-    mysteryVoiceToggle.textContent = 'PLAY';
-    mysteryVoiceToggle.classList.remove('is-playing');
-    mysteryVoiceToggle.setAttribute('aria-label', 'Voice-over unavailable for case two');
-    return;
+    const valhallaVoice = case2Stage === 0
+      ? valhallaPrologueVoices[case2ProloguePage]
+      : currentValhallaSuspect && case2Stage === 1
+        ? valhallaSuspectVoices[currentValhallaSuspect]
+        : valhallaStageVoices[case2Stage];
+    if (valhallaVoice) {
+      setMysteryVoice(valhallaVoice, autoplay);
+      return;
+    }
   }
   const voice = mysteryStageVoices[mysteryStage];
   if (voice) {
@@ -773,9 +811,12 @@ function renderValhallaCase() {
 
   if (case2Stage >= 2 && case2Stage <= 8) {
     const file = valhallaFiles[case2Stage - 2];
-    const order = valhallaFiles.map((item, index) => `<span class="${index < case2Stage - 2 ? 'is-solved' : index === case2Stage - 2 ? 'is-current' : ''}">${item.number}</span>`).join('');
+    const solvedFiles = new Set(valhallaFiles.slice(0, case2Stage - 2).map((item) => item.number));
+    const order = [...valhallaFiles]
+      .sort((first, second) => Number(first.number) - Number(second.number))
+      .map((item) => `<span class="${solvedFiles.has(item.number) ? 'is-solved' : item.number === file.number ? 'is-current' : ''}">${item.number}</span>`)
+      .join('');
     const body = file.body.map((line) => `<p>${line}</p>`).join('');
-    const options = file.options.map((option) => `<button class="deduction-option valhalla-answer" type="button" data-case2-answer="${option}" ${option === file.correct ? 'data-correct="true"' : ''}>${option}</button>`).join('');
     mysteryScreen.innerHTML = `
       <article class="case-panel valhalla-panel">
         <div class="archive-order" aria-label="Recovered file order">${order}</div>
@@ -783,8 +824,16 @@ function renderValhallaCase() {
         <h2 class="case-heading">${file.title}</h2>
         <div class="archive-document">${body}</div>
         <p class="case-copy puzzle-prompt"><strong>${file.prompt}</strong></p>
-        <div class="deduction-list">${options}</div>
-        <p class="case-feedback" id="case2-feedback">Choose only when the evidence agrees.</p>
+        <form class="valhalla-input-form" id="case2-answer-form" autocomplete="off">
+          <label for="case2-answer-input">Type your deduction</label>
+          <div class="valhalla-input-row">
+            <input id="case2-answer-input" name="deduction" type="text" placeholder="enter your answer..." aria-describedby="case2-feedback" required />
+            <button class="pixel-button primary-button" type="submit">submit</button>
+          </div>
+        </form>
+        <button class="valhalla-clue-button" type="button" data-case2-clue aria-expanded="false">need a clue?</button>
+        <p class="valhalla-clue" id="case2-clue" hidden>${file.hint}</p>
+        <p class="case-feedback" id="case2-feedback" aria-live="polite">The archive is waiting for your deduction.</p>
       </article>`;
     return;
   }
@@ -812,12 +861,17 @@ function renderValhallaCase() {
           <p>Not his memory alone.</p><p>Not his identity.</p><p>Not his past.</p>
           <p>He lost the part of himself that believed another person could genuinely stay.</p>
         </div>
-        <div class="deduction-list">
-          <button class="deduction-option valhalla-answer" type="button" data-case2-answer="MEMORIES">HIS MEMORIES</button>
-          <button class="deduction-option valhalla-answer" type="button" data-case2-answer="TRUST" data-correct="true">THE COURAGE TO TRUST AGAIN</button>
-          <button class="deduction-option valhalla-answer" type="button" data-case2-answer="POWER">A HIDDEN POWER</button>
-        </div>
-        <p class="case-feedback" id="case2-feedback">The answer is emotional, not physical.</p>
+        <p class="case-copy puzzle-prompt"><strong>What did Dekdek truly lose?</strong></p>
+        <form class="valhalla-input-form" id="case2-answer-form" autocomplete="off">
+          <label for="case2-answer-input">Type your final deduction</label>
+          <div class="valhalla-input-row">
+            <input id="case2-answer-input" name="deduction" type="text" placeholder="enter your answer..." aria-describedby="case2-feedback" required />
+            <button class="pixel-button primary-button" type="submit">submit</button>
+          </div>
+        </form>
+        <button class="valhalla-clue-button" type="button" data-case2-clue aria-expanded="false">need a clue?</button>
+        <p class="valhalla-clue" id="case2-clue" hidden>It is not physical. Finish this thought: the courage to ___ again.</p>
+        <p class="case-feedback" id="case2-feedback" aria-live="polite">The answer is emotional, not physical.</p>
       </article>`;
     return;
   }
@@ -990,15 +1044,61 @@ function renderMysteryGame(preserveScroll = false) {
   }
 }
 
+function normalizeValhallaAnswer(value) {
+  return value
+    .toUpperCase()
+    .replace(/[^A-Z0-9]+/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function submitValhallaDeduction(form) {
+  const input = form.querySelector('#case2-answer-input');
+  const feedback = document.querySelector('#case2-feedback');
+  const answer = normalizeValhallaAnswer(input.value);
+  const accepted = case2Stage === 10
+    ? ['TRUST', 'COURAGE TO TRUST AGAIN', 'THE COURAGE TO TRUST AGAIN']
+    : valhallaFiles[case2Stage - 2].accepted.map(normalizeValhallaAnswer);
+
+  form.classList.remove('is-wrong');
+  if (!accepted.includes(answer)) {
+    form.classList.add('is-wrong');
+    feedback.textContent = case2Stage === 10
+      ? 'That was damaged too, but it is not the missing piece described by the Keeper.'
+      : 'The archive rejects that deduction. Recheck the evidence or open the clue.';
+    input.focus();
+    input.select();
+    return;
+  }
+
+  form.classList.add('is-correct');
+  input.disabled = true;
+  form.querySelector('button[type="submit"]').disabled = true;
+  feedback.textContent = case2Stage === 10
+    ? 'Correct. She did not fix him. She stayed long enough for him to remember that part was still there.'
+    : valhallaFiles[case2Stage - 2].success;
+  window.setTimeout(() => {
+    case2Stage += 1;
+    renderMysteryGame();
+    playMysteryStageVoice(false);
+  }, 1400);
+}
+
+mysteryScreen.addEventListener('submit', (event) => {
+  if (event.target.id !== 'case2-answer-form') return;
+  event.preventDefault();
+  submitValhallaDeduction(event.target);
+});
+
 mysteryScreen.addEventListener('click', (event) => {
   const evidenceButton = event.target.closest('[data-evidence]');
   const witnessButton = event.target.closest('[data-witness]');
   const answerButton = event.target.closest('[data-game-answer]');
   const actionButton = event.target.closest('[data-game-action]');
   const valhallaSuspectButton = event.target.closest('[data-valhalla-suspect]');
-  const case2AnswerButton = event.target.closest('[data-case2-answer]');
   const case2ActionButton = event.target.closest('[data-case2-action]');
   const case2PrologueButton = event.target.closest('[data-case2-prologue]');
+  const case2ClueButton = event.target.closest('[data-case2-clue]');
 
   if (activeMysteryCase === 2) {
     if (actionButton?.dataset.gameAction === 'case1') {
@@ -1012,6 +1112,7 @@ mysteryScreen.addEventListener('click', (event) => {
       currentValhallaSuspect = valhallaSuspectButton.dataset.valhallaSuspect;
       valhallaSuspectsSeen.add(currentValhallaSuspect);
       renderMysteryGame(true);
+      playMysteryStageVoice(false);
       return;
     }
 
@@ -1019,27 +1120,16 @@ mysteryScreen.addEventListener('click', (event) => {
       case2ProloguePage += case2PrologueButton.dataset.case2Prologue === 'next' ? 1 : -1;
       case2ProloguePage = Math.max(0, Math.min(valhallaPrologue.length - 1, case2ProloguePage));
       renderMysteryGame();
+      playMysteryStageVoice(false);
       return;
     }
 
-    if (case2AnswerButton) {
-      const feedback = document.querySelector('#case2-feedback');
-      if (case2AnswerButton.dataset.correct === 'true') {
-        document.querySelectorAll('[data-case2-answer]').forEach((button) => { button.disabled = true; });
-        case2AnswerButton.classList.add('is-correct');
-        feedback.textContent = case2Stage === 10
-          ? 'Correct. She did not fix him. She stayed long enough for him to remember that part was still there.'
-          : valhallaFiles[case2Stage - 2].success;
-        window.setTimeout(() => {
-          case2Stage += 1;
-          renderMysteryGame();
-        }, 1300);
-      } else {
-        case2AnswerButton.classList.add('is-wrong');
-        feedback.textContent = case2Stage === 10
-          ? 'That was damaged, but it was not the missing piece described by the Keeper.'
-          : 'The archive rejects that deduction. Recheck the cipher, chronology, or testimony.';
-      }
+    if (case2ClueButton) {
+      const clue = document.querySelector('#case2-clue');
+      const willShow = clue.hidden;
+      clue.hidden = !willShow;
+      case2ClueButton.setAttribute('aria-expanded', String(willShow));
+      case2ClueButton.textContent = willShow ? 'hide clue' : 'need a clue?';
       return;
     }
 
