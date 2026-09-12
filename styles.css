@@ -463,13 +463,6 @@ h1 em { color: #ec4c91; font-style: normal; }
   filter: drop-shadow(4px 5px 0 rgba(102, 25, 61, .18));
 }
 
-.totoro-umbrella { position: absolute; z-index: 6; left: -9px; top: -45px; width: 88px; height: 105px; transform: rotate(-5deg); transform-origin: 48px 87px; }
-.umbrella-canopy { position: absolute; left: 0; top: 0; width: 86px; height: 35px; border: 3px solid #633044; background: linear-gradient(90deg, #d9337a 0 25%, #ff80b0 25% 50%, #e5488d 50% 75%, #ff9fc2 75%); clip-path: polygon(50% 0, 68% 8%, 84% 30%, 100% 100%, 76% 86%, 51% 100%, 25% 86%, 0 100%, 15% 31%, 32% 8%); }
-.umbrella-canopy::after { content: ""; position: absolute; left: 40px; top: 1px; width: 3px; height: 30px; background: rgba(111, 32, 66, .35); box-shadow: -21px 8px rgba(111, 32, 66, .25), 21px 8px rgba(111, 32, 66, .25); }
-.umbrella-shaft { position: absolute; z-index: -1; left: 43px; top: 29px; width: 4px; height: 64px; border-left: 2px solid #542f3f; background: #f5c7d6; }
-.umbrella-handle { position: absolute; left: 43px; top: 86px; width: 16px; height: 15px; border: 4px solid #542f3f; border-left: 0; border-top: 0; border-radius: 0 0 12px 0; }
-.umbrella-grip { position: absolute; z-index: 8; left: 36px; top: 72px; width: 17px; height: 12px; border: 2px solid #59435a; border-radius: 50%; background: #918493; transform: rotate(18deg); }
-
 .totoro-body {
   position: absolute;
   left: 8px;
