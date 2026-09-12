@@ -787,9 +787,9 @@ h1 em { color: #ec4c91; font-style: normal; }
 
 @media (max-width: 760px) {
   body { overflow-y: auto; }
-  .desktop { min-height: calc(100vh - 48px); padding: 88px 14px 86px; place-items: start center; }
-  .desktop-icons { position: absolute; top: 14px; left: 8px; right: 8px; grid-template-columns: repeat(4, 1fr); gap: 2px; }
-  .desktop-icon { width: auto; min-width: 0; padding: 2px; font-size: 8px; }
+  .desktop { min-height: calc(100vh - 48px); padding: 162px 14px 86px; place-items: start center; }
+  .desktop-icons { position: absolute; top: 12px; left: 10px; right: 10px; grid-template-columns: repeat(3, minmax(0, 82px)); gap: 7px 4px; }
+  .desktop-icon { width: 82px; min-width: 0; min-height: 66px; padding: 2px; font-size: 8px; }
   .desktop-icon .folder-icon, .desktop-icon .note-icon, .desktop-icon .mail-icon { transform: scale(.75); margin: -5px 0; }
   .window-controls button { width: 32px; height: 30px; font-size: 17px; }
   .hero-window { width: 100%; }
