@@ -10,6 +10,7 @@
     />
     <title>The friendship we never new it was possible.</title>
     <link rel="stylesheet" href="styles.css?v=25" />
+    <link rel="stylesheet" href="capsule.css?v=1" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
@@ -97,6 +98,10 @@
         <button class="desktop-icon" data-open="mystery-window" type="button">
           <span class="mystery-icon" aria-hidden="true">?</span>
           <span>mystery.exe</span>
+        </button>
+        <button class="desktop-icon" data-open="capsule-window" type="button">
+          <span class="capsule-icon" aria-hidden="true"><i></i></span>
+          <span>are_you_ready.exe</span>
         </button>
         <button class="desktop-icon" data-open="appreciation-window" type="button">
           <span class="mail-icon" aria-hidden="true">💌</span>
@@ -260,6 +265,32 @@
         </div>
       </section>
 
+      <section class="window capsule-window is-hidden" id="capsule-window" aria-labelledby="capsule-title">
+        <header class="title-bar capsule-title-bar">
+          <div class="title-bar-label"><span class="capsule-title-mark">12</span><span id="capsule-title">ARE YOU READY?</span></div>
+          <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize time capsule">_</button>
+            <button class="close-window" type="button" aria-label="Close time capsule">×</button>
+          </div>
+        </header>
+        <div class="window-body capsule-body">
+          <div id="capsule-root" class="capsule-root" aria-live="polite"></div>
+          <aside class="capsule-dev is-hidden" id="capsule-dev" aria-label="Time capsule developer controls">
+            <details>
+              <summary>DEKDEK TEST MODE</summary>
+              <div>
+                <button type="button" data-capsule-dev="unlock">force unlock</button>
+                <button type="button" data-capsule-dev="preview">preview October 12</button>
+                <button type="button" data-capsule-dev="yes">test YES</button>
+                <button type="button" data-capsule-dev="no">test NO</button>
+                <button type="button" data-capsule-dev="restart">restart experience</button>
+                <button type="button" data-capsule-dev="lock">reset locked</button>
+              </div>
+            </details>
+          </aside>
+        </div>
+      </section>
+
       <section class="window letter-window long-message-window is-hidden" id="long-message-window" aria-labelledby="long-message-title">
         <header class="title-bar">
           <div class="title-bar-label"><span>💌</span><span id="long-message-title">A Long Message for Bembun.doc</span></div>
@@ -400,6 +431,7 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=25"></script>
+    <script src="script.js?v=26"></script>
+    <script src="capsule.js?v=1"></script>
   </body>
 </html>

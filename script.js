@@ -45,6 +45,7 @@ let collisionCooldownUntil = 0;
 let mysteryStage = 0;
 let activeMysteryCase = 1;
 let case2Stage = 0;
+let case2ProloguePage = 0;
 let currentEvidence = '';
 let currentWitness = '';
 let currentValhallaSuspect = '';
@@ -416,6 +417,41 @@ const valhallaFiles = [
   }
 ];
 
+const valhallaPrologue = [
+  {
+    kicker: 'SEVEN NIGHTS BEFORE THE MURDER',
+    title: 'Someone was missing from eternity.',
+    visual: '<div class="archive-visual"><span class="shelf left"></span><span class="keeper-figure">R</span><span class="shelf right"></span></div>',
+    story: `<p>Valhalla records every god, warrior, victory, defeat, birth, and death. Nothing enters eternity without leaving a story behind.</p>
+      <p>One Record Keeper noticed an impossible gap: a space where a life should have been. The pages before it were numbered. The pages after it were numbered. But the person between them had been removed so perfectly that the archive itself pretended he had never existed.</p>
+      <p>The Keeper began investigating in secret.</p>`
+  },
+  {
+    kicker: 'THE NIGHT EVERYTHING CHANGED',
+    title: 'At 11:47 PM, the archive bell rang once.',
+    visual: '<div class="clock-visual"><span>11:47</span><i></i></div>',
+    story: `<p>The western archive was found open. A chair lay overturned. Ink crossed the floor like a trail, stopping beneath the Record Keeper’s motionless hand.</p>
+      <p>He had been murdered—but the room made no sense. Nothing valuable was taken. The ancient records remained untouched.</p>
+      <p>Only one thing had vanished: the final investigation file he had spent seven nights protecting.</p>`
+  },
+  {
+    kicker: 'THE MESSAGE THAT SURVIVED',
+    title: 'The murderer missed one fragment.',
+    visual: '<div class="redacted-visual"><span>████████</span><span class="visible-line">FIND THE BOY</span><span>██████</span></div>',
+    story: `<p>Hidden inside the Keeper’s sleeve was a strip of paper addressed to no one. It contained no photograph and no identity.</p>
+      <blockquote class="keeper-message">“IF YOU ARE READING THIS,<br>FIND THE BOY WITHOUT A STORY.”</blockquote>
+      <p>Below it, three lines remained: <strong>He remembers nothing. He has nothing left. Someone does not want him found.</strong></p>`
+  },
+  {
+    kicker: 'THE SUMMONS',
+    title: 'Then Valhalla called for Bembun.',
+    visual: '<div class="summons-visual"><span>B</span><div>DETECTIVE ACCESS<br>GRANTED</div></div>',
+    story: `<p>Eight names surrounded the dead Keeper’s final hours: Loki, Jack, Sasaki, Poseidon, Shiva, Buddha, Zeus, and Odin.</p>
+      <p>Seven damaged files survived. Their dates were scrambled, their sentences altered, and their truths buried beneath codes.</p>
+      <p>Bembun was told she was investigating a murder. She was not told why the Keeper had chosen her—or that somewhere beneath Valhalla, a forgotten person was still waiting to be found.</p>`
+  }
+];
+
 function formatVoiceTime(seconds) {
   if (!Number.isFinite(seconds)) return '0:00';
   const minutes = Math.floor(seconds / 60);
@@ -693,23 +729,22 @@ function updateCaseHud() {
 
 function renderValhallaCase() {
   if (case2Stage === 0) {
+    const prologue = valhallaPrologue[case2ProloguePage];
+    const dots = valhallaPrologue.map((_, index) => `<span class="${index === case2ProloguePage ? 'is-current' : index < case2ProloguePage ? 'is-seen' : ''}"></span>`).join('');
     mysteryScreen.innerHTML = `
-      <article class="case-panel valhalla-panel">
-        <p class="case-kicker">VALHALLA ARCHIVE • RESTRICTED</p>
-        <h2 class="case-heading">Case #002:<br>The One Who Disappeared</h2>
-        <div class="valhalla-seal">II</div>
-        <p class="case-copy">Detective Bembun, a Record Keeper has been murdered. His final investigation file vanished with him.</p>
-        <blockquote class="keeper-message">“IF YOU ARE READING THIS,<br>FIND THE BOY WITHOUT A STORY.”</blockquote>
-        <div class="case-brief">
-          <p><strong>Identity:</strong> unknown</p>
-          <p><strong>Photograph:</strong> erased</p>
-          <p><strong>Condition:</strong> alive, but missing from every official record</p>
-          <p><strong>Threat:</strong> someone does not want him found</p>
-        </div>
-        <p class="case-hint">Seven files survived. Their dates are deliberately out of order.</p>
+      <article class="case-panel valhalla-panel prologue-panel">
+        <div class="prologue-progress" aria-label="Prologue page ${case2ProloguePage + 1} of ${valhallaPrologue.length}">${dots}</div>
+        <p class="case-kicker">PROLOGUE ${case2ProloguePage + 1} / ${valhallaPrologue.length} • ${prologue.kicker}</p>
+        <h2 class="case-heading">${prologue.title}</h2>
+        ${prologue.visual}
+        <div class="prologue-story">${prologue.story}</div>
         <div class="button-row">
-          <button class="pixel-button" type="button" data-game-action="case1">return to case #001</button>
-          <button class="pixel-button primary-button" type="button" data-case2-action="start">enter valhalla</button>
+          ${case2ProloguePage === 0
+            ? '<button class="pixel-button" type="button" data-game-action="case1">return to case #001</button>'
+            : '<button class="pixel-button" type="button" data-case2-prologue="back">previous</button>'}
+          ${case2ProloguePage === valhallaPrologue.length - 1
+            ? '<button class="pixel-button primary-button" type="button" data-case2-action="start">accept the case</button>'
+            : '<button class="pixel-button primary-button" type="button" data-case2-prologue="next">continue</button>'}
         </div>
       </article>`;
     return;
@@ -963,6 +998,7 @@ mysteryScreen.addEventListener('click', (event) => {
   const valhallaSuspectButton = event.target.closest('[data-valhalla-suspect]');
   const case2AnswerButton = event.target.closest('[data-case2-answer]');
   const case2ActionButton = event.target.closest('[data-case2-action]');
+  const case2PrologueButton = event.target.closest('[data-case2-prologue]');
 
   if (activeMysteryCase === 2) {
     if (actionButton?.dataset.gameAction === 'case1') {
@@ -976,6 +1012,13 @@ mysteryScreen.addEventListener('click', (event) => {
       currentValhallaSuspect = valhallaSuspectButton.dataset.valhallaSuspect;
       valhallaSuspectsSeen.add(currentValhallaSuspect);
       renderMysteryGame(true);
+      return;
+    }
+
+    if (case2PrologueButton) {
+      case2ProloguePage += case2PrologueButton.dataset.case2Prologue === 'next' ? 1 : -1;
+      case2ProloguePage = Math.max(0, Math.min(valhallaPrologue.length - 1, case2ProloguePage));
+      renderMysteryGame();
       return;
     }
 
@@ -1003,6 +1046,7 @@ mysteryScreen.addEventListener('click', (event) => {
     if (case2ActionButton) {
       if (case2ActionButton.dataset.case2Action === 'replay') {
         case2Stage = 0;
+        case2ProloguePage = 0;
         currentValhallaSuspect = '';
         valhallaSuspectsSeen.clear();
       } else {
@@ -1052,6 +1096,7 @@ mysteryScreen.addEventListener('click', (event) => {
   if (actionButton.dataset.gameAction === 'case2') {
     activeMysteryCase = 2;
     case2Stage = 0;
+    case2ProloguePage = 0;
     renderMysteryGame();
     playMysteryStageVoice(false);
     return;

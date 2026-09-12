@@ -1,0 +1,109 @@
+.capsule-icon {
+  position: relative;
+  width: 38px;
+  height: 44px;
+  display: block;
+  border: 3px solid #722447;
+  border-radius: 50% 50% 9px 9px;
+  background: linear-gradient(90deg, #702548, #ee5797 48%, #702548 52%, #321829);
+  box-shadow: inset 0 0 0 3px #ffb9d4, 4px 4px rgba(84, 20, 49, .25);
+}
+.capsule-icon::before { content: "12"; position: absolute; inset: 11px 5px auto; padding: 2px; color: #5b1b39; background: #ffd9e8; font: 700 10px "Pixelify Sans", monospace; text-align: center; }
+.capsule-icon i { position: absolute; left: 50%; bottom: 4px; width: 8px; height: 8px; border-radius: 50%; background: #ffc967; transform: translateX(-50%); }
+
+.capsule-window { position: fixed; z-index: 48; left: 50%; top: 50%; width: min(880px, calc(100vw - 22px)); transform: translate(-50%, -50%); border-color: #77727c; box-shadow: 12px 13px rgba(20, 8, 18, .45); }
+.capsule-title-bar { color: #f2f0f2; background: linear-gradient(90deg, #08080b, #22202a 60%, #5a1f3b); }
+.capsule-title-mark { width: 23px; height: 20px; display: grid; place-items: center; color: #17131a; border-radius: 50%; background: #ded7dc; font-size: 8px; }
+.capsule-body { position: relative; height: min(650px, calc(100vh - 102px)); padding: 0; overflow: hidden; color: #eee8ec; background: #050507; }
+.capsule-root { width: 100%; height: 100%; overflow-y: auto; overscroll-behavior: contain; }
+.capsule-screen { min-height: 100%; padding: clamp(30px, 6vw, 70px); display: grid; place-items: center; position: relative; isolation: isolate; background: radial-gradient(circle at 50% 35%, #1c1620, #050507 58%); animation: capsule-fade .65s ease both; }
+.capsule-screen::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .18; background-image: radial-gradient(circle, #fff 0 1px, transparent 1.5px); background-size: 39px 39px; mask-image: linear-gradient(transparent, black 30%, transparent); }
+.capsule-center { width: min(620px, 100%); text-align: center; }
+.capsule-eyebrow { margin: 0 0 16px; color: #9f939b; font-size: 9px; letter-spacing: .22em; }
+.capsule-heading { margin: 0; color: #f7f2f5; font: 700 clamp(40px, 9vw, 76px)/.9 "Pixelify Sans", monospace; letter-spacing: .03em; text-wrap: balance; }
+.capsule-subtitle { margin: 22px auto; color: #bbb0b8; font: 500 13px/1.8 Georgia, serif; text-wrap: balance; }
+.capsule-lockbox { margin: 30px auto; padding: 22px; border: 1px solid #736b72; background: rgba(9, 8, 11, .75); box-shadow: 0 0 0 5px #111015, 0 0 45px rgba(221, 67, 130, .08); }
+.capsule-lockbox h2 { margin: 0 0 16px; color: #e4dde2; font: 700 21px "Pixelify Sans", monospace; letter-spacing: .12em; }
+.capsule-date-label { margin: 0 0 7px; color: #837981; font-size: 8px; letter-spacing: .2em; }
+.capsule-date { margin: 0; color: #ecb0c9; font: 700 24px "Pixelify Sans", monospace; }
+.capsule-countdown { margin: 26px 0 13px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+.countdown-part { padding: 13px 5px 10px; border: 1px solid #554d53; background: #0c0b0e; }
+.countdown-part strong { display: block; color: #f7e9ef; font: 700 clamp(25px, 7vw, 43px) "Pixelify Sans", monospace; }
+.countdown-part span { display: block; margin-top: 6px; color: #7f747c; font-size: 7px; letter-spacing: .15em; }
+.capsule-whisper { margin: 20px 0 0; color: #847a81; font: italic 12px Georgia, serif; }
+
+.capsule-button { min-height: 47px; padding: 11px 22px; color: #ece7ea; border: 1px solid #837780; background: #171319; font: 700 13px "Pixelify Sans", monospace; letter-spacing: .08em; cursor: pointer; box-shadow: 4px 4px #020203; }
+.capsule-button:hover, .capsule-button:focus { color: #1d1118; background: #efafca; outline: 1px solid #f6d5e3; }
+.capsule-button.primary { color: #201018; border-color: #ffc2db; background: #ed6aa1; }
+.capsule-button.ghost { color: #9e949a; background: transparent; }
+.capsule-actions { margin-top: 24px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+.unlock-lines { min-height: 220px; display: grid; align-content: center; gap: 17px; }
+.unlock-lines p { margin: 0; opacity: 0; color: #ddd5da; font: 700 clamp(21px, 5vw, 36px) "Pixelify Sans", monospace; animation: reveal-line .8s ease forwards; }
+.unlock-lines p:nth-child(2) { animation-delay: 1.2s; }
+.unlock-lines p:nth-child(3) { animation-delay: 2.4s; }
+.unlock-lines + .capsule-button { opacity: 0; animation: reveal-line .7s ease 3.8s forwards; }
+
+.warning-window { width: min(520px, 100%); padding: 9px; color: #3a1b2b; border: 3px solid; border-color: #fff #702747 #702747 #fff; background: #f7c5d9; box-shadow: 9px 9px #260d19; text-align: left; }
+.warning-title { padding: 8px 11px; color: white; background: linear-gradient(90deg, #9d2f61, #e75896); font: 700 18px "Pixelify Sans", monospace; }
+.warning-content { padding: 30px 24px 24px; border: 2px inset #ffdce9; background: #fff8fb; text-align: center; }
+.warning-content h2 { margin: 0 0 17px; color: #702747; font: 700 34px "Pixelify Sans", monospace; }
+.warning-content p { margin: 10px 0; font: 500 13px/1.7 Georgia, serif; }
+
+.memory-screen { min-height: 100%; padding: clamp(24px, 5vw, 56px); color: #30212a; background: linear-gradient(rgba(255,250,252,.94), rgba(255,250,252,.94)), repeating-linear-gradient(0deg, transparent 0 29px, #f0cad9 30px); }
+.memory-shell { width: min(680px, 100%); margin: 0 auto; animation: capsule-fade .5s ease both; }
+.memory-date { margin: 0 0 9px; color: #b5346b; font-size: 9px; letter-spacing: .18em; }
+.memory-title { margin: 0 0 25px; color: #6d2444; font: 700 clamp(36px, 7vw, 62px)/.92 "Pixelify Sans", monospace; text-shadow: 2px 2px #efb2ca; text-wrap: balance; }
+.memory-copy { margin: 14px 0; font: 500 14px/1.85 Georgia, serif; }
+.memory-copy.center { text-align: center; }
+.chat-recovery { margin: 25px 0; padding: 17px; border: 2px solid #b6577f; background: #f4e9ee; box-shadow: 6px 6px #c47b9a; }
+.chat-bubble { width: min(88%, 510px); margin: 13px 0; padding: 13px 15px; opacity: 0; border-radius: 13px 13px 13px 2px; background: white; font: 500 12px/1.55 Arial, sans-serif; box-shadow: 0 3px 8px rgba(73, 26, 47, .12); animation: chat-arrive .5s ease forwards; }
+.chat-bubble:nth-child(2) { margin-left: auto; border-radius: 13px 13px 2px 13px; background: #ef73a8; animation-delay: 1.1s; }
+.chat-bubble:nth-child(3) { animation-delay: 2.2s; }
+.chat-bubble strong { display: block; margin-bottom: 5px; color: #a42d62; font-size: 9px; }
+.chat-bubble:nth-child(2) strong { color: #542039; }
+.memory-quote { margin: 26px auto; padding: 22px; color: #812d53; border-top: 1px solid #c987a3; border-bottom: 1px solid #c987a3; font: italic 700 17px/1.65 Georgia, serif; text-align: center; }
+.memory-card-grid { margin: 22px 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.memory-card { min-height: 105px; padding: 14px; display: grid; align-content: space-between; border: 2px solid #c0698e; background: #fff; box-shadow: 4px 4px #e0a2bb; transform: rotate(var(--tilt, -1deg)); }
+.memory-card:nth-child(even) { --tilt: 1deg; }
+.memory-card strong { color: #9f2e61; font: 700 15px "Pixelify Sans", monospace; }
+.memory-card small { color: #745767; font: italic 9px/1.4 Georgia, serif; }
+.timeline-marker { margin: 28px 0; display: flex; align-items: center; gap: 11px; color: #a63164; font: 700 12px "Pixelify Sans", monospace; }
+.timeline-marker::before, .timeline-marker::after { content: ""; height: 1px; flex: 1; background: #cc8ca7; }
+.story-beat { margin: 18px 0; padding: 18px; border-left: 4px solid #bf4679; background: rgba(255,255,255,.72); font: 500 13px/1.8 Georgia, serif; }
+.story-beat strong { color: #a12f61; }
+.empty-future { min-height: 220px; margin: 28px 0; display: grid; place-items: center; color: #a99ba3; border: 2px dashed #c497aa; background: linear-gradient(135deg, #fff, #f9eef3); font: italic 13px Georgia, serif; text-align: center; }
+.final-question { min-height: 100%; padding: clamp(35px, 7vw, 85px); display: grid; place-items: center; color: #ece7ea; background: radial-gradient(circle at 50% 55%, #24151d, #030304 65%); text-align: center; }
+.final-question .memory-shell { width: min(600px, 100%); }
+.final-question h2 { margin: 0 0 30px; color: white; font: 700 clamp(47px, 10vw, 82px) "Pixelify Sans", monospace; }
+.final-lines { display: grid; gap: 15px; }
+.final-lines p { margin: 0; color: #cfc5cb; font: 500 15px/1.7 Georgia, serif; }
+.final-lines .courting-question { margin-top: 25px; color: #f2b5ce; font-size: 22px; }
+.final-response-actions { margin-top: 40px; display: flex; justify-content: center; gap: 16px; }
+.delayed-actions { opacity: 0; animation: reveal-line .8s ease 4s forwards; }
+.secret-phrase { margin: 25px 0; padding: 18px; color: #552038; border: 2px dashed #c24579; background: #ffe4ef; font: 700 17px "Pixelify Sans", monospace; }
+
+.capsule-dev { position: absolute; z-index: 20; right: 10px; bottom: 10px; width: 190px; padding: 7px; color: #dfcf95; border: 1px solid #806f3b; background: rgba(7, 7, 8, .96); font-size: 8px; }
+.capsule-dev.is-hidden { display: none; }
+.capsule-dev summary { padding: 5px; font: 700 8px monospace; cursor: pointer; }
+.capsule-dev details > div { padding-top: 6px; display: grid; gap: 5px; }
+.capsule-dev button { padding: 5px; color: #ddd; border: 1px solid #645b61; background: #211c22; font: 700 8px monospace; cursor: pointer; }
+
+@keyframes capsule-fade { from { opacity: 0; } }
+@keyframes reveal-line { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(7px); } }
+@keyframes chat-arrive { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(8px); } }
+
+@media (max-width: 700px) {
+  .capsule-window { width: calc(100vw - 10px); }
+  .capsule-body { height: calc(100vh - 76px); }
+  .capsule-screen, .memory-screen, .final-question { padding: 28px 17px 38px; }
+  .capsule-countdown { gap: 5px; }
+  .countdown-part { padding: 11px 2px 8px; }
+  .countdown-part strong { font-size: 27px; }
+  .countdown-part span { font-size: 6px; letter-spacing: .08em; }
+  .memory-card-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .memory-title { font-size: 41px; }
+  .chat-bubble { font-size: 11px; }
+  .final-response-actions { flex-direction: column; }
+  .final-response-actions .capsule-button { width: 100%; }
+}
