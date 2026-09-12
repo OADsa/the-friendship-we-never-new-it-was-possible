@@ -506,10 +506,10 @@ h1 em { color: #ec4c91; font-style: normal; }
 .calcifer-camp {
   position: fixed;
   z-index: 26;
-  left: -82px;
+  left: -92px;
   bottom: 50px;
-  width: 68px;
-  height: 70px;
+  width: 84px;
+  height: 76px;
   pointer-events: none;
   filter: drop-shadow(3px 4px 0 rgba(105, 24, 60, .22));
   animation: calcifer-travel 18s linear -2s infinite;
@@ -525,28 +525,36 @@ h1 em { color: #ec4c91; font-style: normal; }
   --flame-hue: 30;
   position: absolute;
   z-index: 2;
-  left: 11px;
-  bottom: 1px;
-  width: 48px;
-  height: 62px;
+  left: 14px;
+  bottom: 4px;
+  width: 56px;
+  height: 68px;
   background: radial-gradient(
     ellipse at 50% 65%,
-    hsl(var(--flame-hue) 100% 78%) 0 31%,
-    hsl(var(--flame-hue) 94% 58%) 33% 58%,
-    hsl(var(--flame-hue) 82% 43%) 60%
+    hsl(var(--flame-hue) 100% 70%) 0 34%,
+    hsl(var(--flame-hue) 94% 55%) 36% 63%,
+    hsl(var(--flame-hue) 82% 38%) 65%
   );
-  clip-path: polygon(50% 0, 64% 18%, 80% 7%, 77% 32%, 100% 42%, 86% 58%, 91% 79%, 70% 94%, 50% 100%, 28% 94%, 8% 79%, 14% 58%, 0 42%, 23% 31%, 22% 8%, 39% 20%);
+  clip-path: polygon(50% 0, 64% 18%, 79% 5%, 78% 30%, 96% 20%, 89% 46%, 100% 58%, 88% 78%, 72% 95%, 50% 100%, 27% 95%, 10% 79%, 0 58%, 12% 43%, 7% 20%, 27% 32%, 28% 7%, 41% 21%);
   animation: calcifer-flicker .42s steps(2) infinite, calcifer-colors 8s linear infinite;
 }
 
-.calcifer-eye { position: absolute; top: 31px; width: 9px; height: 12px; border: 2px solid #6d293b; border-radius: 50%; background: white; transform-origin: center; animation: calcifer-eye-emotions 8s steps(1) infinite; }
+.calcifer-core { position: absolute; z-index: 1; left: 9px; right: 9px; top: 20px; bottom: 6px; border-radius: 50% 50% 42% 42%; background: #ffda3e; box-shadow: inset 4px 3px #fff47d, inset -4px -3px #f09b26; }
+.calcifer-arm { position: absolute; z-index: 1; top: 44px; width: 27px; height: 11px; border: 3px solid #70263c; border-radius: 70% 40% 60% 40%; background: #ea563e; }
+.calcifer-arm.left { left: 0; transform: rotate(-28deg); }
+.calcifer-arm.right { right: 0; transform: rotate(28deg); }
+.calcifer-foot { position: absolute; z-index: 3; bottom: 0; width: 27px; height: 13px; border: 3px solid #70263c; border-radius: 60%; background: #e55a39; }
+.calcifer-foot.left { left: 9px; transform: rotate(-11deg); }
+.calcifer-foot.right { right: 9px; transform: rotate(11deg); }
+.calcifer-eye { position: absolute; z-index: 3; top: 33px; width: 12px; height: 15px; border: 2px solid #5e2838; border-radius: 50%; background: white; transform-origin: center; animation: calcifer-eye-emotions 8s steps(1) infinite; }
 .calcifer-eye::after { content: ""; position: absolute; width: 3px; height: 5px; left: 2px; top: 3px; background: #3f2531; }
-.calcifer-eye.left { left: 12px; }
-.calcifer-eye.right { right: 12px; }
-.calcifer-cheek { position: absolute; top: 44px; width: 7px; height: 4px; border-radius: 50%; background: #ff7b9c; opacity: 0; animation: calcifer-cheek-emotions 8s steps(1) infinite; }
+.calcifer-eye.left { left: 13px; }
+.calcifer-eye.right { right: 13px; }
+.calcifer-cheek { position: absolute; z-index: 3; top: 48px; width: 8px; height: 4px; border-radius: 50%; background: #ff7b9c; opacity: 0; animation: calcifer-cheek-emotions 8s steps(1) infinite; }
 .calcifer-cheek.left { left: 8px; }
 .calcifer-cheek.right { right: 8px; }
-.calcifer-mouth { position: absolute; left: 18px; top: 47px; width: 12px; height: 6px; border: 0 solid #6d293b; border-bottom-width: 2px; border-radius: 50%; animation: calcifer-mouth-emotions 8s steps(1) infinite; }
+.calcifer-mouth { position: absolute; z-index: 3; left: 19px; top: 49px; width: 18px; height: 9px; border: 2px solid #592635; border-radius: 40% 40% 55% 55%; background: #a72d3c; animation: calcifer-mouth-emotions 8s steps(1) infinite; }
+.calcifer-mouth::after { content: ""; position: absolute; left: 4px; right: 4px; bottom: 0; height: 3px; border-radius: 50%; background: #ff725e; }
 .ponyo-swimmer {
   position: fixed;
   z-index: 23;
@@ -607,21 +615,43 @@ h1 em { color: #ec4c91; font-style: normal; }
 .fish-fin { position: absolute; left: 17px; bottom: -7px; width: 18px; height: 12px; border: 2px solid #8c3150; border-radius: 50%; background: #ff7869; transform: rotate(14deg); }
 .ponyo-magic { position: absolute; z-index: 6; right: 26px; top: 13px; color: white; font-size: 24px; text-shadow: 2px 2px #e43878; animation: ponyo-magic-flash 6s steps(1) infinite; }
 
+.noface-peeker { position: fixed; z-index: 24; right: -84px; top: 40%; width: 88px; height: 150px; pointer-events: none; animation: noface-peek 14s ease-in-out -3s infinite; filter: drop-shadow(-4px 5px 0 rgba(78, 16, 47, .2)); }
+.noface-cloak { position: absolute; right: 0; bottom: 0; width: 78px; height: 143px; border: 3px solid #261d2a; border-radius: 55% 55% 20% 20%; background: linear-gradient(90deg, #17131b, #332a36 50%, #17131b); }
+.noface-mask { position: absolute; left: 16px; top: 13px; width: 43px; height: 65px; border: 3px solid #312635; border-radius: 48%; background: #e8e5da; box-shadow: inset -7px 0 #bbbdb5; }
+.noface-eye { position: absolute; top: 21px; width: 8px; height: 5px; border-radius: 50%; background: #32252f; }
+.noface-eye.left { left: 7px; }
+.noface-eye.right { right: 7px; }
+.noface-mark { position: absolute; top: 13px; width: 5px; height: 20px; border-radius: 50%; background: #9b78a4; }
+.noface-mark.left { left: 5px; transform: rotate(-8deg); }
+.noface-mark.right { right: 5px; transform: rotate(8deg); }
+.noface-mouth { position: absolute; left: 12px; top: 43px; width: 15px; height: 5px; border-radius: 50%; background: #3c2b35; }
+.noface-hand { position: absolute; left: -9px; top: 84px; width: 23px; height: 10px; border: 2px solid #2d2230; border-radius: 60%; background: #514651; transform: rotate(-22deg); animation: noface-wave .65s ease-in-out infinite alternate; transform-origin: right; }
+
+.totoro-walker.is-stunned,
+.totoro-walker.is-stunned *,
+.calcifer-camp.is-stunned,
+.calcifer-camp.is-stunned * { animation-play-state: paused !important; }
+.totoro-walker.is-stunned::after,
+.calcifer-camp.is-stunned::after { content: "✦ ✧"; position: absolute; z-index: 20; left: 50%; top: -18px; width: 58px; color: #fff36a; font: 700 20px Arial, sans-serif; text-shadow: 2px 2px #a42b64; transform: translateX(-50%); animation: stun-stars .35s steps(2) infinite; }
+
 @keyframes totoro-travel {
   0% { left: -90px; }
   47% { left: calc(100vw + 10px); }
   53% { left: calc(100vw + 10px); }
   100% { left: -90px; }
 }
+@keyframes noface-peek { 0%, 13%, 62%, 100% { right: -84px; } 24%, 50% { right: -18px; } }
+@keyframes noface-wave { to { transform: rotate(10deg); } }
+@keyframes stun-stars { 50% { transform: translateX(-50%) rotate(12deg) scale(1.16); } }
 @keyframes totoro-turn { 0%, 49% { transform: scaleX(1); } 50%, 99% { transform: scaleX(-1); } }
 @keyframes totoro-bob { 50% { margin-top: 3px; } }
 @keyframes footstep { 50% { transform: translateY(-3px); } }
 @keyframes calcifer-flicker { 50% { transform: translateY(-3px) scaleX(.92); } }
 @keyframes calcifer-travel {
-  0% { left: -82px; }
+  0% { left: -92px; }
   45% { left: calc(100vw + 12px); }
   52% { left: calc(100vw + 12px); }
-  97%, 100% { left: -82px; }
+  97%, 100% { left: -92px; }
 }
 @keyframes calcifer-roll {
   0% { transform: rotate(0deg); }
@@ -910,6 +940,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   .totoro-walker { bottom: 48px; transform: scale(.78); transform-origin: bottom left; }
   .calcifer-camp { bottom: 47px; transform: scale(.76); transform-origin: bottom left; }
   .ponyo-swimmer { top: 17%; transform: scale(.76); transform-origin: center left; }
+  .noface-peeker { top: 38%; transform: scale(.76); transform-origin: right center; }
   .verification-overlay { padding: 8px; }
   .verification-window { width: calc(100vw - 16px); }
   .verification-body { padding: 27px 21px 24px; }

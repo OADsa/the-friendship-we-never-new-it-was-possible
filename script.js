@@ -23,11 +23,15 @@ const verificationMood = document.querySelector('#verification-mood');
 const angerSegments = [...document.querySelectorAll('.anger-meter i')];
 const fingerprintButton = document.querySelector('#fingerprint-button');
 const fingerprintStatus = document.querySelector('#fingerprint-status');
+const totoroWalker = document.querySelector('.totoro-walker');
+const calciferCamp = document.querySelector('.calcifer-camp');
 let currentGuideStep = 0;
 let highestWindowZ = 60;
 let fingerprintTimer;
 let fingerprintComplete = false;
 let wrongNameAttempts = 0;
+let charactersStunned = false;
+let collisionCooldownUntil = 0;
 
 const messages = [
   "Dear Bembun, I’m really glad I met you.",
@@ -418,6 +422,35 @@ if (sessionStorage.getItem('friendship_sender_verified') === 'yes') {
   window.setTimeout(() => senderName.focus(), 100);
 }
 
+function stunCharacters() {
+  charactersStunned = true;
+  collisionCooldownUntil = performance.now() + 3200;
+  totoroWalker.classList.add('is-stunned');
+  calciferCamp.classList.add('is-stunned');
+
+  window.setTimeout(() => {
+    totoroWalker.classList.remove('is-stunned');
+    calciferCamp.classList.remove('is-stunned');
+    charactersStunned = false;
+  }, 1050);
+}
+
+function watchCharacterCollision(time) {
+  if (!charactersStunned && time > collisionCooldownUntil) {
+    const totoroBox = totoroWalker.getBoundingClientRect();
+    const calciferBox = calciferCamp ? calciferCamp.getBoundingClientRect() : null;
+    const overlapping = calciferBox
+      && totoroBox.left + 12 < calciferBox.right
+      && totoroBox.right - 12 > calciferBox.left
+      && totoroBox.top + 8 < calciferBox.bottom
+      && totoroBox.bottom - 8 > calciferBox.top;
+
+    if (overlapping) stunCharacters();
+  }
+
+  window.requestAnimationFrame(watchCharacterCollision);
+}
+
 function updateClock() {
   document.querySelector('#clock').textContent = new Intl.DateTimeFormat('en', {
     hour: 'numeric', minute: '2-digit'
@@ -427,4 +460,5 @@ function updateClock() {
 makeFloatingHearts();
 renderMessage();
 updateClock();
+window.requestAnimationFrame(watchCharacterCollision);
 window.setInterval(updateClock, 30000);
