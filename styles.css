@@ -734,6 +734,77 @@ h1 em { color: #ec4c91; font-style: normal; }
 .tray { margin-left: auto; padding: 6px 12px; display: flex; align-items: center; gap: 9px; font-size: 10px; }
 .tray span { color: #e23f84; font-size: 17px; }
 
+.verification-overlay {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: rgba(112, 21, 65, .5);
+  backdrop-filter: blur(5px);
+}
+.verification-overlay.is-hidden { display: none; }
+.verification-overlay.is-unlocking { animation: unlock-overlay .65s ease-in forwards; pointer-events: none; }
+.verification-window { width: min(500px, calc(100vw - 24px)); }
+.verification-body { padding: 34px; }
+.verification-step h2 { margin: 0 0 24px; color: #a52961; font: 700 clamp(29px, 7vw, 42px)/1 "Pixelify Sans", monospace; text-shadow: 2px 2px #ffc1dc; text-wrap: balance; }
+.sender-label { display: block; margin-bottom: 8px; font-size: 11px; font-weight: 500; }
+.sender-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 13px;
+  color: #721f49;
+  border: 3px solid;
+  border-color: #a23968 #fff #fff #a23968;
+  outline: 0;
+  background: white;
+  font: 18px "Pixelify Sans", monospace;
+  caret-color: #e13d84;
+}
+.sender-input:focus { box-shadow: 0 0 0 3px #f7a7c8; }
+.sender-hint { margin: 9px 0 0; color: #97506f; font-size: 9px; }
+.verification-error { min-height: 18px; margin: 8px 0; color: #c12768; font-size: 10px; }
+.verify-name-button { width: 100%; min-height: 46px; }
+.verification-window.is-shaking { animation: gentle-no .32s steps(3); }
+
+.fingerprint-copy { margin: -8px 0 20px; font-size: 10px; line-height: 1.6; }
+.fingerprint-button {
+  position: relative;
+  width: 126px;
+  height: 126px;
+  margin: 0 auto;
+  padding: 0;
+  display: block;
+  overflow: hidden;
+  color: #d6387b;
+  border: 4px solid;
+  border-color: #fff #922b59 #922b59 #fff;
+  border-radius: 50%;
+  background: #ffd7e7;
+  box-shadow: 4px 5px 0 rgba(102, 25, 59, .24), inset 0 0 0 6px #fff2f7;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+.fingerprint-button:focus-visible { outline: 3px dotted #9c285c; outline-offset: 5px; }
+.fingerprint-heart { position: absolute; z-index: 3; inset: 0; display: grid; place-items: center; font: 700 49px Arial, sans-serif; text-shadow: 2px 2px #fff; }
+.fingerprint-lines { position: absolute; z-index: 2; inset: 17px; border-radius: 50%; opacity: .45; background: repeating-radial-gradient(circle, transparent 0 6px, #c23b75 7px 9px); }
+.fingerprint-scan { position: absolute; z-index: 4; left: 12px; right: 12px; top: 10px; height: 4px; opacity: 0; background: white; box-shadow: 0 0 9px white, 0 0 16px #f25b9a; }
+.fingerprint-button.is-holding { transform: translate(2px, 2px); border-color: #922b59 #fff #fff #922b59; box-shadow: 2px 2px 0 rgba(102, 25, 59, .24), inset 0 0 0 6px #fff2f7; }
+.fingerprint-button.is-holding .fingerprint-heart { animation: heartbeat .55s ease-in-out infinite; }
+.fingerprint-button.is-holding .fingerprint-scan { opacity: .9; animation: fingerprint-scan 1.5s linear forwards; }
+.fingerprint-button.is-complete { color: white; background: #e23f84; }
+.fingerprint-progress { width: min(230px, 86%); height: 15px; margin: 19px auto 0; padding: 2px; border: 2px solid; border-color: #9c315f #fff #fff #9c315f; background: white; }
+.fingerprint-progress span { display: block; width: 0; height: 100%; background: repeating-linear-gradient(90deg, #df3d84 0 9px, transparent 9px 11px), #ffafd0; transition: width .18s ease-out; }
+.fingerprint-button.is-holding + .fingerprint-progress span { width: 100%; transition: width 1.5s linear; }
+.fingerprint-button.is-complete + .fingerprint-progress span { width: 100%; }
+.fingerprint-status { margin: 10px 0 0; color: #9d315e; font: 15px "Pixelify Sans", monospace; text-align: center; }
+@keyframes gentle-no { 0%, 100% { transform: translateX(0); } 33% { transform: translateX(-7px); } 66% { transform: translateX(7px); } }
+@keyframes heartbeat { 50% { transform: scale(1.13); } }
+@keyframes fingerprint-scan { from { transform: translateY(4px); } to { transform: translateY(94px); } }
+@keyframes unlock-overlay { 45% { opacity: 1; } 100% { opacity: 0; transform: scale(1.04); } }
+
 .guide-overlay {
   position: fixed;
   z-index: 1000;
@@ -818,6 +889,13 @@ h1 em { color: #ec4c91; font-style: normal; }
   .totoro-walker { bottom: 48px; transform: scale(.78); transform-origin: bottom left; }
   .calcifer-camp { bottom: 47px; transform: scale(.76); transform-origin: bottom left; }
   .ponyo-swimmer { top: 17%; transform: scale(.76); transform-origin: center left; }
+  .verification-overlay { padding: 8px; }
+  .verification-window { width: calc(100vw - 16px); }
+  .verification-body { padding: 27px 21px 24px; }
+  .verification-step h2 { font-size: 32px; }
+  .sender-input { min-height: 52px; font-size: 20px; }
+  .verify-name-button { min-height: 50px; }
+  .fingerprint-button { width: 132px; height: 132px; }
 }
 
 @media (max-width: 420px) {

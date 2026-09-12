@@ -12,8 +12,19 @@ const guideOverlay = document.querySelector('#navigation-guide, #guide-overlay')
 const guideNext = document.querySelector('#guide-next');
 const guideBack = document.querySelector('#guide-back');
 const helpButton = document.querySelector('#help-button');
+const verificationOverlay = document.querySelector('#verification-overlay');
+const verificationWindow = document.querySelector('.verification-window');
+const nameCheckStep = document.querySelector('#name-check-step');
+const fingerprintStep = document.querySelector('#fingerprint-step');
+const senderName = document.querySelector('#sender-name');
+const verifyNameButton = document.querySelector('#verify-name-button');
+const verificationError = document.querySelector('#verification-error');
+const fingerprintButton = document.querySelector('#fingerprint-button');
+const fingerprintStatus = document.querySelector('#fingerprint-status');
 let currentGuideStep = 0;
 let highestWindowZ = 60;
+let fingerprintTimer;
+let fingerprintComplete = false;
 
 const messages = [
   "Dear Bembun, I’m really glad I met you.",
@@ -313,6 +324,78 @@ if (sessionStorage.getItem('friendship_navigation_seen') === 'yes') {
   guideOverlay.classList.add('is-hidden');
 } else {
   openGuide();
+}
+
+function checkSenderName() {
+  const answer = senderName.value.trim().toLowerCase().replace(/\s+/g, '');
+  const acceptedNames = ['kris', 'krissy', 'dekdek'];
+
+  if (!acceptedNames.includes(answer)) {
+    verificationError.textContent = 'Hmm… that’s not quite it. Try a name or nickname ♡';
+    verificationWindow.classList.remove('is-shaking');
+    void verificationWindow.offsetWidth;
+    verificationWindow.classList.add('is-shaking');
+    senderName.focus();
+    return;
+  }
+
+  verificationError.textContent = '';
+  nameCheckStep.classList.add('is-hidden');
+  fingerprintStep.classList.remove('is-hidden');
+  window.setTimeout(() => fingerprintButton.focus(), 80);
+}
+
+function finishFingerprint() {
+  fingerprintComplete = true;
+  window.clearTimeout(fingerprintTimer);
+  fingerprintButton.classList.remove('is-holding');
+  fingerprintButton.classList.add('is-complete');
+  fingerprintStatus.textContent = 'verified! welcome in ♡';
+  sessionStorage.setItem('friendship_sender_verified', 'yes');
+  burstHearts(fingerprintButton);
+
+  window.setTimeout(() => verificationOverlay.classList.add('is-unlocking'), 350);
+  window.setTimeout(() => {
+    verificationOverlay.classList.add('is-hidden');
+    verificationOverlay.classList.remove('is-unlocking');
+    if (!guideOverlay.classList.contains('is-hidden')) guideNext.focus();
+    else document.querySelector('[data-open="long-message-window"]')?.focus();
+  }, 1000);
+}
+
+function startFingerprintHold(event) {
+  if (fingerprintComplete || fingerprintButton.classList.contains('is-holding')) return;
+  event?.preventDefault();
+  fingerprintButton.classList.add('is-holding');
+  fingerprintStatus.textContent = 'keep holding… ♡';
+  fingerprintTimer = window.setTimeout(finishFingerprint, 1500);
+}
+
+function cancelFingerprintHold() {
+  if (fingerprintComplete || !fingerprintButton.classList.contains('is-holding')) return;
+  window.clearTimeout(fingerprintTimer);
+  fingerprintButton.classList.remove('is-holding');
+  fingerprintStatus.textContent = 'almost—hold it a little longer ♡';
+}
+
+verifyNameButton.addEventListener('click', checkSenderName);
+senderName.addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') checkSenderName();
+});
+fingerprintButton.addEventListener('pointerdown', startFingerprintHold);
+document.addEventListener('pointerup', cancelFingerprintHold);
+document.addEventListener('pointercancel', cancelFingerprintHold);
+fingerprintButton.addEventListener('keydown', (event) => {
+  if ((event.key === ' ' || event.key === 'Enter') && !event.repeat) startFingerprintHold(event);
+});
+fingerprintButton.addEventListener('keyup', (event) => {
+  if (event.key === ' ' || event.key === 'Enter') cancelFingerprintHold();
+});
+
+if (sessionStorage.getItem('friendship_sender_verified') === 'yes') {
+  verificationOverlay.classList.add('is-hidden');
+} else {
+  window.setTimeout(() => senderName.focus(), 100);
 }
 
 function updateClock() {

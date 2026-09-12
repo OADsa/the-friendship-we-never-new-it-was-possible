@@ -9,7 +9,7 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=14" />
+    <link rel="stylesheet" href="styles.css?v=15" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
@@ -277,6 +277,38 @@
       <div class="tray"><span aria-hidden="true">♡</span><time id="clock">11:11 PM</time></div>
     </footer>
 
+    <div class="verification-overlay" id="verification-overlay">
+      <section class="window verification-window" role="dialog" aria-modal="true" aria-labelledby="verification-title">
+        <header class="title-bar">
+          <div class="title-bar-label"><span class="tiny-heart" aria-hidden="true">♥</span><span>friend check.exe</span></div>
+        </header>
+        <div class="window-body verification-body">
+          <div class="verification-step" id="name-check-step">
+            <p class="eyebrow">A TINY CHECK BEFORE ENTERING</p>
+            <h2 id="verification-title">Do you know who sent this? ♡</h2>
+            <label class="sender-label" for="sender-name">What is the sender’s name?</label>
+            <input class="sender-input" id="sender-name" name="sender-name" type="text" autocomplete="off" autocapitalize="words" placeholder="type their name…" />
+            <p class="sender-hint">A name or nickname works. This is just for fun!</p>
+            <p class="verification-error" id="verification-error" aria-live="polite"></p>
+            <button class="pixel-button primary-button verify-name-button" id="verify-name-button" type="button">check answer ♥</button>
+          </div>
+
+          <div class="verification-step is-hidden" id="fingerprint-step">
+            <p class="eyebrow">NAME RECOGNIZED!</p>
+            <h2>One last little thing…</h2>
+            <p class="fingerprint-copy">Press and hold the heart-print until it fills up.</p>
+            <button class="fingerprint-button" id="fingerprint-button" type="button" aria-label="Press and hold to enter">
+              <span class="fingerprint-heart">♥</span>
+              <span class="fingerprint-lines" aria-hidden="true"></span>
+              <span class="fingerprint-scan" aria-hidden="true"></span>
+            </button>
+            <div class="fingerprint-progress" aria-hidden="true"><span></span></div>
+            <p class="fingerprint-status" id="fingerprint-status" aria-live="polite">keep holding… ♡</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <div class="guide-overlay" id="guide-overlay" role="presentation">
       <section class="window guide-window" role="dialog" aria-modal="true" aria-labelledby="guide-title">
         <header class="title-bar">
@@ -311,6 +343,6 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=13"></script>
+    <script src="script.js?v=15"></script>
   </body>
 </html>
