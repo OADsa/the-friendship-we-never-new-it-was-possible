@@ -189,6 +189,11 @@ const mysteryWitnessVoices = {
   noface: { src: 'assets/audio/no-face.m4a', label: 'NO-FACE’S STATEMENT' }
 };
 
+const classifiedVoice = {
+  src: 'assets/audio/classified.m4a',
+  label: 'CLASSIFIED FILE'
+};
+
 function formatVoiceTime(seconds) {
   if (!Number.isFinite(seconds)) return '0:00';
   const minutes = Math.floor(seconds / 60);
@@ -601,6 +606,7 @@ mysteryScreen.addEventListener('click', (event) => {
   }
   if (actionButton.dataset.gameAction === 'classified') {
     document.querySelector('#classified-note').classList.remove('is-hidden');
+    setMysteryVoice(classifiedVoice, true);
     burstHearts(actionButton);
   }
   if (actionButton.dataset.gameAction === 'replay') {
