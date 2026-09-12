@@ -741,8 +741,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   display: grid;
   place-items: center;
   padding: 16px;
-  background: rgba(112, 21, 65, .5);
-  backdrop-filter: blur(5px);
+  background: #030003;
 }
 .verification-overlay.is-hidden { display: none; }
 .verification-overlay.is-unlocking { animation: unlock-overlay .65s ease-in forwards; pointer-events: none; }
@@ -765,8 +764,25 @@ h1 em { color: #ec4c91; font-style: normal; }
 .sender-input:focus { box-shadow: 0 0 0 3px #f7a7c8; }
 .sender-hint { margin: 9px 0 0; color: #97506f; font-size: 9px; }
 .verification-error { min-height: 18px; margin: 8px 0; color: #c12768; font-size: 10px; }
+.anger-status { margin: 4px 0 15px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #9c466d; font: 12px "Pixelify Sans", monospace; }
+.anger-meter { display: flex; gap: 4px; }
+.anger-meter i { width: 18px; height: 10px; border: 1px solid #a73465; background: #fff; box-shadow: inset 1px 1px #ffd2e3; }
+.anger-meter i.is-filled { background: #df2f71; animation: angry-segment .25s steps(2); }
 .verify-name-button { width: 100%; min-height: 46px; }
 .verification-window.is-shaking { animation: gentle-no .32s steps(3); }
+.verification-overlay[data-anger="1"] .title-bar { background: linear-gradient(90deg, #b82a6a, #ed4a86); }
+.verification-overlay[data-anger="2"] .verification-window { box-shadow: 8px 9px 0 #7c123d, 0 0 35px rgba(255, 41, 103, .45); }
+.verification-overlay[data-anger="2"] .verification-window.is-shaking { animation: annoyed-no .38s steps(4); }
+.verification-overlay[data-anger="2"] .anger-status { color: #c21f5d; }
+.verification-overlay[data-anger="3"] { animation: angry-screen-pulse .85s steps(2) infinite; }
+.verification-overlay[data-anger="3"] .title-bar,
+.verification-overlay[data-anger="4"] .title-bar { background: linear-gradient(90deg, #740026, #ec174f 55%, #ff694f); }
+.verification-overlay[data-anger="3"] .verification-window.is-shaking { animation: angry-no .32s steps(5); }
+.verification-overlay[data-anger="3"] .verification-step h2,
+.verification-overlay[data-anger="4"] .verification-step h2 { color: #bd124d; text-shadow: 2px 2px #ff9aae; }
+.verification-overlay[data-anger="4"] { background: #000; box-shadow: inset 0 0 110px #7d001f; }
+.verification-overlay[data-anger="4"] .verification-window { animation: furious-jitter .15s steps(2) infinite; border-color: #ff96ad #74001d #74001d #ff96ad; }
+.verification-overlay[data-anger="4"] .verify-name-button { background: #ce174f; }
 
 .fingerprint-copy { margin: -8px 0 20px; font-size: 10px; line-height: 1.6; }
 .fingerprint-button {
@@ -801,6 +817,11 @@ h1 em { color: #ec4c91; font-style: normal; }
 .fingerprint-button.is-complete + .fingerprint-progress span { width: 100%; }
 .fingerprint-status { margin: 10px 0 0; color: #9d315e; font: 15px "Pixelify Sans", monospace; text-align: center; }
 @keyframes gentle-no { 0%, 100% { transform: translateX(0); } 33% { transform: translateX(-7px); } 66% { transform: translateX(7px); } }
+@keyframes annoyed-no { 0%, 100% { transform: translateX(0) rotate(0); } 25% { transform: translateX(-10px) rotate(-1deg); } 75% { transform: translateX(10px) rotate(1deg); } }
+@keyframes angry-no { 0%, 100% { transform: translate(0); } 20% { transform: translate(-12px, 2px); } 40% { transform: translate(10px, -2px); } 60% { transform: translate(-8px, -1px); } 80% { transform: translate(12px, 2px); } }
+@keyframes furious-jitter { 0% { transform: translate(-2px, 1px); } 50% { transform: translate(2px, -1px); } 100% { transform: translate(-1px, -2px); } }
+@keyframes angry-screen-pulse { 0%, 100% { background: #030003; } 50% { background: #180008; } }
+@keyframes angry-segment { 50% { transform: scaleY(1.45); background: #ff174f; } }
 @keyframes heartbeat { 50% { transform: scale(1.13); } }
 @keyframes fingerprint-scan { from { transform: translateY(4px); } to { transform: translateY(94px); } }
 @keyframes unlock-overlay { 45% { opacity: 1; } 100% { opacity: 0; transform: scale(1.04); } }

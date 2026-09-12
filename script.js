@@ -19,12 +19,15 @@ const fingerprintStep = document.querySelector('#fingerprint-step');
 const senderName = document.querySelector('#sender-name');
 const verifyNameButton = document.querySelector('#verify-name-button');
 const verificationError = document.querySelector('#verification-error');
+const verificationMood = document.querySelector('#verification-mood');
+const angerSegments = [...document.querySelectorAll('.anger-meter i')];
 const fingerprintButton = document.querySelector('#fingerprint-button');
 const fingerprintStatus = document.querySelector('#fingerprint-status');
 let currentGuideStep = 0;
 let highestWindowZ = 60;
 let fingerprintTimer;
 let fingerprintComplete = false;
+let wrongNameAttempts = 0;
 
 const messages = [
   "Dear Bembun, I’m really glad I met you.",
@@ -331,7 +334,21 @@ function checkSenderName() {
   const acceptedNames = ['kris', 'krissy', 'dekdek'];
 
   if (!acceptedNames.includes(answer)) {
-    verificationError.textContent = 'Hmm… that’s not quite it. Try a name or nickname ♡';
+    wrongNameAttempts = Math.min(wrongNameAttempts + 1, 4);
+    const wrongMessages = [
+      'Nope… try a name or nickname ♡',
+      'Hey! Are you sure you know the sender? >:(',
+      'The little computer is getting suspicious…',
+      'ACCESS DENIED! Think harder!!'
+    ];
+    const moods = ['mood: slightly annoyed :/', 'mood: getting grumpy >:(', 'mood: VERY MAD!!', 'mood: FURIOUS!!!'];
+    const buttonLabels = ['try again', 'try harder >:(', 'last chance!!', 'ACCESS DENIED'];
+
+    verificationOverlay.dataset.anger = String(wrongNameAttempts);
+    verificationError.textContent = wrongMessages[wrongNameAttempts - 1];
+    verificationMood.textContent = moods[wrongNameAttempts - 1];
+    verifyNameButton.textContent = buttonLabels[wrongNameAttempts - 1];
+    angerSegments.forEach((segment, index) => segment.classList.toggle('is-filled', index < wrongNameAttempts));
     verificationWindow.classList.remove('is-shaking');
     void verificationWindow.offsetWidth;
     verificationWindow.classList.add('is-shaking');
@@ -339,7 +356,10 @@ function checkSenderName() {
     return;
   }
 
+  verificationOverlay.removeAttribute('data-anger');
   verificationError.textContent = '';
+  verificationMood.textContent = 'mood: happy again ♡';
+  angerSegments.forEach((segment) => segment.classList.remove('is-filled'));
   nameCheckStep.classList.add('is-hidden');
   fingerprintStep.classList.remove('is-hidden');
   window.setTimeout(() => fingerprintButton.focus(), 80);

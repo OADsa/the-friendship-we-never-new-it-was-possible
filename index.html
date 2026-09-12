@@ -9,7 +9,7 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=15" />
+    <link rel="stylesheet" href="styles.css?v=16" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
@@ -290,6 +290,12 @@
             <input class="sender-input" id="sender-name" name="sender-name" type="text" autocomplete="off" autocapitalize="words" placeholder="type their name…" />
             <p class="sender-hint">A name or nickname works. This is just for fun!</p>
             <p class="verification-error" id="verification-error" aria-live="polite"></p>
+            <div class="anger-status" aria-live="polite">
+              <span id="verification-mood">mood: curious ♡</span>
+              <div class="anger-meter" aria-label="Computer patience meter">
+                <i></i><i></i><i></i><i></i>
+              </div>
+            </div>
             <button class="pixel-button primary-button verify-name-button" id="verify-name-button" type="button">check answer ♥</button>
           </div>
 
@@ -343,6 +349,6 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=15"></script>
+    <script src="script.js?v=16"></script>
   </body>
 </html>
