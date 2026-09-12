@@ -9,11 +9,26 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=3" />
+    <link rel="stylesheet" href="styles.css?v=4" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
     <div id="heart-field" class="heart-field" aria-hidden="true"></div>
+
+    <div class="totoro-walker" aria-hidden="true">
+      <div class="totoro-sprite">
+        <span class="totoro-ear left"></span>
+        <span class="totoro-ear right"></span>
+        <span class="totoro-body">
+          <span class="totoro-eye left"></span>
+          <span class="totoro-eye right"></span>
+          <span class="totoro-nose"></span>
+          <span class="totoro-belly"><i>⌃</i><i>⌃</i><i>⌃</i></span>
+          <span class="totoro-foot left"></span>
+          <span class="totoro-foot right"></span>
+        </span>
+      </div>
+    </div>
 
     <main class="desktop">
       <section class="desktop-icons" aria-label="Desktop shortcuts">
@@ -41,8 +56,10 @@
             <span class="tiny-heart" aria-hidden="true">♥</span>
             <span>friendship.exe</span>
           </div>
-          <div class="window-controls" aria-hidden="true">
-            <span>_</span><span>□</span><span>×</span>
+          <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize friendship window">_</button>
+            <button type="button" data-window-action="maximize" aria-label="Maximize friendship window">□</button>
+            <button type="button" data-window-action="close" aria-label="Close friendship window">×</button>
           </div>
         </header>
 
@@ -93,6 +110,7 @@
         <header class="title-bar">
           <div class="title-bar-label"><span>📝</span><span id="note-title">read me.txt</span></div>
           <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize note">_</button>
             <button class="close-window" type="button" aria-label="Close note">×</button>
           </div>
         </header>
@@ -107,6 +125,7 @@
         <header class="title-bar">
           <div class="title-bar-label"><span>📁</span><span id="little-letters-title">C:\LITTLE_LETTERS</span></div>
           <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize little letters">_</button>
             <button class="close-window" type="button" aria-label="Close little letters">×</button>
           </div>
         </header>
@@ -131,6 +150,7 @@
         <header class="title-bar">
           <div class="title-bar-label"><span>💌</span><span id="appreciation-title">Appreciation Letter.doc</span></div>
           <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize appreciation letter">_</button>
             <button class="close-window" type="button" aria-label="Close appreciation letter">×</button>
           </div>
         </header>
@@ -148,6 +168,7 @@
         <header class="title-bar">
           <div class="title-bar-label"><span>✉</span><span id="thank-you-title">Thank You Letter.doc</span></div>
           <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize thank you letter">_</button>
             <button class="close-window" type="button" aria-label="Close thank you letter">×</button>
           </div>
         </header>
@@ -164,11 +185,45 @@
 
     <footer class="taskbar">
       <button class="start-button" type="button" data-open="hero-window"><span>♥</span> start</button>
-      <div class="taskbar-item">friendship.exe</div>
+      <button class="taskbar-item" type="button" data-open="hero-window">friendship.exe</button>
+      <button class="help-button" id="help-button" type="button" aria-label="Open navigation guide">?</button>
       <div class="tray"><span aria-hidden="true">♡</span><time id="clock">11:11 PM</time></div>
     </footer>
 
+    <div class="guide-overlay" id="guide-overlay" role="presentation">
+      <section class="window guide-window" role="dialog" aria-modal="true" aria-labelledby="guide-title">
+        <header class="title-bar">
+          <div class="title-bar-label"><span class="tiny-heart" aria-hidden="true">?</span><span>quick guide.exe</span></div>
+        </header>
+        <div class="window-body guide-body">
+          <div class="guide-step is-active" data-guide-step="0">
+            <p class="eyebrow">BEFORE YOU BEGIN</p>
+            <h2 id="guide-title">Hi! Here’s how to explore ♡</h2>
+            <div class="guide-list">
+              <p><span>1</span><strong>Tap a desktop icon</strong> to open a letter or little surprise.</p>
+              <p><span>2</span><strong>Tap a file name</strong> inside Little Letters to read its message.</p>
+              <p><span>3</span><strong>Use _ to minimize and × to close.</strong> Tap the taskbar to reopen the main window.</p>
+            </div>
+          </div>
+          <div class="guide-step" data-guide-step="1">
+            <p class="eyebrow">ONE MORE THING</p>
+            <h2>A tiny friend is here too!</h2>
+            <div class="guide-creature" aria-hidden="true">♥</div>
+            <p class="guide-copy">Look near the bottom of the screen—a little Totoro-inspired forest friend will walk around while you read.</p>
+            <p class="guide-copy">You can open this guide again anytime by tapping the <strong>?</strong> button below.</p>
+          </div>
+          <div class="guide-footer">
+            <div class="guide-dots" aria-hidden="true"><span class="is-active"></span><span></span></div>
+            <div class="guide-actions">
+              <button class="pixel-button is-hidden" id="guide-back" type="button">back</button>
+              <button class="pixel-button primary-button" id="guide-next" type="button">next →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=3"></script>
+    <script src="script.js?v=4"></script>
   </body>
 </html>

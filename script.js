@@ -3,6 +3,11 @@ const celebrateButton = document.querySelector('#celebrate-button');
 const toast = document.querySelector('#toast');
 const noteText = document.querySelector('#note-text');
 const littleLetterPreview = document.querySelector('#little-letter-preview');
+const guideOverlay = document.querySelector('#navigation-guide, #guide-overlay');
+const guideNext = document.querySelector('#guide-next');
+const guideBack = document.querySelector('#guide-back');
+const helpButton = document.querySelector('#help-button');
+let currentGuideStep = 0;
 
 const reminders = [
   'You are one of my favorite plot twists. ♡',
@@ -61,6 +66,7 @@ function showWindow(id) {
   const target = document.getElementById(id);
   if (!target) return;
   target.classList.remove('is-hidden');
+  target.classList.remove('is-minimized');
   target.style.zIndex = String(40 + Math.floor(Math.random() * 20));
 }
 
@@ -84,6 +90,28 @@ document.querySelectorAll('.close-window').forEach((button) => {
   button.addEventListener('click', () => closeWindow(button));
 });
 
+document.querySelectorAll('[data-window-action]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const targetWindow = button.closest('.window');
+    if (!targetWindow) return;
+
+    if (button.dataset.windowAction === 'close') {
+      targetWindow.classList.add('is-hidden');
+    }
+
+    if (button.dataset.windowAction === 'minimize') {
+      targetWindow.classList.toggle('is-minimized');
+      button.setAttribute('aria-label', targetWindow.classList.contains('is-minimized') ? 'Restore window' : 'Minimize window');
+    }
+
+    if (button.dataset.windowAction === 'maximize') {
+      targetWindow.classList.toggle('is-maximized');
+      button.textContent = targetWindow.classList.contains('is-maximized') ? '❐' : '□';
+      button.setAttribute('aria-label', targetWindow.classList.contains('is-maximized') ? 'Restore friendship window' : 'Maximize friendship window');
+    }
+  });
+});
+
 celebrateButton.addEventListener('click', () => {
   const reminder = reminders[Math.floor(Math.random() * reminders.length)];
   noteText.textContent = noteMessages[Math.floor(Math.random() * noteMessages.length)];
@@ -96,6 +124,52 @@ document.querySelectorAll('.little-letter-file').forEach((file) => {
     littleLetterPreview.textContent = file.dataset.letter;
   });
 });
+
+function renderGuideStep() {
+  document.querySelectorAll('.guide-step').forEach((step, index) => {
+    step.classList.toggle('is-active', index === currentGuideStep);
+  });
+  document.querySelectorAll('.guide-dots span').forEach((dot, index) => {
+    dot.classList.toggle('is-active', index === currentGuideStep);
+  });
+  guideBack.classList.toggle('is-hidden', currentGuideStep === 0);
+  guideNext.textContent = currentGuideStep === 1 ? 'enter site ♡' : 'next →';
+}
+
+function openGuide() {
+  currentGuideStep = 0;
+  renderGuideStep();
+  guideOverlay.classList.remove('is-hidden');
+  window.setTimeout(() => guideNext.focus(), 50);
+}
+
+function finishGuide() {
+  guideOverlay.classList.add('is-hidden');
+  sessionStorage.setItem('friendship_navigation_seen', 'yes');
+  document.querySelector('[data-open="little-letters-window"]')?.focus();
+}
+
+guideNext.addEventListener('click', () => {
+  if (currentGuideStep === 1) {
+    finishGuide();
+    return;
+  }
+  currentGuideStep += 1;
+  renderGuideStep();
+});
+
+guideBack.addEventListener('click', () => {
+  currentGuideStep = Math.max(0, currentGuideStep - 1);
+  renderGuideStep();
+});
+
+helpButton.addEventListener('click', openGuide);
+
+if (sessionStorage.getItem('friendship_navigation_seen') === 'yes') {
+  guideOverlay.classList.add('is-hidden');
+} else {
+  openGuide();
+}
 
 function updateClock() {
   document.querySelector('#clock').textContent = new Intl.DateTimeFormat('en', {
