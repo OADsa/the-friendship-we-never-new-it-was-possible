@@ -387,6 +387,36 @@ h1 em { color: #ec4c91; font-style: normal; }
 .little-letter-file span { margin-right: 7px; }
 .little-letter-preview { min-height: 66px; margin: 8px 0 0; padding: 13px; border: 2px inset #ffd0e2; background: #fff; font-size: 10px; line-height: 1.6; }
 
+.messages-window {
+  position: fixed;
+  z-index: 38;
+  width: min(560px, calc(100vw - 28px));
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.messages-body { padding: 30px; }
+.message-counter { margin-bottom: 9px; color: #a52961; font-size: 10px; font-weight: 500; letter-spacing: .12em; }
+.message-paper {
+  position: relative;
+  min-height: 190px;
+  padding: 34px 36px;
+  display: grid;
+  place-items: center;
+  border: 2px solid;
+  border-color: #d76a99 #fff #fff #d76a99;
+  background:
+    linear-gradient(rgba(255,255,255,.88), rgba(255,255,255,.88)),
+    repeating-linear-gradient(0deg, transparent 0 27px, #f4a8c7 28px);
+  text-align: center;
+}
+.message-paper p { margin: 0; font: 600 clamp(23px, 4vw, 32px)/1.25 "Pixelify Sans", monospace; color: #8f2558; text-wrap: balance; }
+.message-paper strong { color: #ed438b; font-weight: 700; }
+.message-heart { position: absolute; right: 13px; top: 9px; color: #f187b3; font-size: 18px; animation: twinkle 1.5s steps(2) infinite; }
+.message-controls { margin-top: 18px; display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 9px; }
+.message-controls .pixel-button { min-height: 44px; padding-inline: 8px; }
+
 .letter-window {
   position: fixed;
   z-index: 35;
@@ -772,6 +802,11 @@ h1 em { color: #ec4c91; font-style: normal; }
   .taskbar-item { display: none; }
   .little-letters-window { left: 50%; top: 50%; }
   .letter-body { max-height: calc(100vh - 100px); padding: 26px 22px; font-size: 14px; }
+  .messages-body { padding: 22px 16px; }
+  .message-paper { min-height: 220px; padding: 28px 22px; }
+  .message-paper p { font-size: 25px; }
+  .message-controls { grid-template-columns: 1fr 1fr; }
+  .message-controls .primary-button { grid-column: 1 / -1; grid-row: 1; }
   .window-controls button { width: 31px; height: 28px; }
   .guide-overlay { padding: 10px; }
   .guide-window { width: calc(100vw - 20px); }

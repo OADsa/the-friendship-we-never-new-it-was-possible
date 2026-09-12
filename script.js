@@ -3,19 +3,121 @@ const celebrateButton = document.querySelector('#celebrate-button');
 const toast = document.querySelector('#toast');
 const noteText = document.querySelector('#note-text');
 const littleLetterPreview = document.querySelector('#little-letter-preview');
+const messageText = document.querySelector('#message-text');
+const messageCounter = document.querySelector('#message-counter');
+const previousMessage = document.querySelector('#previous-message');
+const randomMessage = document.querySelector('#random-message');
+const nextMessage = document.querySelector('#next-message');
 const guideOverlay = document.querySelector('#navigation-guide, #guide-overlay');
 const guideNext = document.querySelector('#guide-next');
 const guideBack = document.querySelector('#guide-back');
 const helpButton = document.querySelector('#help-button');
 let currentGuideStep = 0;
 
-const reminders = [
-  'You are one of my favorite plot twists. ♡',
-  'Life is better with you in the group chat.',
-  'No distance can uninstall this friendship.',
-  'You make being understood feel easy.',
-  'In every timeline, I hope we find each other.'
+const messages = [
+  "Dear Bembun, I’m really glad I met you.",
+  "Thank you, Bembun, for always making me smile.",
+  "Bembun, you’re someone I genuinely appreciate.",
+  "I’m thankful for every conversation with you, Bembun.",
+  "Bembun, you make my days a little better.",
+  "Thank you for being yourself, Bembun.",
+  "I’m happy that I get to know you, Bembun.",
+  "Bembun, you’re honestly someone special to me.",
+  "Thank you for letting me be part of your life, Bembun.",
+  "Bembun, I appreciate you more than I say.",
+  "I hope I can make you smile too, Bembun.",
+  "Bembun, talking to you is always something I look forward to.",
+  "Thank you for listening to me, Bembun.",
+  "Bembun, you make even random conversations memorable.",
+  "I’m grateful that our paths crossed, Bembun.",
+  "Bembun, you deserve all the happiness in the world.",
+  "Thank you for reassuring me, Bembun.",
+  "Bembun, I’m glad I can be myself around you.",
+  "You’re someone I’m happy to have met, Bembun.",
+  "Bembun, your presence means a lot to me.",
+  "Thank you for every little thing you do, Bembun.",
+  "Bembun, I genuinely enjoy talking to you.",
+  "I appreciate every moment with you, Bembun.",
+  "Bembun, you’re one of my favorite people to talk to.",
+  "Thank you for being honest with me, Bembun.",
+  "Bembun, I hope you know how appreciated you are.",
+  "I’m thankful for the memories we’re making, Bembun.",
+  "Bembun, you make me smile without even trying.",
+  "Thank you for being part of my life, Bembun.",
+  "Bembun, I’ll always appreciate you.",
+  "I’m glad I got to know you, Bembun.",
+  "Bembun, you’re genuinely worth knowing.",
+  "Thank you for all the laughs, Bembun.",
+  "Bembun, your happiness matters to me.",
+  "I’m grateful for you, Bembun.",
+  "Bembun, you make ordinary days feel special.",
+  "Thank you for trusting me, Bembun.",
+  "Bembun, I’m proud of you for choosing yourself.",
+  "I’ll always support you, Bembun.",
+  "Bembun, take your time. I’ll respect your pace.",
+  "Thank you for every random story, Bembun.",
+  "Bembun, you’re honestly adorable.",
+  "I hope life treats you kindly, Bembun.",
+  "Bembun, I’m happy you’re here.",
+  "Thank you for putting up with me, Bembun. :3",
+  "Bembun, you’re someone I don’t want to lose.",
+  "I appreciate your kindness, Bembun.",
+  "Bembun, I’ll always cheer for you.",
+  "Thank you for making me feel heard, Bembun.",
+  "Bembun, you mean more to me than you know.",
+  "I’m grateful for our connection, Bembun.",
+  "Bembun, you’re a beautiful part of my life.",
+  "Thank you for being patient with me, Bembun.",
+  "Bembun, I like getting to know you slowly.",
+  "You make conversations feel easy, Bembun.",
+  "Bembun, I hope I can be someone you can rely on.",
+  "Thank you for every smile you’ve given me.",
+  "Bembun, I’ll always respect your feelings.",
+  "I’m happy with where we are, Bembun.",
+  "Bembun, no pressure, just appreciation.",
+  "Thank you for being someone I can talk to.",
+  "Bembun, you’re genuinely important to me.",
+  "I hope I make your days better too.",
+  "Bembun, I’ll always value what we have.",
+  "Thank you for the little moments, Bembun.",
+  "Bembun, you have such a comforting presence.",
+  "I’m glad you’re part of my story.",
+  "Bembun, you’re someone I’ll always remember.",
+  "Thank you for being you.",
+  "Bembun, I appreciate you every day.",
+  "I hope you never forget how special you are.",
+  "Bembun, you deserve someone who understands you.",
+  "Thank you for allowing me to know you better.",
+  "Bembun, I’m happy whenever I hear from you.",
+  "I’ll always be grateful for you.",
+  "Bembun, you’re worth the patience.",
+  "Thank you for every conversation we’ve had.",
+  "Bembun, I’ll always root for you.",
+  "I’m thankful that I met you.",
+  "Bembun, you make waiting feel worth it.",
+  "Thank you for every little interaction.",
+  "Bembun, I hope you always feel appreciated.",
+  "I’m grateful for your presence.",
+  "Bembun, you’re someone I care about deeply.",
+  "Thank you for giving me something to smile about.",
+  "Bembun, I appreciate how honest you are.",
+  "I’ll always respect your boundaries.",
+  "Bembun, I hope we keep making memories.",
+  "Thank you for being part of my days.",
+  "Bembun, you make life feel a little lighter.",
+  "I’m grateful for every “hello.”",
+  "Bembun, I’ll always appreciate our connection.",
+  "Thank you for letting me stay in your life.",
+  "Bembun, you’re someone worth waiting for.",
+  "I hope you always feel safe talking to me.",
+  "Bembun, I’m happy we’re friends.",
+  "Thank you for being someone I trust.",
+  "Bembun, I’m grateful for you every day.",
+  "I’ll always appreciate you, Bembun. ♡",
+  "Dear Bembun, thank you for coming into my life. I’m genuinely grateful I met you. <3"
 ];
+
+let currentMessageIndex = 0;
 
 const noteMessages = [
   'You make ordinary days feel like something worth saving.',
@@ -113,7 +215,7 @@ document.querySelectorAll('[data-window-action]').forEach((button) => {
 });
 
 celebrateButton.addEventListener('click', () => {
-  const reminder = reminders[Math.floor(Math.random() * reminders.length)];
+  const reminder = messages[Math.floor(Math.random() * messages.length)];
   noteText.textContent = noteMessages[Math.floor(Math.random() * noteMessages.length)];
   burstHearts(celebrateButton);
   showToast(reminder);
@@ -123,6 +225,38 @@ document.querySelectorAll('.little-letter-file').forEach((file) => {
   file.addEventListener('click', () => {
     littleLetterPreview.textContent = file.dataset.letter;
   });
+});
+
+function renderMessage() {
+  messageCounter.textContent = `MESSAGE ${String(currentMessageIndex + 1).padStart(3, '0')} / ${messages.length}`;
+  messageText.replaceChildren();
+  messages[currentMessageIndex].split(/(Bembun)/g).forEach((part) => {
+    if (part === 'Bembun') {
+      const emphasis = document.createElement('strong');
+      emphasis.textContent = part;
+      messageText.appendChild(emphasis);
+    } else {
+      messageText.appendChild(document.createTextNode(part));
+    }
+  });
+}
+
+previousMessage.addEventListener('click', () => {
+  currentMessageIndex = (currentMessageIndex - 1 + messages.length) % messages.length;
+  renderMessage();
+});
+
+nextMessage.addEventListener('click', () => {
+  currentMessageIndex = (currentMessageIndex + 1) % messages.length;
+  renderMessage();
+});
+
+randomMessage.addEventListener('click', () => {
+  let nextIndex = currentMessageIndex;
+  while (nextIndex === currentMessageIndex) nextIndex = Math.floor(Math.random() * messages.length);
+  currentMessageIndex = nextIndex;
+  renderMessage();
+  burstHearts(randomMessage);
 });
 
 function renderGuideStep() {
@@ -178,5 +312,6 @@ function updateClock() {
 }
 
 makeFloatingHearts();
+renderMessage();
 updateClock();
 window.setInterval(updateClock, 30000);

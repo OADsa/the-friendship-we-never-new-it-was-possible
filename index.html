@@ -9,7 +9,7 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=10" />
+    <link rel="stylesheet" href="styles.css?v=12" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
@@ -164,6 +164,12 @@
           </div>
         </header>
         <div class="window-body little-letters-body">
+          <button class="little-letter-file" type="button" data-open="messages-window" data-letter="Opening all 100 messages for Bembun… ♡">
+            <span>💗</span> 100_messages.exe
+          </button>
+          <button class="little-letter-file" type="button" data-open="long-message-window" data-letter="A long message written especially for Bembun. Take your time reading it. ♡">
+            <span>💌</span> long_message.doc
+          </button>
           <button class="little-letter-file" type="button" data-letter="I’m really glad you’re here. That’s all—just something I hope you never forget. ♡">
             <span>💌</span> for_you.txt
           </button>
@@ -177,6 +183,52 @@
             <span>✨</span> just_because.txt
           </button>
           <p class="little-letter-preview" id="little-letter-preview">Choose a little letter to read. ♡</p>
+        </div>
+      </section>
+
+      <section class="window messages-window is-hidden" id="messages-window" aria-labelledby="messages-title">
+        <header class="title-bar">
+          <div class="title-bar-label"><span>💗</span><span id="messages-title">100 Messages for Bembun</span></div>
+          <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize 100 messages">_</button>
+            <button class="close-window" type="button" aria-label="Close 100 messages">×</button>
+          </div>
+        </header>
+        <div class="window-body messages-body">
+          <div class="message-counter" id="message-counter">MESSAGE 001 / 100</div>
+          <div class="message-paper">
+            <span class="message-heart" aria-hidden="true">♥</span>
+            <p id="message-text"></p>
+          </div>
+          <div class="message-controls" aria-label="Message controls">
+            <button class="pixel-button" id="previous-message" type="button">← previous</button>
+            <button class="pixel-button primary-button" id="random-message" type="button">surprise me ✦</button>
+            <button class="pixel-button" id="next-message" type="button">next →</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="window letter-window long-message-window is-hidden" id="long-message-window" aria-labelledby="long-message-title">
+        <header class="title-bar">
+          <div class="title-bar-label"><span>💌</span><span id="long-message-title">A Long Message for Bembun.doc</span></div>
+          <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize long message">_</button>
+            <button class="close-window" type="button" aria-label="Close long message">×</button>
+          </div>
+        </header>
+        <div class="window-body letter-body long-message-body">
+          <p class="letter-greeting">Dear Bembun,</p>
+          <p>I don't really know how to put everything I feel into words, but I want to try anyway. I just want you to know how much I appreciate you and how grateful I am that I got the chance to meet you and know you.</p>
+          <p>When I first started getting close to you, I honestly didn't expect that you would become someone this important to me. I tend to get attached really quickly, and sometimes I know I can become clingy or overthink things. I'm aware of that about myself. A lot of the time, I think it's because I'm scared of being left behind. Being left by someone you care about isn't easy, and getting yourself back together afterward can be even harder. That's something I'm still learning to deal with.</p>
+          <p>But I don't want my fears to become something you have to carry for me. I don't want you to feel like you have to constantly reassure me or stay because you're worried about hurting me. I want to learn how to care about someone without holding them too tightly. And with you, I want to learn how to do that properly.</p>
+          <p>I really appreciate how honest you've been with me, and how you took the time to explain how you feel instead of leaving me confused. I know that you want to focus on yourself right now, and I respect that. You deserve the time and space to figure things out, to grow, and to take care of yourself.</p>
+          <p>Even if things aren't exactly what I imagined, I'm still grateful that I get to be part of your life, even if it's just as a friend for now. I'd rather have you in my life as a friend than lose you completely.</p>
+          <p>I don't want to rush you or make you feel pressured. I want you to take your time. And while you do that, I'll be here—supporting you, cheering for you, and being someone you can talk to.</p>
+          <p>Thank you for every conversation, every laugh, every random story, and every small moment we've shared. They might seem simple, but they mean a lot to me.</p>
+          <p>I don't know what the future will bring, and I don't want to force anything. I just want to appreciate what we have right now and continue getting to know you.</p>
+          <p class="letter-closing">Thank you for being Bembun. And thank you for letting me be someone who cares about you.</p>
+          <p class="letter-closing">Always take your time. I'll be cheering for you. &lt;3</p>
+          <button class="pixel-button close-window" type="button">close letter ♡</button>
         </div>
       </section>
 
@@ -258,6 +310,6 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=9"></script>
+    <script src="script.js?v=12"></script>
   </body>
 </html>
