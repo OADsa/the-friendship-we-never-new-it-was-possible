@@ -1080,7 +1080,7 @@ function submitValhallaDeduction(form) {
   window.setTimeout(() => {
     case2Stage += 1;
     renderMysteryGame();
-    playMysteryStageVoice(false);
+    playMysteryStageVoice(true);
   }, 1400);
 }
 
@@ -1112,7 +1112,7 @@ mysteryScreen.addEventListener('click', (event) => {
       currentValhallaSuspect = valhallaSuspectButton.dataset.valhallaSuspect;
       valhallaSuspectsSeen.add(currentValhallaSuspect);
       renderMysteryGame(true);
-      playMysteryStageVoice(false);
+      playMysteryStageVoice(true);
       return;
     }
 
@@ -1120,7 +1120,7 @@ mysteryScreen.addEventListener('click', (event) => {
       case2ProloguePage += case2PrologueButton.dataset.case2Prologue === 'next' ? 1 : -1;
       case2ProloguePage = Math.max(0, Math.min(valhallaPrologue.length - 1, case2ProloguePage));
       renderMysteryGame();
-      playMysteryStageVoice(false);
+      playMysteryStageVoice(true);
       return;
     }
 
@@ -1143,7 +1143,7 @@ mysteryScreen.addEventListener('click', (event) => {
         case2Stage += 1;
       }
       renderMysteryGame();
-      playMysteryStageVoice(false);
+      playMysteryStageVoice(true);
       return;
     }
 
@@ -1188,7 +1188,7 @@ mysteryScreen.addEventListener('click', (event) => {
     case2Stage = 0;
     case2ProloguePage = 0;
     renderMysteryGame();
-    playMysteryStageVoice(false);
+    playMysteryStageVoice(true);
     return;
   }
   if (actionButton.dataset.gameAction === 'start' || actionButton.dataset.gameAction === 'continue') {
