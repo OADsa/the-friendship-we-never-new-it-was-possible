@@ -26,8 +26,10 @@ const fingerprintStatus = document.querySelector('#fingerprint-status');
 const totoroWalker = document.querySelector('.totoro-walker');
 const calciferCamp = document.querySelector('.calcifer-camp');
 const mysteryScreen = document.querySelector('#mystery-screen');
+const mysteryWindow = document.querySelector('#mystery-window');
+const mysteryTitle = document.querySelector('#mystery-title');
 const caseStatus = document.querySelector('#case-status');
-const caseProgressSegments = [...document.querySelectorAll('#case-progress span')];
+const caseProgress = document.querySelector('#case-progress');
 const mysteryVoiceAudio = document.querySelector('#case-voice-audio');
 const mysteryVoiceToggle = document.querySelector('#case-voice-toggle');
 const mysteryVoiceLabel = document.querySelector('#case-voice-label');
@@ -41,10 +43,14 @@ let wrongNameAttempts = 0;
 let charactersStunned = false;
 let collisionCooldownUntil = 0;
 let mysteryStage = 0;
+let activeMysteryCase = 1;
+let case2Stage = 0;
 let currentEvidence = '';
 let currentWitness = '';
+let currentValhallaSuspect = '';
 const evidenceSeen = new Set();
 const witnessesSeen = new Set();
+const valhallaSuspectsSeen = new Set();
 
 const messages = [
   "Dear Bembun, I’m really glad I met you.",
@@ -347,6 +353,69 @@ const classifiedVoice = {
   label: 'CLASSIFIED FILE'
 };
 
+const valhallaSuspects = [
+  { id: 'loki', mark: 'L', name: 'Loki', role: 'God of Mischief', statement: '“Dekdek? Invented name. Invented boy. A detective chasing a bedtime story.” He smiles before Bembun mentions any name.' },
+  { id: 'jack', mark: 'J', name: 'Jack', role: 'The Ripper', statement: '“The boy carries a color he cannot see himself—blue, threaded with gold. Hope hidden underneath fear.”' },
+  { id: 'sasaki', mark: 'S', name: 'Sasaki Kojiro', role: 'History’s Loser', statement: '“His memories are not gone naturally. The gaps are too clean, like pages cut from a book.”' },
+  { id: 'poseidon', mark: 'P', name: 'Poseidon', role: 'Lord of the Seas', statement: '“The western archive has remained sealed since 11:30. There are no old records worth discussing.”' },
+  { id: 'shiva', mark: 'S', name: 'Shiva', role: 'Destroyer', statement: '“I saw the kid once, before the erasure. Quiet. Still watching the door as though someone might return.”' },
+  { id: 'buddha', mark: 'B', name: 'Buddha', role: 'The Enlightened', statement: '“You will find him. The interesting question is what he will find when you do.”' },
+  { id: 'zeus', mark: 'Z', name: 'Zeus', role: 'Chairman of Valhalla', statement: '“This investigation is forbidden. Close the case, Detective. Some absences protect the future.”' },
+  { id: 'odin', mark: 'O', name: 'Odin', role: 'The All-Father', statement: '“There is no boy without a story.” His ravens repeat one word: “Forgotten.”' }
+];
+
+const valhallaFiles = [
+  {
+    number: '05', date: 'UNKNOWN', title: 'THE KEEPER’S LAST VERSE', kind: 'ACROSTIC',
+    body: ['Find what the fire could not erase.', 'Inside the silence, a trail remains.', 'No god will speak the hidden name.', 'Dust guards the first truth.', 'Do not trust the order of these files.', 'Every beginning matters.', 'Keep only the first mark.', 'Do the same after the divide.', 'Every erased line still leaves a shape.', 'Keep looking.'],
+    prompt: 'Read the first letter of every line. What instruction survives?',
+    options: ['FIND DEKDEK', 'FOLLOW ODIN', 'CLOSE THE CASE'], correct: 'FIND DEKDEK',
+    success: 'Identity fragment recovered: DEKDEK. No matching citizen exists in Valhalla’s official records.'
+  },
+  {
+    number: '02', date: '3 DAYS BEFORE', title: 'THE SHIFTED NAME', kind: 'CAESAR CIPHER',
+    body: ['A strip of paper was hidden beneath the Record Keeper’s desk:', 'GHNGHN', 'Margin note: “The throne stands three steps too far forward.”'],
+    prompt: 'Shift every letter three places backward. What name appears?',
+    options: ['DEKDEK', 'BEMBUN', 'ODIN'], correct: 'DEKDEK',
+    success: 'The same erased name appears twice. Someone expected the first clue to be destroyed.'
+  },
+  {
+    number: '07', date: '11:47 PM', title: 'THE NUMBERED DOOR', kind: 'NUMBER SEQUENCE',
+    body: ['The forgotten archive door has no keyhole.', 'Its dial reads: 4–5–11 / 4–5–11', 'Use A=1, B=2, C=3…'],
+    prompt: 'Which name opens the door?',
+    options: ['DEKDEK', 'LOKLOK', 'DREKON'], correct: 'DEKDEK',
+    success: 'The door opens. Behind it: a room deliberately removed from every map of Valhalla.'
+  },
+  {
+    number: '01', date: 'NIGHT OF THE MURDER', title: 'THE IMPOSSIBLE ALIBI', kind: 'TIMELINE',
+    body: ['11:41 — Shiva saw the Keeper carrying a ledger west.', '11:44 — Poseidon claims the western archive had been sealed since 11:30.', '11:46 — Sasaki saw fresh wet footprints leaving that archive.', '11:47 — The Record Keeper was killed.'],
+    prompt: 'Whose statement cannot coexist with the physical timeline?',
+    options: ['SHIVA', 'POSEIDON', 'SASAKI'], correct: 'POSEIDON',
+    success: 'False alibi exposed. Poseidon concealed access to the archive—but the order came from higher authority.'
+  },
+  {
+    number: '06', date: '12 YEARS ERASED', title: 'THE MISSING PIECE', kind: 'EVIDENCE MATCHING',
+    body: ['Jack saw blue threaded with gold inside the hidden boy.', 'Sasaki found memories removed with surgical precision.', 'Buddha predicted that one particular detective would find him.', 'Keeper’s note: “The missing piece is not an object.”'],
+    prompt: 'What was the Keeper truly investigating?',
+    options: ['A MURDER WEAPON', 'A DISAPPEARED PERSON', 'A STOLEN CROWN'], correct: 'A DISAPPEARED PERSON',
+    success: 'Case direction corrected: the murder concealed a second crime—the erasure of a living person.'
+  },
+  {
+    number: '03', date: 'DATE REDACTED', title: 'THE INTENDED DETECTIVE', kind: 'FIRST-LETTER MESSAGE',
+    body: ['Broken records wait for her.', 'Every false trail will test her.', 'Memory will lead her below.', 'Because she notices who is missing.', 'Under no crown will she stop.', 'Name her, and the final seal breaks.'],
+    prompt: 'The first letters identify the person this case was left for. Who?',
+    options: ['BEMBUN', 'BUDDHA', 'BRUNHILDE'], correct: 'BEMBUN',
+    success: 'The file was addressed to Bembun before the murder happened. The Keeper chose his detective in advance.'
+  },
+  {
+    number: '04', date: 'FUTURE CLASSIFIED', title: 'THE RAVEN ORDER', kind: 'MOTIVE',
+    body: ['Recovered order: “Destroy every record. Leave the body alive. Let the story die.”', 'Zeus demanded the case be closed.', 'Odin alone knew the boy’s identity.', 'The Keeper disobeyed and preserved seven fragments.'],
+    prompt: 'Who ordered Dekdek erased—and killed the Keeper for resisting?',
+    options: ['ZEUS', 'LOKI', 'ODIN'], correct: 'ODIN',
+    success: 'Murderer identified: Odin. His goal was not death. It was to prevent Dekdek’s future by making him forgotten.'
+  }
+];
+
 function formatVoiceTime(seconds) {
   if (!Number.isFinite(seconds)) return '0:00';
   const minutes = Math.floor(seconds / 60);
@@ -372,6 +441,18 @@ function setMysteryVoice(voice, autoplay = false) {
 }
 
 function playMysteryStageVoice(autoplay = true) {
+  if (activeMysteryCase === 2) {
+    mysteryVoiceAudio.pause();
+    mysteryVoiceAudio.removeAttribute('src');
+    mysteryVoiceAudio.load();
+    mysteryVoiceLabel.textContent = 'VALHALLA ARCHIVE — TEXT MODE';
+    mysteryVoiceProgress.style.width = '0%';
+    mysteryVoiceTime.textContent = '0:00';
+    mysteryVoiceToggle.textContent = 'PLAY';
+    mysteryVoiceToggle.classList.remove('is-playing');
+    mysteryVoiceToggle.setAttribute('aria-label', 'Voice-over unavailable for case two');
+    return;
+  }
   const voice = mysteryStageVoices[mysteryStage];
   if (voice) {
     setMysteryVoice(voice, autoplay);
@@ -580,14 +661,170 @@ randomMessage.addEventListener('click', () => {
 });
 
 function updateCaseHud() {
+  const isValhalla = activeMysteryCase === 2;
+  const segmentCount = isValhalla ? 7 : 5;
+  if (caseProgress.children.length !== segmentCount) {
+    caseProgress.replaceChildren(...Array.from({ length: segmentCount }, () => document.createElement('span')));
+  }
+
+  if (isValhalla) {
+    const status = case2Stage === 0
+      ? 'CASE #002 SEALED'
+      : case2Stage === 1
+        ? 'EIGHT SUSPECTS'
+        : case2Stage >= 2 && case2Stage <= 8
+          ? `FILE ${case2Stage - 1} / 7`
+          : case2Stage === 9
+            ? 'PERSON FOUND'
+            : case2Stage === 10
+              ? 'FINAL RECORD'
+              : 'CASE SOLVED';
+    const completed = case2Stage >= 9 ? 7 : Math.max(0, case2Stage - 2);
+    caseStatus.textContent = status;
+    [...caseProgress.children].forEach((segment, index) => segment.classList.toggle('is-complete', index < completed));
+    return;
+  }
+
   const statusLabels = ['UNOPENED', 'EVIDENCE SEARCH', 'WITNESS INTERVIEWS', 'LOGIC CHECK', 'DECODE CLUE', 'FINAL DEDUCTION', 'CASE CLOSED'];
   const completed = [0, 1, 2, 3, 4, 5, 5][mysteryStage];
   caseStatus.textContent = statusLabels[mysteryStage];
-  caseProgressSegments.forEach((segment, index) => segment.classList.toggle('is-complete', index < completed));
+  [...caseProgress.children].forEach((segment, index) => segment.classList.toggle('is-complete', index < completed));
 }
 
-function renderMysteryGame() {
+function renderValhallaCase() {
+  if (case2Stage === 0) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel valhalla-panel">
+        <p class="case-kicker">VALHALLA ARCHIVE • RESTRICTED</p>
+        <h2 class="case-heading">Case #002:<br>The One Who Disappeared</h2>
+        <div class="valhalla-seal">II</div>
+        <p class="case-copy">Detective Bembun, a Record Keeper has been murdered. His final investigation file vanished with him.</p>
+        <blockquote class="keeper-message">“IF YOU ARE READING THIS,<br>FIND THE BOY WITHOUT A STORY.”</blockquote>
+        <div class="case-brief">
+          <p><strong>Identity:</strong> unknown</p>
+          <p><strong>Photograph:</strong> erased</p>
+          <p><strong>Condition:</strong> alive, but missing from every official record</p>
+          <p><strong>Threat:</strong> someone does not want him found</p>
+        </div>
+        <p class="case-hint">Seven files survived. Their dates are deliberately out of order.</p>
+        <div class="button-row">
+          <button class="pixel-button" type="button" data-game-action="case1">return to case #001</button>
+          <button class="pixel-button primary-button" type="button" data-case2-action="start">enter valhalla</button>
+        </div>
+      </article>`;
+    return;
+  }
+
+  if (case2Stage === 1) {
+    const cards = valhallaSuspects.map((suspect) => `
+      <button class="valhalla-suspect ${valhallaSuspectsSeen.has(suspect.id) ? 'is-seen' : ''}" type="button" data-valhalla-suspect="${suspect.id}">
+        <span class="suspect-mark">${suspect.mark}</span><strong>${suspect.name}</strong><small>${suspect.role}</small>
+      </button>`).join('');
+    const selected = valhallaSuspects.find((suspect) => suspect.id === currentValhallaSuspect);
+    mysteryScreen.innerHTML = `
+      <article class="case-panel valhalla-panel">
+        <p class="case-kicker">PRELIMINARY INQUIRY</p>
+        <h2 class="case-heading">Eight gods and warriors. Eight incomplete truths.</h2>
+        <p class="case-copy">Question everyone. Their statements will matter again when the files begin to contradict them.</p>
+        <div class="valhalla-suspect-grid">${cards}</div>
+        <div class="witness-detail valhalla-detail">${selected ? `<strong>${selected.name}:</strong> ${selected.statement}` : 'Select a suspect to inspect their statement.'}</div>
+        <div class="case-footer">
+          <p class="case-hint">Statements recorded: ${valhallaSuspectsSeen.size} / 8</p>
+          <button class="pixel-button primary-button" type="button" data-case2-action="files" ${valhallaSuspectsSeen.size < 8 ? 'disabled' : ''}>unseal the files</button>
+        </div>
+      </article>`;
+    return;
+  }
+
+  if (case2Stage >= 2 && case2Stage <= 8) {
+    const file = valhallaFiles[case2Stage - 2];
+    const order = valhallaFiles.map((item, index) => `<span class="${index < case2Stage - 2 ? 'is-solved' : index === case2Stage - 2 ? 'is-current' : ''}">${item.number}</span>`).join('');
+    const body = file.body.map((line) => `<p>${line}</p>`).join('');
+    const options = file.options.map((option) => `<button class="deduction-option valhalla-answer" type="button" data-case2-answer="${option}" ${option === file.correct ? 'data-correct="true"' : ''}>${option}</button>`).join('');
+    mysteryScreen.innerHTML = `
+      <article class="case-panel valhalla-panel">
+        <div class="archive-order" aria-label="Recovered file order">${order}</div>
+        <p class="case-kicker">FILE ${file.number} • ${file.date} • ${file.kind}</p>
+        <h2 class="case-heading">${file.title}</h2>
+        <div class="archive-document">${body}</div>
+        <p class="case-copy puzzle-prompt"><strong>${file.prompt}</strong></p>
+        <div class="deduction-list">${options}</div>
+        <p class="case-feedback" id="case2-feedback">Choose only when the evidence agrees.</p>
+      </article>`;
+    return;
+  }
+
+  if (case2Stage === 9) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel valhalla-panel found-scene">
+        <p class="case-kicker">FORGOTTEN WING • BELOW VALHALLA</p>
+        <h2 class="case-heading">Bembun finds the boy without a story.</h2>
+        <div class="found-silhouette"><span>D</span></div>
+        <p class="dialogue"><strong>Dekdek:</strong> “I don't know why you're looking for me.”</p>
+        <p class="dialogue detective"><strong>Bembun:</strong> “Because someone went through a lot of trouble to make sure nobody could.”</p>
+        <p class="case-copy">He is alive. His memories arrive in fragments, but every surviving file carries his name. From here, he follows while Bembun remains the detective.</p>
+        <button class="pixel-button primary-button case-action" type="button" data-case2-action="final-record">read the keeper’s final record</button>
+      </article>`;
+    return;
+  }
+
+  if (case2Stage === 10) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel valhalla-panel">
+        <p class="case-kicker">FINAL RECORD • ADDRESSED TO BEMBUN</p>
+        <h2 class="case-heading">What did Dekdek lose?</h2>
+        <div class="archive-document final-record">
+          <p>Not his memory alone.</p><p>Not his identity.</p><p>Not his past.</p>
+          <p>He lost the part of himself that believed another person could genuinely stay.</p>
+        </div>
+        <div class="deduction-list">
+          <button class="deduction-option valhalla-answer" type="button" data-case2-answer="MEMORIES">HIS MEMORIES</button>
+          <button class="deduction-option valhalla-answer" type="button" data-case2-answer="TRUST" data-correct="true">THE COURAGE TO TRUST AGAIN</button>
+          <button class="deduction-option valhalla-answer" type="button" data-case2-answer="POWER">A HIDDEN POWER</button>
+        </div>
+        <p class="case-feedback" id="case2-feedback">The answer is emotional, not physical.</p>
+      </article>`;
+    return;
+  }
+
+  mysteryScreen.innerHTML = `
+    <article class="case-panel valhalla-panel valhalla-final">
+      <p class="case-kicker">THE RECORD KEEPER’S LAST MESSAGE</p>
+      <blockquote class="keeper-message">“Detective Bembun,<br><br>If you reached this page, then you found him.<br><br>I did not ask you to save him. I only asked you to find him.<br><br>What he lost was never truly gone. It was waiting for someone to remind him where it was.”</blockquote>
+      <p class="dialogue"><strong>Dekdek:</strong> “So… you really came all this way just to find me?”</p>
+      <p class="dialogue detective"><strong>Bembun:</strong> “Obviously. You made yourself ridiculously difficult to find.”</p>
+      <p class="dialogue"><strong>Dekdek:</strong> “Maybe I didn't lose it after all.”</p>
+      <p class="dialogue detective"><strong>Bembun:</strong> “Lose what?”</p>
+      <p class="dialogue"><strong>Dekdek:</strong> “Myself.”</p>
+      <div class="valhalla-verdict">
+        <h2>VALHALLA CASE #002<br>CASE SOLVED</h2>
+        <p><strong>MURDERER:</strong> ODIN</p><p><strong>VICTIM:</strong> THE RECORD KEEPER</p>
+        <p><strong>DETECTIVE:</strong> BEMBUN</p><p><strong>PERSON FOUND:</strong> DEKDEK</p>
+        <p><strong>MISSING:</strong> UNKNOWN</p><p><strong>STATUS:</strong> FOUND</p>
+      </div>
+      <p class="valhalla-final-note">“Sometimes you don't find what you were looking for.<br>Sometimes you find the person you were meant to.”</p>
+      <div class="button-row">
+        <button class="pixel-button" type="button" data-game-action="case1">case #001</button>
+        <button class="pixel-button primary-button" type="button" data-case2-action="replay">replay case #002</button>
+      </div>
+    </article>`;
+}
+
+function renderMysteryGame(preserveScroll = false) {
+  const previousScroll = mysteryScreen.scrollTop;
+  window.queueMicrotask(() => {
+    mysteryScreen.scrollTop = preserveScroll ? previousScroll : 0;
+  });
+  mysteryWindow.classList.toggle('is-valhalla', activeMysteryCase === 2);
+  mysteryTitle.textContent = activeMysteryCase === 2
+    ? 'mystery.exe — VALHALLA CASE #002'
+    : 'mystery.exe — THE MISSING HEART';
   updateCaseHud();
+
+  if (activeMysteryCase === 2) {
+    renderValhallaCase();
+    return;
+  }
 
   if (mysteryStage === 0) {
     mysteryScreen.innerHTML = `
@@ -604,7 +841,10 @@ function renderMysteryGame() {
         <div class="case-cast" aria-label="The four characters in the case">
           ${mysteryWitnesses.map((person) => `<img src="${person.image}" alt="${person.name}" title="${person.name}" />`).join('')}
         </div>
-        <button class="pixel-button primary-button case-action" type="button" data-game-action="start">begin investigation</button>
+        <div class="button-row">
+          <button class="pixel-button primary-button case-action" type="button" data-game-action="start">begin investigation</button>
+          <button class="pixel-button case-action" type="button" data-game-action="case2">open case #002</button>
+        </div>
       </article>`;
   }
 
@@ -705,6 +945,7 @@ function renderMysteryGame() {
         <p class="case-copy"><strong>Dekdek gave it willingly—and he doesn’t want it back. ♡</strong></p>
         <div class="button-row" style="justify-content:center">
           <button class="pixel-button" type="button" data-game-action="classified">open classified.txt</button>
+          <button class="pixel-button" type="button" data-game-action="case2">begin case #002</button>
           <button class="pixel-button primary-button" type="button" data-game-action="replay">replay case</button>
         </div>
         <div class="case-brief is-hidden" id="classified-note">
@@ -719,18 +960,73 @@ mysteryScreen.addEventListener('click', (event) => {
   const witnessButton = event.target.closest('[data-witness]');
   const answerButton = event.target.closest('[data-game-answer]');
   const actionButton = event.target.closest('[data-game-action]');
+  const valhallaSuspectButton = event.target.closest('[data-valhalla-suspect]');
+  const case2AnswerButton = event.target.closest('[data-case2-answer]');
+  const case2ActionButton = event.target.closest('[data-case2-action]');
+
+  if (activeMysteryCase === 2) {
+    if (actionButton?.dataset.gameAction === 'case1') {
+      activeMysteryCase = 1;
+      renderMysteryGame();
+      playMysteryStageVoice(true);
+      return;
+    }
+
+    if (valhallaSuspectButton) {
+      currentValhallaSuspect = valhallaSuspectButton.dataset.valhallaSuspect;
+      valhallaSuspectsSeen.add(currentValhallaSuspect);
+      renderMysteryGame(true);
+      return;
+    }
+
+    if (case2AnswerButton) {
+      const feedback = document.querySelector('#case2-feedback');
+      if (case2AnswerButton.dataset.correct === 'true') {
+        document.querySelectorAll('[data-case2-answer]').forEach((button) => { button.disabled = true; });
+        case2AnswerButton.classList.add('is-correct');
+        feedback.textContent = case2Stage === 10
+          ? 'Correct. She did not fix him. She stayed long enough for him to remember that part was still there.'
+          : valhallaFiles[case2Stage - 2].success;
+        window.setTimeout(() => {
+          case2Stage += 1;
+          renderMysteryGame();
+        }, 1300);
+      } else {
+        case2AnswerButton.classList.add('is-wrong');
+        feedback.textContent = case2Stage === 10
+          ? 'That was damaged, but it was not the missing piece described by the Keeper.'
+          : 'The archive rejects that deduction. Recheck the cipher, chronology, or testimony.';
+      }
+      return;
+    }
+
+    if (case2ActionButton) {
+      if (case2ActionButton.dataset.case2Action === 'replay') {
+        case2Stage = 0;
+        currentValhallaSuspect = '';
+        valhallaSuspectsSeen.clear();
+      } else {
+        case2Stage += 1;
+      }
+      renderMysteryGame();
+      playMysteryStageVoice(false);
+      return;
+    }
+
+    return;
+  }
 
   if (evidenceButton) {
     currentEvidence = evidenceButton.dataset.evidence;
     evidenceSeen.add(currentEvidence);
-    renderMysteryGame();
+    renderMysteryGame(true);
     return;
   }
 
   if (witnessButton) {
     currentWitness = witnessButton.dataset.witness;
     witnessesSeen.add(currentWitness);
-    renderMysteryGame();
+    renderMysteryGame(true);
     setMysteryVoice(mysteryWitnessVoices[currentWitness], true);
     return;
   }
@@ -753,6 +1049,13 @@ mysteryScreen.addEventListener('click', (event) => {
   }
 
   if (!actionButton) return;
+  if (actionButton.dataset.gameAction === 'case2') {
+    activeMysteryCase = 2;
+    case2Stage = 0;
+    renderMysteryGame();
+    playMysteryStageVoice(false);
+    return;
+  }
   if (actionButton.dataset.gameAction === 'start' || actionButton.dataset.gameAction === 'continue') {
     mysteryStage += 1;
     renderMysteryGame();
