@@ -154,17 +154,17 @@ const noteMessages = [
 ];
 
 const mysteryEvidence = [
-  { id: 'ash', icon: '✦', name: 'Warm golden ash', detail: '<strong>Found:</strong> beside the empty heart-shaped case. It is still warm—but it smells more like toast than crime.' },
-  { id: 'scale', icon: '🐟', name: 'A red fish scale', detail: '<strong>Found:</strong> in a tiny puddle. Someone swam through here carrying something wrapped in pink.' },
-  { id: 'acorn', icon: '🌱', name: 'One polished acorn', detail: '<strong>Found:</strong> beneath a trail of very large, very soft footprints. Gray fur was caught on the corner.' },
-  { id: 'shadow', icon: '◼', name: 'A silent shadow', detail: '<strong>Found:</strong> peeking from behind the window. It left no footprints—only a folded note that says “not stolen.”' }
+  { id: 'ash', image: 'assets/characters/calcifer.webp', name: 'Warm golden ash', detail: '<strong>Found:</strong> beside the empty heart-shaped case. It is still warm—but it smells more like toast than crime.' },
+  { id: 'scale', image: 'assets/characters/ponyo-fish.webp', name: 'A red fish scale', detail: '<strong>Found:</strong> in a tiny puddle. Someone swam through here carrying something wrapped in pink.' },
+  { id: 'acorn', image: 'assets/characters/totoro.webp', name: 'One polished acorn', detail: '<strong>Found:</strong> beneath a trail of very large, very soft footprints. Gray fur was caught on the corner.' },
+  { id: 'shadow', image: 'assets/characters/no-face.webp', name: 'A silent shadow', detail: '<strong>Found:</strong> peeking from behind the window. It left no footprints—only a folded note that says “not stolen.”' }
 ];
 
 const mysteryWitnesses = [
-  { id: 'totoro', icon: '🌱', name: 'Totoro', role: 'Delivery suspect', statement: '<strong>Totoro:</strong> “I heard a tiny heartbeat inside the pink letter. I only carried it safely to the desktop.”' },
-  { id: 'ponyo', icon: '🐟', name: 'Ponyo', role: 'Water-route suspect', statement: '<strong>Ponyo:</strong> “I swam the package across the pink sea. It was already glowing when I found it!”' },
-  { id: 'calcifer', icon: '🔥', name: 'Calcifer', role: 'Seal-breaking suspect', statement: '<strong>Calcifer:</strong> “Fine! I warmed the wax seal—but I never took the thing inside.”' },
-  { id: 'noface', icon: '🎭', name: 'No-Face', role: 'Peeping witness', statement: '<strong>No-Face:</strong> “…” He points at all four suspects, then holds up a note: <strong>EVERYONE HELPED.</strong>' }
+  { id: 'totoro', image: 'assets/characters/totoro.webp', name: 'Totoro', role: 'Delivery suspect', statement: '<strong>Totoro:</strong> “I heard a tiny heartbeat inside the pink letter. I only carried it safely to the desktop.”' },
+  { id: 'ponyo', image: 'assets/characters/ponyo.webp', name: 'Ponyo', role: 'Water-route suspect', statement: '<strong>Ponyo:</strong> “I swam the package across the pink sea. It was already glowing when I found it!”' },
+  { id: 'calcifer', image: 'assets/characters/calcifer.webp', name: 'Calcifer', role: 'Seal-breaking suspect', statement: '<strong>Calcifer:</strong> “Fine! I warmed the wax seal—but I never took the thing inside.”' },
+  { id: 'noface', image: 'assets/characters/no-face.webp', name: 'No-Face', role: 'Peeping witness', statement: '<strong>No-Face:</strong> “…” He points at all four suspects, then holds up a note: <strong>EVERYONE HELPED.</strong>' }
 ];
 
 function makeFloatingHearts() {
@@ -331,14 +331,17 @@ function renderMysteryGame() {
           <p><strong>Suspects:</strong> Totoro, Ponyo, Calcifer, and No-Face</p>
           <p><strong>Warning:</strong> one final answer may change the entire case.</p>
         </div>
-        <button class="pixel-button primary-button case-action" type="button" data-game-action="start">begin investigation 🔎</button>
+        <div class="case-cast" aria-label="The four characters in the case">
+          ${mysteryWitnesses.map((person) => `<img src="${person.image}" alt="${person.name}" title="${person.name}" />`).join('')}
+        </div>
+        <button class="pixel-button primary-button case-action" type="button" data-game-action="start">begin investigation</button>
       </article>`;
   }
 
   if (mysteryStage === 1) {
     const cards = mysteryEvidence.map((item) => `
       <button class="evidence-card ${evidenceSeen.has(item.id) ? 'is-seen' : ''}" type="button" data-evidence="${item.id}">
-        <span>${item.icon}</span><strong>${item.name}</strong><small>${evidenceSeen.has(item.id) ? 'EXAMINED' : 'TAP TO EXAMINE'}</small>
+        <img class="case-card-image" src="${item.image}" alt="" /><strong>${item.name}</strong><small>${evidenceSeen.has(item.id) ? 'EXAMINED' : 'TAP TO EXAMINE'}</small>
       </button>`).join('');
     const selected = mysteryEvidence.find((item) => item.id === currentEvidence);
     mysteryScreen.innerHTML = `
@@ -355,7 +358,7 @@ function renderMysteryGame() {
   if (mysteryStage === 2) {
     const cards = mysteryWitnesses.map((person) => `
       <button class="suspect-card ${witnessesSeen.has(person.id) ? 'is-seen' : ''}" type="button" data-witness="${person.id}">
-        <span>${person.icon}</span><strong>${person.name}</strong><small>${person.role}</small>
+        <img class="case-card-image" src="${person.image}" alt="" /><strong>${person.name}</strong><small>${person.role}</small>
       </button>`).join('');
     const selected = mysteryWitnesses.find((person) => person.id === currentWitness);
     mysteryScreen.innerHTML = `
@@ -426,6 +429,9 @@ function renderMysteryGame() {
         <p class="case-copy"><strong>Missing item:</strong> Dekdek’s heart</p>
         <p class="case-copy"><strong>Current location:</strong> Safe with Bembun</p>
         <p class="case-copy">Totoro delivered it. Ponyo carried it across the water. Calcifer warmed the seal. No-Face made sure it arrived.</p>
+        <div class="case-cast final-cast" aria-label="The case team">
+          ${mysteryWitnesses.map((person) => `<img src="${person.image}" alt="${person.name}" title="${person.name}" />`).join('')}
+        </div>
         <p class="case-copy"><strong>Dekdek gave it willingly—and he doesn’t want it back. ♡</strong></p>
         <div class="button-row" style="justify-content:center">
           <button class="pixel-button" type="button" data-game-action="classified">open classified.txt</button>

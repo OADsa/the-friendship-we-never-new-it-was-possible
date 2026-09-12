@@ -9,75 +9,31 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=20" />
+    <link rel="stylesheet" href="styles.css?v=21" />
   </head>
   <body>
     <div class="wallpaper-noise" aria-hidden="true"></div>
     <div id="heart-field" class="heart-field" aria-hidden="true"></div>
 
     <div class="totoro-walker" aria-hidden="true">
-      <div class="totoro-sprite">
-        <span class="totoro-ear left"></span>
-        <span class="totoro-ear right"></span>
-        <span class="totoro-body">
-          <span class="totoro-eye left"></span>
-          <span class="totoro-eye right"></span>
-          <span class="totoro-nose"></span>
-          <span class="totoro-belly"><i>⌃</i><i>⌃</i><i>⌃</i></span>
-          <span class="totoro-foot left"></span>
-          <span class="totoro-foot right"></span>
-        </span>
-      </div>
+      <img class="totoro-sprite" src="assets/characters/totoro.webp" alt="" />
     </div>
 
     <div class="calcifer-camp" aria-hidden="true">
-      <div class="calcifer-roller">
-        <span class="calcifer-arm left"></span>
-        <span class="calcifer-arm right"></span>
-        <span class="calcifer-foot left"></span>
-        <span class="calcifer-foot right"></span>
-        <div class="calcifer-flame">
-          <span class="calcifer-core"></span>
-          <span class="calcifer-eye left"></span>
-          <span class="calcifer-eye right"></span>
-          <span class="calcifer-cheek left"></span>
-          <span class="calcifer-cheek right"></span>
-          <span class="calcifer-mouth"></span>
-        </div>
-      </div>
+      <img class="calcifer-roller" src="assets/characters/calcifer.webp" alt="" />
     </div>
 
     <div class="ponyo-swimmer" aria-hidden="true">
       <span class="ponyo-bubble one"></span>
       <span class="ponyo-bubble two"></span>
       <span class="ponyo-bubble three"></span>
-      <div class="ponyo-sprite">
-        <span class="ponyo-hair"></span>
-        <span class="ponyo-face">
-          <i class="ponyo-eye left"></i><i class="ponyo-eye right"></i><i class="ponyo-smile"></i>
-        </span>
-        <span class="ponyo-dress"></span>
-        <span class="ponyo-arm top"></span><span class="ponyo-arm bottom"></span>
-        <span class="ponyo-foot top"></span><span class="ponyo-foot bottom"></span>
-      </div>
-      <div class="ponyo-fish">
-        <span class="fish-tail"></span>
-        <span class="fish-body">
-          <i class="fish-eye"></i><i class="fish-smile"></i><i class="fish-fin"></i>
-        </span>
-      </div>
-      <span class="ponyo-magic">✦</span>
+      <img class="ponyo-sprite" src="assets/characters/ponyo.webp" alt="" />
+      <img class="ponyo-fish" src="assets/characters/ponyo-fish.webp" alt="" />
+      <span class="ponyo-magic"></span>
     </div>
 
     <div class="noface-peeker" aria-hidden="true">
-      <div class="noface-cloak">
-        <span class="noface-mask">
-          <i class="noface-eye left"></i><i class="noface-eye right"></i>
-          <i class="noface-mark left"></i><i class="noface-mark right"></i>
-          <i class="noface-mouth"></i>
-        </span>
-        <span class="noface-hand"></span>
-      </div>
+      <img class="noface-cloak" src="assets/characters/no-face.webp" alt="" />
     </div>
 
     <main class="desktop">
@@ -231,7 +187,7 @@
 
       <section class="window mystery-window is-hidden" id="mystery-window" aria-labelledby="mystery-title">
         <header class="title-bar mystery-title-bar">
-          <div class="title-bar-label"><span>🔎</span><span id="mystery-title">mystery.exe — THE MISSING HEART</span></div>
+          <div class="title-bar-label"><span class="case-title-mark">CASE</span><span id="mystery-title">mystery.exe — THE MISSING HEART</span></div>
           <div class="window-controls">
             <button type="button" data-window-action="minimize" aria-label="Minimize mystery game">_</button>
             <button class="close-window" type="button" aria-label="Close mystery game">×</button>
@@ -391,6 +347,6 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=20"></script>
+    <script src="script.js?v=21"></script>
   </body>
 </html>

@@ -439,6 +439,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   transform: translate(-50%, -50%);
 }
 .mystery-title-bar { background: linear-gradient(90deg, #42172f, #842b5c 58%, #cf477f); }
+.case-title-mark { padding: 2px 4px; color: #42172f; border-radius: 2px; background: #ffd5e6; font-size: 8px; letter-spacing: .08em; }
 .mystery-body { height: min(610px, calc(100vh - 105px)); padding: 0; overflow: hidden; background: #fff8fb; }
 .case-hud { min-height: 58px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #ffeaf3; border-bottom: 3px solid #5f2043; background: #301523; }
 .case-hud > div:first-child { display: grid; gap: 3px; }
@@ -460,7 +461,8 @@ h1 em { color: #ec4c91; font-style: normal; }
 .evidence-card, .suspect-card, .deduction-option { min-height: 82px; padding: 13px; border: 3px solid; border-color: #fff #833050 #833050 #fff; background: #ffe4ee; text-align: left; cursor: pointer; box-shadow: 2px 2px #be668b; }
 .evidence-card:hover, .suspect-card:hover, .deduction-option:hover { background: #fff1f6; }
 .evidence-card.is-seen, .suspect-card.is-seen { color: white; background: #9d3764; }
-.evidence-card span, .suspect-card span { display: block; margin-bottom: 7px; font-size: 25px; }
+.case-card-image { width: 100%; height: 86px; margin: -5px 0 7px; display: block; object-fit: contain; filter: drop-shadow(0 5px 6px rgba(54, 15, 35, .24)); transition: transform .2s ease; }
+.evidence-card:hover .case-card-image, .suspect-card:hover .case-card-image { transform: scale(1.06); }
 .evidence-card strong, .suspect-card strong { display: block; font: 700 16px "Pixelify Sans", monospace; }
 .evidence-card small, .suspect-card small { font-size: 8px; }
 .evidence-detail, .witness-detail { min-height: 76px; padding: 14px; margin: 12px 0 16px; border: 2px dashed #c25382; background: #fff; font-size: 10px; line-height: 1.6; }
@@ -476,6 +478,9 @@ h1 em { color: #ec4c91; font-style: normal; }
 .final-case { text-align: center; }
 .final-heart { width: 118px; height: 105px; margin: 18px auto; display: grid; place-items: center; color: white; background: #e83f86; clip-path: polygon(50% 91%, 8% 50%, 3% 28%, 14% 8%, 34% 4%, 50% 21%, 66% 4%, 86% 8%, 97% 28%, 92% 50%); font: 700 37px "Pixelify Sans", monospace; animation: heartbeat .75s ease-in-out infinite; filter: drop-shadow(5px 6px #9c285c); }
 .case-stamp { display: inline-block; padding: 8px 13px; color: #b5245e; border: 4px double #b5245e; font: 700 25px "Pixelify Sans", monospace; transform: rotate(-3deg); }
+.case-cast { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin: 17px 0; padding: 10px; border: 2px solid #8e315c; background: radial-gradient(circle at 50% 120%, #8f4166, #2f1825 65%); box-shadow: 5px 5px #e5a1be; }
+.case-cast img { width: 100%; height: 92px; object-fit: contain; filter: drop-shadow(0 6px 6px rgba(0, 0, 0, .45)); }
+.final-cast { margin: 14px auto 22px; }
 @keyframes case-enter { from { opacity: 0; transform: translateY(8px); } }
 
 .letter-window {
@@ -687,6 +692,26 @@ h1 em { color: #ec4c91; font-style: normal; }
 .noface-mark.right { right: 5px; transform: rotate(8deg); }
 .noface-mouth { position: absolute; left: 12px; top: 43px; width: 15px; height: 5px; border-radius: 50%; background: #3c2b35; }
 .noface-hand { position: absolute; left: -9px; top: 84px; width: 23px; height: 10px; border: 2px solid #2d2230; border-radius: 60%; background: #514651; transform: rotate(-22deg); animation: noface-wave .65s ease-in-out infinite alternate; transform-origin: right; }
+
+/* Cinematic character art replaces the old flat CSS figures. */
+.totoro-walker { width: 96px; height: 116px; }
+.totoro-sprite { width: 96px; height: 116px; display: block; object-fit: contain; }
+.calcifer-camp { width: 92px; height: 98px; }
+.calcifer-roller { width: 92px; height: 98px; display: block; object-fit: contain; filter: drop-shadow(0 6px 7px rgba(105, 24, 60, .32)); animation: calcifer-roll 18s linear -2s infinite, realistic-flame-colors 8s steps(5) infinite; }
+.ponyo-swimmer { width: 118px; height: 78px; }
+.ponyo-sprite, .ponyo-fish { right: 0; top: 0; width: 118px; height: 78px; object-fit: contain; }
+.ponyo-magic { right: 51px; top: 33px; width: 8px; height: 8px; border-radius: 50%; background: white; box-shadow: 0 -13px #fff, 0 13px #fff, -13px 0 #fff, 13px 0 #fff, 0 0 10px 4px #ff65a5; }
+.noface-peeker { right: -96px; width: 104px; height: 166px; }
+.noface-cloak { right: 0; bottom: 0; width: 104px; height: 166px; display: block; object-fit: contain; border: 0; border-radius: 0; background: none; }
+
+@keyframes realistic-flame-colors {
+  0% { filter: hue-rotate(0deg) saturate(1.05) drop-shadow(0 6px 7px rgba(238, 64, 30, .45)); }
+  20% { filter: hue-rotate(165deg) saturate(1.2) drop-shadow(0 6px 7px rgba(49, 125, 255, .45)); }
+  40% { filter: hue-rotate(80deg) saturate(1.12) drop-shadow(0 6px 7px rgba(44, 211, 110, .45)); }
+  60% { filter: hue-rotate(-26deg) saturate(1.25) drop-shadow(0 6px 7px rgba(242, 45, 73, .45)); }
+  80% { filter: hue-rotate(238deg) saturate(1.2) drop-shadow(0 6px 7px rgba(163, 71, 241, .45)); }
+  100% { filter: hue-rotate(0deg) saturate(1.05) drop-shadow(0 6px 7px rgba(238, 64, 30, .45)); }
+}
 
 .totoro-walker.is-stunned,
 .totoro-walker.is-stunned *,
