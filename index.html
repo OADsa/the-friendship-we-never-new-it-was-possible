@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ff8fbd" />
+    <meta
+      name="description"
+      content="A tiny pink place for the friendship we never knew was possible."
+    />
+    <title>The friendship we never new it was possible.</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="wallpaper-noise" aria-hidden="true"></div>
+    <div id="heart-field" class="heart-field" aria-hidden="true"></div>
+
+    <main class="desktop">
+      <section class="desktop-icons" aria-label="Desktop shortcuts">
+        <button class="desktop-icon" data-open="memories-window" type="button">
+          <span class="folder-icon" aria-hidden="true"><span></span></span>
+          <span>our memories</span>
+        </button>
+        <button class="desktop-icon" data-open="note-window" type="button">
+          <span class="note-icon" aria-hidden="true">♥</span>
+          <span>read me.txt</span>
+        </button>
+      </section>
+
+      <section class="window hero-window" id="hero-window" aria-labelledby="hero-title">
+        <header class="title-bar">
+          <div class="title-bar-label">
+            <span class="tiny-heart" aria-hidden="true">♥</span>
+            <span>friendship.exe</span>
+          </div>
+          <div class="window-controls" aria-hidden="true">
+            <span>_</span><span>□</span><span>×</span>
+          </div>
+        </header>
+
+        <div class="window-body">
+          <div class="hero-copy">
+            <p class="eyebrow">A SPECIAL MESSAGE FOR YOU</p>
+            <h1 id="hero-title">The friendship we never <em>new</em> it was possible.</h1>
+            <p class="intro">
+              Somehow, in this huge pixelated world, we found each other—and everything
+              got a little softer, sillier, and brighter.
+            </p>
+
+            <div class="status-panel" aria-live="polite">
+              <div class="status-topline">
+                <span id="status-label">Friendship connection</span>
+                <span id="status-percent">100%</span>
+              </div>
+              <div class="progress-track" aria-hidden="true">
+                <span class="progress-fill"></span>
+              </div>
+              <p id="status-message">Status: meant to find each other ♡</p>
+            </div>
+
+            <div class="button-row">
+              <button class="pixel-button primary-button" id="celebrate-button" type="button">
+                <span aria-hidden="true">♥</span> click for a reminder
+              </button>
+              <button class="pixel-button" data-open="note-window" type="button">open note</button>
+            </div>
+          </div>
+
+          <aside class="friend-card" aria-label="Friendship profile">
+            <div class="avatar-frame">
+              <div class="pixel-face" aria-hidden="true">
+                <span class="eye left"></span><span class="eye right"></span>
+                <span class="blush left"></span><span class="blush right"></span>
+                <span class="smile"></span>
+              </div>
+              <span class="sparkle one">✦</span><span class="sparkle two">✧</span>
+            </div>
+            <p class="card-label">BEST FRIEND</p>
+            <p class="online"><span></span> always here</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="window mini-window is-hidden" id="note-window" aria-labelledby="note-title">
+        <header class="title-bar">
+          <div class="title-bar-label"><span>📝</span><span id="note-title">read me.txt</span></div>
+          <div class="window-controls">
+            <button class="close-window" type="button" aria-label="Close note">×</button>
+          </div>
+        </header>
+        <div class="window-body note-body">
+          <p id="note-text">You make ordinary days feel like something worth saving.</p>
+          <div class="note-signoff">forever grateful you exist, <span>♡</span></div>
+          <button class="pixel-button close-window" type="button">okay ♡</button>
+        </div>
+      </section>
+
+      <section class="window mini-window memories-window is-hidden" id="memories-window" aria-labelledby="memories-title">
+        <header class="title-bar">
+          <div class="title-bar-label"><span>📁</span><span id="memories-title">C:\OUR_MEMORIES</span></div>
+          <div class="window-controls">
+            <button class="close-window" type="button" aria-label="Close memories">×</button>
+          </div>
+        </header>
+        <div class="window-body memories-body">
+          <button class="memory-file" type="button" data-memory="The day we realized we could tell each other anything.">
+            <span>🖼️</span> first_laugh.jpg
+          </button>
+          <button class="memory-file" type="button" data-memory="Every little check-in that said: I’m still here.">
+            <span>💌</span> tiny_things.txt
+          </button>
+          <button class="memory-file" type="button" data-memory="More good days are still downloading…">
+            <span>✨</span> the_future.gif
+          </button>
+          <p class="memory-preview" id="memory-preview">Select a memory to preview.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="taskbar">
+      <button class="start-button" type="button" data-open="hero-window"><span>♥</span> start</button>
+      <div class="taskbar-item">friendship.exe</div>
+      <div class="tray"><span aria-hidden="true">♡</span><time id="clock">11:11 PM</time></div>
+    </footer>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="script.js"></script>
+  </body>
+</html>
