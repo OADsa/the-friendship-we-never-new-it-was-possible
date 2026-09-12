@@ -476,12 +476,19 @@ h1 em { color: #ec4c91; font-style: normal; }
 .calcifer-camp {
   position: fixed;
   z-index: 26;
-  right: 18px;
+  left: -82px;
   bottom: 50px;
   width: 68px;
   height: 70px;
   pointer-events: none;
   filter: drop-shadow(3px 4px 0 rgba(105, 24, 60, .22));
+  animation: calcifer-travel 18s linear -2s infinite;
+}
+
+.calcifer-roller {
+  position: absolute;
+  inset: 0;
+  animation: calcifer-roll 18s linear -2s infinite;
 }
 
 .calcifer-flame {
@@ -502,11 +509,14 @@ h1 em { color: #ec4c91; font-style: normal; }
   animation: calcifer-flicker .42s steps(2) infinite, calcifer-colors 8s linear infinite;
 }
 
-.calcifer-eye { position: absolute; top: 31px; width: 9px; height: 12px; border: 2px solid #6d293b; border-radius: 50%; background: white; }
+.calcifer-eye { position: absolute; top: 31px; width: 9px; height: 12px; border: 2px solid #6d293b; border-radius: 50%; background: white; transform-origin: center; animation: calcifer-eye-emotions 8s steps(1) infinite; }
 .calcifer-eye::after { content: ""; position: absolute; width: 3px; height: 5px; left: 2px; top: 3px; background: #3f2531; }
 .calcifer-eye.left { left: 12px; }
 .calcifer-eye.right { right: 12px; }
-.calcifer-mouth { position: absolute; left: 19px; top: 47px; width: 11px; height: 4px; border-bottom: 2px solid #6d293b; }
+.calcifer-cheek { position: absolute; top: 44px; width: 7px; height: 4px; border-radius: 50%; background: #ff7b9c; opacity: 0; animation: calcifer-cheek-emotions 8s steps(1) infinite; }
+.calcifer-cheek.left { left: 8px; }
+.calcifer-cheek.right { right: 8px; }
+.calcifer-mouth { position: absolute; left: 18px; top: 47px; width: 12px; height: 6px; border: 0 solid #6d293b; border-bottom-width: 2px; border-radius: 50%; animation: calcifer-mouth-emotions 8s steps(1) infinite; }
 .ponyo-swimmer {
   position: fixed;
   z-index: 23;
@@ -577,12 +587,39 @@ h1 em { color: #ec4c91; font-style: normal; }
 @keyframes totoro-bob { 50% { margin-top: 3px; } }
 @keyframes footstep { 50% { transform: translateY(-3px); } }
 @keyframes calcifer-flicker { 50% { transform: translateY(-3px) scaleX(.92); } }
+@keyframes calcifer-travel {
+  0% { left: -82px; }
+  45% { left: calc(100vw + 12px); }
+  52% { left: calc(100vw + 12px); }
+  97%, 100% { left: -82px; }
+}
+@keyframes calcifer-roll {
+  0% { transform: rotate(0deg); }
+  45%, 52% { transform: rotate(1080deg); }
+  97%, 100% { transform: rotate(0deg); }
+}
 @keyframes calcifer-colors {
   0%, 100% { --flame-hue: 220; }
   20% { --flame-hue: 120; }
   40% { --flame-hue: 0; }
   60% { --flame-hue: 30; }
   80% { --flame-hue: 278; }
+}
+@keyframes calcifer-eye-emotions {
+  0%, 18%, 82%, 100% { transform: scale(1); border-radius: 50%; }
+  20%, 38% { transform: scaleY(.18); border-radius: 0; }
+  40%, 58% { transform: scale(1.28); border-radius: 50%; }
+  60%, 80% { transform: translateY(3px) rotate(8deg); border-radius: 50%; }
+}
+@keyframes calcifer-cheek-emotions {
+  0%, 18%, 82%, 100% { opacity: 1; }
+  20%, 80% { opacity: 0; }
+}
+@keyframes calcifer-mouth-emotions {
+  0%, 18%, 82%, 100% { left: 17px; top: 46px; width: 14px; height: 7px; border-width: 0 0 2px; border-style: solid; border-radius: 50%; }
+  20%, 38% { left: 20px; top: 48px; width: 8px; height: 2px; border-width: 2px 0 0; border-style: solid; border-radius: 0; }
+  40%, 58% { left: 19px; top: 45px; width: 10px; height: 10px; border-width: 2px; border-style: solid; border-radius: 50%; background: #6d293b; }
+  60%, 80% { left: 17px; top: 49px; width: 14px; height: 7px; border-width: 2px 0 0; border-style: solid; border-radius: 50%; background: transparent; }
 }
 @keyframes ponyo-travel { 0% { left: -110px; } 46% { left: calc(100vw + 15px); } 54% { left: calc(100vw + 15px); } 100% { left: -110px; } }
 @keyframes ponyo-turn { 0%, 49% { transform: scaleX(1); } 50%, 99% { transform: scaleX(-1); } }
@@ -744,7 +781,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   .guide-footer { position: sticky; bottom: -18px; margin-left: -20px; margin-right: -20px; padding: 14px 20px 18px; background: #fff8fb; }
   .guide-actions .pixel-button { min-height: 43px; }
   .totoro-walker { bottom: 48px; transform: scale(.78); transform-origin: bottom left; }
-  .calcifer-camp { right: 5px; bottom: 47px; transform: scale(.76); transform-origin: bottom right; }
+  .calcifer-camp { bottom: 47px; transform: scale(.76); transform-origin: bottom left; }
   .ponyo-swimmer { top: 17%; transform: scale(.76); transform-origin: center left; }
 }
 
