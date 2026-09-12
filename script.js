@@ -25,6 +25,9 @@ const fingerprintButton = document.querySelector('#fingerprint-button');
 const fingerprintStatus = document.querySelector('#fingerprint-status');
 const totoroWalker = document.querySelector('.totoro-walker');
 const calciferCamp = document.querySelector('.calcifer-camp');
+const mysteryScreen = document.querySelector('#mystery-screen');
+const caseStatus = document.querySelector('#case-status');
+const caseProgressSegments = [...document.querySelectorAll('#case-progress span')];
 let currentGuideStep = 0;
 let highestWindowZ = 60;
 let fingerprintTimer;
@@ -32,6 +35,11 @@ let fingerprintComplete = false;
 let wrongNameAttempts = 0;
 let charactersStunned = false;
 let collisionCooldownUntil = 0;
+let mysteryStage = 0;
+let currentEvidence = '';
+let currentWitness = '';
+const evidenceSeen = new Set();
+const witnessesSeen = new Set();
 
 const messages = [
   "Dear Bembun, I’m really glad I met you.",
@@ -143,6 +151,20 @@ const noteMessages = [
   'Thank you for knowing the real me—and staying anyway.',
   'Some people feel like sunshine. You feel like home.',
   'Our friendship is proof that the best things can arrive unexpectedly.'
+];
+
+const mysteryEvidence = [
+  { id: 'ash', icon: '✦', name: 'Warm golden ash', detail: '<strong>Found:</strong> beside the empty heart-shaped case. It is still warm—but it smells more like toast than crime.' },
+  { id: 'scale', icon: '🐟', name: 'A red fish scale', detail: '<strong>Found:</strong> in a tiny puddle. Someone swam through here carrying something wrapped in pink.' },
+  { id: 'acorn', icon: '🌱', name: 'One polished acorn', detail: '<strong>Found:</strong> beneath a trail of very large, very soft footprints. Gray fur was caught on the corner.' },
+  { id: 'shadow', icon: '◼', name: 'A silent shadow', detail: '<strong>Found:</strong> peeking from behind the window. It left no footprints—only a folded note that says “not stolen.”' }
+];
+
+const mysteryWitnesses = [
+  { id: 'totoro', icon: '🌱', name: 'Totoro', role: 'Delivery suspect', statement: '<strong>Totoro:</strong> “I heard a tiny heartbeat inside the pink letter. I only carried it safely to the desktop.”' },
+  { id: 'ponyo', icon: '🐟', name: 'Ponyo', role: 'Water-route suspect', statement: '<strong>Ponyo:</strong> “I swam the package across the pink sea. It was already glowing when I found it!”' },
+  { id: 'calcifer', icon: '🔥', name: 'Calcifer', role: 'Seal-breaking suspect', statement: '<strong>Calcifer:</strong> “Fine! I warmed the wax seal—but I never took the thing inside.”' },
+  { id: 'noface', icon: '🎭', name: 'No-Face', role: 'Peeping witness', statement: '<strong>No-Face:</strong> “…” He points at all four suspects, then holds up a note: <strong>EVERYONE HELPED.</strong>' }
 ];
 
 function makeFloatingHearts() {
@@ -285,6 +307,190 @@ randomMessage.addEventListener('click', () => {
   currentMessageIndex = nextIndex;
   renderMessage();
   burstHearts(randomMessage);
+});
+
+function updateCaseHud() {
+  const statusLabels = ['UNOPENED', 'EVIDENCE SEARCH', 'WITNESS INTERVIEWS', 'LOGIC CHECK', 'DECODE CLUE', 'FINAL DEDUCTION', 'CASE CLOSED'];
+  const completed = [0, 1, 2, 3, 4, 5, 5][mysteryStage];
+  caseStatus.textContent = statusLabels[mysteryStage];
+  caseProgressSegments.forEach((segment, index) => segment.classList.toggle('is-complete', index < completed));
+}
+
+function renderMysteryGame() {
+  updateCaseHud();
+
+  if (mysteryStage === 0) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel">
+        <p class="case-kicker">CONFIDENTIAL • CASE #1147</p>
+        <h2 class="case-heading">The Case of the Missing Heart</h2>
+        <p class="case-copy">Detective Bembun, something important disappeared from <strong>friendship.exe</strong> at exactly 11:47 PM.</p>
+        <div class="case-brief">
+          <p><strong>Missing item:</strong> [REDACTED]</p>
+          <p><strong>Last known location:</strong> inside a sealed pink letter</p>
+          <p><strong>Suspects:</strong> Totoro, Ponyo, Calcifer, and No-Face</p>
+          <p><strong>Warning:</strong> one final answer may change the entire case.</p>
+        </div>
+        <button class="pixel-button primary-button case-action" type="button" data-game-action="start">begin investigation 🔎</button>
+      </article>`;
+  }
+
+  if (mysteryStage === 1) {
+    const cards = mysteryEvidence.map((item) => `
+      <button class="evidence-card ${evidenceSeen.has(item.id) ? 'is-seen' : ''}" type="button" data-evidence="${item.id}">
+        <span>${item.icon}</span><strong>${item.name}</strong><small>${evidenceSeen.has(item.id) ? 'EXAMINED' : 'TAP TO EXAMINE'}</small>
+      </button>`).join('');
+    const selected = mysteryEvidence.find((item) => item.id === currentEvidence);
+    mysteryScreen.innerHTML = `
+      <article class="case-panel">
+        <p class="case-kicker">STEP 1 • CRIME SCENE</p>
+        <h2 class="case-heading">Examine the evidence</h2>
+        <p class="case-copy">Tap every item. Tiny details matter in tiny mysteries.</p>
+        <div class="evidence-grid">${cards}</div>
+        <div class="evidence-detail">${selected ? selected.detail : 'Select an item to inspect it.'}</div>
+        <div class="case-footer"><p class="case-hint">Evidence found: ${evidenceSeen.size} / 4</p><button class="pixel-button primary-button" type="button" data-game-action="continue" ${evidenceSeen.size < 4 ? 'disabled' : ''}>question suspects →</button></div>
+      </article>`;
+  }
+
+  if (mysteryStage === 2) {
+    const cards = mysteryWitnesses.map((person) => `
+      <button class="suspect-card ${witnessesSeen.has(person.id) ? 'is-seen' : ''}" type="button" data-witness="${person.id}">
+        <span>${person.icon}</span><strong>${person.name}</strong><small>${person.role}</small>
+      </button>`).join('');
+    const selected = mysteryWitnesses.find((person) => person.id === currentWitness);
+    mysteryScreen.innerHTML = `
+      <article class="case-panel">
+        <p class="case-kicker">STEP 2 • INTERROGATION</p>
+        <h2 class="case-heading">Question every suspect</h2>
+        <p class="case-copy">One is shy, one is fiery, one is fishy, and one says almost nothing.</p>
+        <div class="suspect-grid">${cards}</div>
+        <div class="witness-detail">${selected ? selected.statement : 'Choose a character to hear their statement.'}</div>
+        <div class="case-footer"><p class="case-hint">Statements taken: ${witnessesSeen.size} / 4</p><button class="pixel-button primary-button" type="button" data-game-action="continue" ${witnessesSeen.size < 4 ? 'disabled' : ''}>compare stories →</button></div>
+      </article>`;
+  }
+
+  if (mysteryStage === 3) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel">
+        <p class="case-kicker">STEP 3 • CONTRADICTION</p>
+        <h2 class="case-heading">Who is lying?</h2>
+        <p class="case-copy">Totoro carried the letter. Ponyo crossed the water. Calcifer warmed the seal. No-Face watched them all. The physical evidence supports every statement.</p>
+        <div class="deduction-list">
+          <button class="deduction-option" type="button" data-game-answer="totoro">A — Totoro</button>
+          <button class="deduction-option" type="button" data-game-answer="calcifer">B — Calcifer</button>
+          <button class="deduction-option" type="button" data-game-answer="noface">C — No-Face</button>
+          <button class="deduction-option" type="button" data-game-answer="none" data-correct="true">D — None of them</button>
+        </div>
+        <p class="case-feedback" id="case-feedback">Choose carefully, Detective.</p>
+      </article>`;
+  }
+
+  if (mysteryStage === 4) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel">
+        <p class="case-kicker">STEP 4 • RECOVERED CODE</p>
+        <h2 class="case-heading">Complete the name</h2>
+        <p class="case-copy">No-Face unfolds the final note. One letter has been washed away.</p>
+        <div class="decoded-name">_ E M B U N</div>
+        <div class="deduction-list">
+          <button class="deduction-option" type="button" data-game-answer="D">D</button>
+          <button class="deduction-option" type="button" data-game-answer="B" data-correct="true">B</button>
+          <button class="deduction-option" type="button" data-game-answer="K">K</button>
+        </div>
+        <p class="case-feedback" id="case-feedback">Which letter completes the recipient’s name?</p>
+      </article>`;
+  }
+
+  if (mysteryStage === 5) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel">
+        <p class="case-kicker">STEP 5 • FINAL DEDUCTION</p>
+        <h2 class="case-heading">Who has the missing heart?</h2>
+        <p class="case-copy">Every clue points to one person. This is your final accusation.</p>
+        <div class="deduction-list">
+          <button class="deduction-option" type="button" data-game-answer="Totoro">Totoro — the delivery suspect</button>
+          <button class="deduction-option" type="button" data-game-answer="Dekdek">Dekdek — the supposed victim</button>
+          <button class="deduction-option" type="button" data-game-answer="Bembun" data-correct="true">Bembun — the recipient</button>
+        </div>
+        <p class="case-feedback" id="case-feedback">The answer has been nearby from the beginning.</p>
+      </article>`;
+  }
+
+  if (mysteryStage === 6) {
+    mysteryScreen.innerHTML = `
+      <article class="case-panel final-case">
+        <p class="case-kicker">FINAL REPORT • DECLASSIFIED</p>
+        <div class="case-stamp">CASE CLOSED</div>
+        <div class="final-heart">D + B</div>
+        <h2 class="case-heading">There was no theft.</h2>
+        <p class="case-copy"><strong>Missing item:</strong> Dekdek’s heart</p>
+        <p class="case-copy"><strong>Current location:</strong> Safe with Bembun</p>
+        <p class="case-copy">Totoro delivered it. Ponyo carried it across the water. Calcifer warmed the seal. No-Face made sure it arrived.</p>
+        <p class="case-copy"><strong>Dekdek gave it willingly—and he doesn’t want it back. ♡</strong></p>
+        <div class="button-row" style="justify-content:center">
+          <button class="pixel-button" type="button" data-game-action="classified">open classified.txt</button>
+          <button class="pixel-button primary-button" type="button" data-game-action="replay">replay case</button>
+        </div>
+        <div class="case-brief is-hidden" id="classified-note">
+          <p><strong>CLASSIFIED:</strong> There was never a crime. This whole mystery was just an excuse to lead you here and say: I really like you, Bembun. That’s the whole case. :3</p>
+        </div>
+      </article>`;
+  }
+}
+
+mysteryScreen.addEventListener('click', (event) => {
+  const evidenceButton = event.target.closest('[data-evidence]');
+  const witnessButton = event.target.closest('[data-witness]');
+  const answerButton = event.target.closest('[data-game-answer]');
+  const actionButton = event.target.closest('[data-game-action]');
+
+  if (evidenceButton) {
+    currentEvidence = evidenceButton.dataset.evidence;
+    evidenceSeen.add(currentEvidence);
+    renderMysteryGame();
+    return;
+  }
+
+  if (witnessButton) {
+    currentWitness = witnessButton.dataset.witness;
+    witnessesSeen.add(currentWitness);
+    renderMysteryGame();
+    return;
+  }
+
+  if (answerButton) {
+    const feedback = document.querySelector('#case-feedback');
+    if (answerButton.dataset.correct === 'true') {
+      answerButton.classList.add('is-correct');
+      feedback.textContent = 'Correct. Updating the case file…';
+      window.setTimeout(() => {
+        mysteryStage += 1;
+        renderMysteryGame();
+      }, 650);
+    } else {
+      answerButton.classList.add('is-wrong');
+      feedback.textContent = mysteryStage === 5 ? 'That person helped—but the heart belongs somewhere else.' : 'That clue doesn’t fit. Look at the evidence again.';
+    }
+    return;
+  }
+
+  if (!actionButton) return;
+  if (actionButton.dataset.gameAction === 'start' || actionButton.dataset.gameAction === 'continue') {
+    mysteryStage += 1;
+    renderMysteryGame();
+  }
+  if (actionButton.dataset.gameAction === 'classified') {
+    document.querySelector('#classified-note').classList.remove('is-hidden');
+    burstHearts(actionButton);
+  }
+  if (actionButton.dataset.gameAction === 'replay') {
+    mysteryStage = 0;
+    currentEvidence = '';
+    currentWitness = '';
+    evidenceSeen.clear();
+    witnessesSeen.clear();
+    renderMysteryGame();
+  }
 });
 
 function renderGuideStep() {
@@ -459,6 +665,7 @@ function updateClock() {
 
 makeFloatingHearts();
 renderMessage();
+renderMysteryGame();
 updateClock();
 window.requestAnimationFrame(watchCharacterCollision);
 window.setInterval(updateClock, 30000);

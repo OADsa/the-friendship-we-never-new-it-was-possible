@@ -135,6 +135,19 @@ button { font: inherit; color: inherit; }
   box-shadow: inset -5px -5px #f3b2cc;
 }
 
+.mystery-icon {
+  width: 43px;
+  height: 43px;
+  display: grid;
+  place-items: center;
+  color: white;
+  border: 2px solid #56233d;
+  border-radius: 50%;
+  background: #812a5a;
+  box-shadow: inset -5px -5px #5e1d43, inset 4px 4px #c66693;
+  font: 700 25px "Pixelify Sans", monospace;
+}
+
 .window {
   position: relative;
   z-index: 10;
@@ -416,6 +429,54 @@ h1 em { color: #ec4c91; font-style: normal; }
 .message-heart { position: absolute; right: 13px; top: 9px; color: #f187b3; font-size: 18px; animation: twinkle 1.5s steps(2) infinite; }
 .message-controls { margin-top: 18px; display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 9px; }
 .message-controls .pixel-button { min-height: 44px; padding-inline: 8px; }
+
+.mystery-window {
+  position: fixed;
+  z-index: 42;
+  width: min(760px, calc(100vw - 24px));
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.mystery-title-bar { background: linear-gradient(90deg, #42172f, #842b5c 58%, #cf477f); }
+.mystery-body { height: min(610px, calc(100vh - 105px)); padding: 0; overflow: hidden; background: #fff8fb; }
+.case-hud { min-height: 58px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 16px; color: #ffeaf3; border-bottom: 3px solid #5f2043; background: #301523; }
+.case-hud > div:first-child { display: grid; gap: 3px; }
+.case-label { color: #dca4bb; font-size: 8px; letter-spacing: .16em; }
+#case-status { font: 700 16px "Pixelify Sans", monospace; }
+.case-progress { display: flex; gap: 5px; }
+.case-progress span { width: 24px; height: 11px; border: 1px solid #e9aac4; background: #5a3043; }
+.case-progress span.is-complete { background: #ec4c91; box-shadow: inset 2px 2px #ff9dc3; }
+.mystery-screen { height: calc(100% - 58px); padding: 24px; overflow-y: auto; background: linear-gradient(rgba(255,255,255,.91), rgba(255,255,255,.91)), repeating-linear-gradient(0deg, transparent 0 27px, #efc4d6 28px); }
+.case-panel { max-width: 650px; margin: 0 auto; animation: case-enter .25s ease-out both; }
+.case-kicker { margin: 0 0 8px; color: #b42f68; font-size: 9px; font-weight: 500; letter-spacing: .15em; }
+.case-heading { margin: 0 0 14px; color: #64213f; font: 700 clamp(30px, 6vw, 48px)/.95 "Pixelify Sans", monospace; text-shadow: 2px 2px #efb0ca; text-wrap: balance; }
+.case-copy { margin: 0 0 14px; font-size: 11px; line-height: 1.7; }
+.case-brief { padding: 17px; margin: 18px 0; color: #fcecf3; border: 2px solid #8e315c; background: #3d1b2c; box-shadow: 5px 5px #e5a1be; }
+.case-brief p { margin: 6px 0; font-size: 10px; line-height: 1.55; }
+.case-brief strong { color: #ff80af; }
+.case-action { min-height: 46px; min-width: 180px; }
+.evidence-grid, .suspect-grid { margin: 17px 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.evidence-card, .suspect-card, .deduction-option { min-height: 82px; padding: 13px; border: 3px solid; border-color: #fff #833050 #833050 #fff; background: #ffe4ee; text-align: left; cursor: pointer; box-shadow: 2px 2px #be668b; }
+.evidence-card:hover, .suspect-card:hover, .deduction-option:hover { background: #fff1f6; }
+.evidence-card.is-seen, .suspect-card.is-seen { color: white; background: #9d3764; }
+.evidence-card span, .suspect-card span { display: block; margin-bottom: 7px; font-size: 25px; }
+.evidence-card strong, .suspect-card strong { display: block; font: 700 16px "Pixelify Sans", monospace; }
+.evidence-card small, .suspect-card small { font-size: 8px; }
+.evidence-detail, .witness-detail { min-height: 76px; padding: 14px; margin: 12px 0 16px; border: 2px dashed #c25382; background: #fff; font-size: 10px; line-height: 1.6; }
+.evidence-detail strong, .witness-detail strong { color: #b62965; }
+.case-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.case-hint { margin: 0; color: #9b5270; font-size: 9px; }
+.deduction-list { margin: 18px 0; display: grid; gap: 9px; }
+.deduction-option { min-height: 52px; font: 600 15px "Pixelify Sans", monospace; }
+.deduction-option.is-wrong { color: white; background: #bc285e; animation: gentle-no .3s steps(3); }
+.deduction-option.is-correct { color: white; background: #3f9b69; }
+.case-feedback { min-height: 25px; margin: 10px 0; color: #b42b65; font-size: 10px; font-weight: 500; }
+.decoded-name { margin: 19px 0; padding: 17px; color: #e64a8c; border: 2px dotted #bd4e7e; background: #fff3f8; font: 700 clamp(28px, 8vw, 48px) "Pixelify Sans", monospace; letter-spacing: .25em; text-align: center; }
+.final-case { text-align: center; }
+.final-heart { width: 118px; height: 105px; margin: 18px auto; display: grid; place-items: center; color: white; background: #e83f86; clip-path: polygon(50% 91%, 8% 50%, 3% 28%, 14% 8%, 34% 4%, 50% 21%, 66% 4%, 86% 8%, 97% 28%, 92% 50%); font: 700 37px "Pixelify Sans", monospace; animation: heartbeat .75s ease-in-out infinite; filter: drop-shadow(5px 6px #9c285c); }
+.case-stamp { display: inline-block; padding: 8px 13px; color: #b5245e; border: 4px double #b5245e; font: 700 25px "Pixelify Sans", monospace; transform: rotate(-3deg); }
+@keyframes case-enter { from { opacity: 0; transform: translateY(8px); } }
 
 .letter-window {
   position: fixed;
@@ -912,7 +973,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   .desktop { min-height: calc(100vh - 48px); padding: 162px 14px 86px; place-items: start center; }
   .desktop-icons { position: absolute; top: 12px; left: 10px; right: 10px; grid-template-columns: repeat(3, minmax(0, 82px)); gap: 7px 4px; }
   .desktop-icon { width: 82px; min-width: 0; min-height: 66px; padding: 2px; font-size: 8px; }
-  .desktop-icon .folder-icon, .desktop-icon .note-icon, .desktop-icon .mail-icon { transform: scale(.75); margin: -5px 0; }
+  .desktop-icon .folder-icon, .desktop-icon .note-icon, .desktop-icon .mail-icon, .desktop-icon .mystery-icon { transform: scale(.75); margin: -5px 0; }
   .window-controls button { width: 32px; height: 30px; font-size: 17px; }
   .hero-window { width: 100%; }
   .hero-window .window-body { grid-template-columns: 1fr; gap: 26px; padding: 26px 20px; }
@@ -929,6 +990,16 @@ h1 em { color: #ec4c91; font-style: normal; }
   .message-paper p { font-size: 25px; }
   .message-controls { grid-template-columns: 1fr 1fr; }
   .message-controls .primary-button { grid-column: 1 / -1; grid-row: 1; }
+  .mystery-window { width: calc(100vw - 12px); }
+  .mystery-body { height: calc(100vh - 78px); }
+  .mystery-screen { padding: 19px 14px 28px; }
+  .case-hud { min-height: 55px; padding: 9px 11px; }
+  .case-progress { gap: 3px; }
+  .case-progress span { width: 18px; height: 10px; }
+  .case-heading { font-size: 34px; }
+  .evidence-grid, .suspect-grid { gap: 7px; }
+  .evidence-card, .suspect-card { min-height: 88px; padding: 10px; }
+  .deduction-option { min-height: 56px; }
   .window-controls button { width: 31px; height: 28px; }
   .guide-overlay { padding: 10px; }
   .guide-window { width: calc(100vw - 20px); }
