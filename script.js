@@ -355,14 +355,14 @@ const classifiedVoice = {
 };
 
 const valhallaSuspects = [
-  { id: 'loki', mark: 'L', name: 'Loki', role: 'God of Mischief', statement: '“Dekdek? Invented name. Invented boy. A detective chasing a bedtime story.” He smiles before Bembun mentions any name.' },
-  { id: 'jack', mark: 'J', name: 'Jack', role: 'The Ripper', statement: '“The boy carries a color he cannot see himself—blue, threaded with gold. Hope hidden underneath fear.”' },
-  { id: 'sasaki', mark: 'S', name: 'Sasaki Kojiro', role: 'History’s Loser', statement: '“His memories are not gone naturally. The gaps are too clean, like pages cut from a book.”' },
-  { id: 'poseidon', mark: 'P', name: 'Poseidon', role: 'Lord of the Seas', statement: '“The western archive has remained sealed since 11:30. There are no old records worth discussing.”' },
-  { id: 'shiva', mark: 'S', name: 'Shiva', role: 'Destroyer', statement: '“I saw the kid once, before the erasure. Quiet. Still watching the door as though someone might return.”' },
-  { id: 'buddha', mark: 'B', name: 'Buddha', role: 'The Enlightened', statement: '“You will find him. The interesting question is what he will find when you do.”' },
-  { id: 'zeus', mark: 'Z', name: 'Zeus', role: 'Chairman of Valhalla', statement: '“This investigation is forbidden. Close the case, Detective. Some absences protect the future.”' },
-  { id: 'odin', mark: 'O', name: 'Odin', role: 'The All-Father', statement: '“There is no boy without a story.” His ravens repeat one word: “Forgotten.”' }
+  { id: 'loki', mark: 'L', image: 'assets/characters/valhalla/loki.webp', name: 'Loki', role: 'God of Mischief', statement: '“Dekdek? Invented name. Invented boy. A detective chasing a bedtime story.” He smiles before Bembun mentions any name.' },
+  { id: 'jack', mark: 'J', image: 'assets/characters/valhalla/jack.webp', name: 'Jack', role: 'The Ripper', statement: '“The boy carries a color he cannot see himself—blue, threaded with gold. Hope hidden underneath fear.”' },
+  { id: 'sasaki', mark: 'S', image: 'assets/characters/valhalla/sasaki.webp', name: 'Sasaki Kojiro', role: 'History’s Loser', statement: '“His memories are not gone naturally. The gaps are too clean, like pages cut from a book.”' },
+  { id: 'poseidon', mark: 'P', image: 'assets/characters/valhalla/poseidon.webp', name: 'Poseidon', role: 'Lord of the Seas', statement: '“The western archive has remained sealed since 11:30. There are no old records worth discussing.”' },
+  { id: 'shiva', mark: 'S', image: 'assets/characters/valhalla/shiva.webp', name: 'Shiva', role: 'Destroyer', statement: '“I saw the kid once, before the erasure. Quiet. Still watching the door as though someone might return.”' },
+  { id: 'buddha', mark: 'B', image: 'assets/characters/valhalla/buddha.webp', name: 'Buddha', role: 'The Enlightened', statement: '“You will find him. The interesting question is what he will find when you do.”' },
+  { id: 'zeus', mark: 'Z', image: 'assets/characters/valhalla/zeus.webp', name: 'Zeus', role: 'Chairman of Valhalla', statement: '“This investigation is forbidden. Close the case, Detective. Some absences protect the future.”' },
+  { id: 'odin', mark: 'O', image: 'assets/characters/valhalla/odin.webp', name: 'Odin', role: 'The All-Father', statement: '“There is no boy without a story.” His ravens repeat one word: “Forgotten.”' }
 ];
 
 const valhallaSuspectVoices = {
@@ -791,6 +791,7 @@ function renderValhallaCase() {
   if (case2Stage === 1) {
     const cards = valhallaSuspects.map((suspect) => `
       <button class="valhalla-suspect ${valhallaSuspectsSeen.has(suspect.id) ? 'is-seen' : ''}" type="button" data-valhalla-suspect="${suspect.id}">
+        <span class="suspect-portrait"><img src="${suspect.image}" alt="${suspect.name}" loading="lazy" decoding="async" /></span>
         <span class="suspect-mark">${suspect.mark}</span><strong>${suspect.name}</strong><small>${suspect.role}</small>
       </button>`).join('');
     const selected = valhallaSuspects.find((suspect) => suspect.id === currentValhallaSuspect);
