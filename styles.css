@@ -398,7 +398,7 @@ h1 em { color: #ec4c91; font-style: normal; }
 .little-letter-file { padding: 8px; border: 1px solid transparent; background: transparent; text-align: left; cursor: pointer; font-size: 11px; }
 .little-letter-file:hover, .little-letter-file:focus { color: white; background: #d83d82; border: 1px dotted white; outline: 0; }
 .little-letter-file span { margin-right: 7px; }
-.little-letter-preview { min-height: 66px; margin: 8px 0 0; padding: 13px; border: 2px inset #ffd0e2; background: #fff; font-size: 10px; line-height: 1.6; }
+.little-letter-preview { min-height: 66px; max-height: min(310px, 42vh); margin: 8px 0 0; padding: 13px; overflow-y: auto; border: 2px inset #ffd0e2; background: #fff; font-size: 10px; line-height: 1.65; white-space: pre-line; }
 
 .messages-window {
   position: fixed;

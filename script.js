@@ -158,6 +158,159 @@ const noteMessages = [
   'Our friendship is proof that the best things can arrive unexpectedly.'
 ];
 
+const littleLetters = {
+  forYou: `Dear Bembun,
+
+This one is simply for you.
+
+I don't really need a special reason to write this. I just wanted to leave something here that you can read whenever you want to remind yourself that someone genuinely appreciates you.
+
+Meeting you wasn't something I expected, but I'm really grateful that it happened. Somewhere along the way, you became someone I started caring about and someone whose presence became important to me.
+
+I appreciate your personality, your little habits, the random things you tell me, and even the moments when we don't really have anything important to talk about. I appreciate the person you are and the person you're becoming.
+
+I hope you never feel like you have to change yourself just to be enough for someone. You deserve to be appreciated for who you genuinely are.
+
+So whenever you open this, just remember that somewhere out there is a person who's rooting for you, hoping you're doing okay, and genuinely happy that you exist.
+
+This letter is just for you, Bembun.
+
+No expectations. No pressure.
+
+Just appreciation.
+
+— Dekdek <3`,
+  beYourself: `Dear Bembun,
+
+I hope you always remember that you don't have to become someone else just to be loved, accepted, or appreciated.
+
+You don't have to pretend to be okay when you're not. You don't have to hide the parts of yourself that you think aren't perfect. And you definitely don't have to compare yourself to everyone around you.
+
+You're still figuring yourself out, and that's okay.
+
+You have so much time to grow, learn, make mistakes, change your mind, discover new things, and become whoever you want to be.
+
+Don't rush yourself.
+
+Don't let other people's expectations decide who you're supposed to become.
+
+Be weird. Be quiet. Be loud. Be emotional. Be excited. Be confused. Be everything that makes you you.
+
+And if there are days when you don't like yourself very much, please remember that one bad day doesn't change your worth.
+
+You are still you.
+
+And that's already someone worth knowing.
+
+So keep discovering yourself, Bembun. Keep learning about yourself. Keep trying new things. Keep becoming the person you want to be.
+
+I'll always appreciate the real you more than some version of you that you think everyone else wants.
+
+Just be yourself, Bembun. That's enough.
+
+— Dekdek ♡`,
+  openWhenSad: `Dear Bembun,
+
+If you're reading this because you're sad, then first of all, I'm sorry you're having a difficult day.
+
+I wish I could take whatever is hurting you and make it disappear, but I know I can't always do that.
+
+So instead, I want to remind you of something.
+
+You don't have to be okay right now.
+
+It's okay to cry. It's okay to feel tired. It's okay to feel lost. It's okay to have a day where you don't feel like doing anything.
+
+You don't have to force yourself to smile just because other people expect you to.
+
+Take your time.
+
+Breathe.
+
+Drink some water.
+
+Rest.
+
+Whatever happened today doesn't define your entire life. One bad moment doesn't mean everything is bad. One failure doesn't mean you're a failure. And one person leaving doesn't mean you're unlovable.
+
+Sometimes life just gets heavy.
+
+But heavy doesn't mean impossible.
+
+You've already made it through every difficult day you've had before this one. Even the days you thought you couldn't survive, somehow you made it through them.
+
+You'll make it through this one too.
+
+And if you need someone, you can always talk to me. You don't have to make your problems sound pretty or explain everything perfectly.
+
+You can simply say:
+
+“Dekdek, I'm not okay.”
+
+And I'll understand.
+
+So please, Bembun, be gentle with yourself today.
+
+You don't need to solve everything tonight.
+
+Just get through today.
+
+Tomorrow can worry about tomorrow.
+
+You'll be okay. Maybe not immediately, maybe not perfectly, but eventually.
+
+And until then, remember that you're cared for.
+
+— Dekdek <3`,
+  justBecause: `Dear Bembun,
+
+There isn't really a reason for this letter.
+
+I just wanted to write one.
+
+Not because you're sad.
+
+Not because something happened.
+
+Not because I need anything from you.
+
+Just because.
+
+Just because sometimes people deserve to be reminded that they're appreciated even when nothing is wrong.
+
+So here I am, reminding you.
+
+I appreciate you.
+
+I appreciate your existence, your presence, your random messages, your stories, your jokes, and all the little moments we've shared.
+
+I appreciate the way you are slowly letting me know more about you.
+
+I appreciate the fact that you're trying to understand yourself and become a better version of yourself.
+
+And I appreciate that even though life can get complicated, you're still trying.
+
+I don't know what the future holds for either of us, and I don't want to force it to become something before its time.
+
+For now, I'm just happy that you're here.
+
+I'm happy I met you.
+
+I'm happy I got to know you.
+
+And I'm happy that I have someone like you to appreciate.
+
+So if you ever randomly open this file and wonder why I wrote it...
+
+There's your answer.
+
+Just because you're Bembun.
+
+And sometimes that's reason enough.
+
+— Dekdek ♡`
+};
+
 const mysteryEvidence = [
   { id: 'ash', image: 'assets/characters/calcifer.webp', name: 'Warm golden ash', detail: '<strong>Found:</strong> beside the empty heart-shaped case. It is still warm—but it smells more like toast than crime.' },
   { id: 'scale', image: 'assets/characters/ponyo-fish.webp', name: 'A red fish scale', detail: '<strong>Found:</strong> in a tiny puddle. Someone swam through here carrying something wrapped in pink.' },
@@ -389,7 +542,8 @@ celebrateButton.addEventListener('click', () => {
 
 document.querySelectorAll('.little-letter-file').forEach((file) => {
   file.addEventListener('click', () => {
-    littleLetterPreview.textContent = file.dataset.letter;
+    littleLetterPreview.textContent = littleLetters[file.dataset.letterKey] || file.dataset.letter;
+    littleLetterPreview.scrollTop = 0;
   });
 });
 
