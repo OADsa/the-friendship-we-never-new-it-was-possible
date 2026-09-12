@@ -123,6 +123,18 @@ button { font: inherit; color: inherit; }
   box-shadow: inset -5px -5px #f3b2cc;
 }
 
+.mail-icon {
+  width: 46px;
+  height: 35px;
+  display: grid;
+  place-items: center;
+  color: #d52f78;
+  font-size: 20px;
+  background: #fff2f7;
+  border: 2px solid #934263;
+  box-shadow: inset -5px -5px #f3b2cc;
+}
+
 .window {
   position: relative;
   z-index: 10;
@@ -359,6 +371,32 @@ h1 em { color: #ec4c91; font-style: normal; }
 .memory-file span { margin-right: 7px; }
 .memory-preview { min-height: 48px; margin: 8px 0 0; padding: 12px; border: 2px inset #ffd0e2; background: #fff; font-size: 10px; line-height: 1.5; }
 
+.letter-window {
+  position: fixed;
+  z-index: 35;
+  width: min(620px, calc(100vw - 28px));
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.letter-body {
+  max-height: min(650px, calc(100vh - 110px));
+  overflow-y: auto;
+  padding: 34px 40px;
+  background:
+    linear-gradient(rgba(255,255,255,.9), rgba(255,255,255,.9)),
+    repeating-linear-gradient(0deg, transparent 0 27px, #f4a8c7 28px);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  line-height: 1.72;
+}
+
+.letter-body p { margin: 0 0 18px; }
+.letter-greeting { color: #a52961; font-size: 21px; font-weight: 700; }
+.letter-closing { color: #a52961; font-weight: 700; }
+.letter-body .pixel-button { margin-top: 4px; font-family: "Pixelify Sans", monospace; }
+
 .heart-field { position: fixed; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
 .balloon-heart {
   position: absolute;
@@ -456,7 +494,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   .desktop { min-height: calc(100vh - 48px); padding: 88px 14px 86px; place-items: start center; }
   .desktop-icons { position: absolute; top: 16px; left: 14px; grid-auto-flow: column; gap: 6px; }
   .desktop-icon { width: 75px; }
-  .desktop-icon .folder-icon, .desktop-icon .note-icon { transform: scale(.75); margin: -5px 0; }
+  .desktop-icon .folder-icon, .desktop-icon .note-icon, .desktop-icon .mail-icon { transform: scale(.75); margin: -5px 0; }
   .hero-window { width: 100%; }
   .hero-window .window-body { grid-template-columns: 1fr; gap: 26px; padding: 26px 20px; }
   .friend-card { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
@@ -466,6 +504,7 @@ h1 em { color: #ec4c91; font-style: normal; }
   .online { width: 100%; margin-top: -10px; }
   .taskbar-item { display: none; }
   .memories-window { left: 50%; top: 50%; }
+  .letter-body { max-height: calc(100vh - 100px); padding: 26px 22px; font-size: 14px; }
 }
 
 @media (max-width: 420px) {
