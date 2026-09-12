@@ -71,7 +71,7 @@ function showWindow(id) {
 }
 
 function closeWindow(button) {
-  const target = button.closest('.mini-window');
+  const target = button.closest('.window');
   target?.classList.add('is-hidden');
 }
 
