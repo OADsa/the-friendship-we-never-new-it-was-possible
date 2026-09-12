@@ -541,8 +541,8 @@ h1 em { color: #ec4c91; font-style: normal; }
 .valhalla-detail strong { color: #e6c66f; }
 .archive-order { margin: 0 0 18px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
 .archive-order span { min-height: 28px; display: grid; place-items: center; color: #756b70; border: 1px solid #493c43; background: #100d12; font-size: 9px; }
-.archive-order span.is-solved { color: #171119; border-color: #c9a553; background: #b99448; }
-.archive-order span.is-current { color: #f3dc9a; border-color: #d2af5d; background: #4b3929; animation: archive-pulse 1s steps(2) infinite; }
+.archive-order span.is-solved { color: #9c8960; border-color: #625234; background: #181319; }
+.archive-order span.is-current { color: #171119; border-color: #f0d17f; background: #c09b4c; box-shadow: inset 2px 2px #e2c878; animation: archive-pulse 1s steps(2) infinite; }
 .archive-document { margin: 17px 0; padding: 18px; color: #332a26; border: 2px solid #8f743f; background: linear-gradient(rgba(249, 232, 190, .95), rgba(218, 195, 142, .95)), repeating-linear-gradient(0deg, transparent 0 25px, rgba(89,64,41,.18) 26px); box-shadow: 6px 6px #392c28; transform: rotate(-.25deg); }
 .archive-document p { margin: 6px 0; font: 600 10px/1.55 Georgia, serif; }
 .puzzle-prompt { color: #f1dfaa !important; }
