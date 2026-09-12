@@ -13,6 +13,7 @@ const guideNext = document.querySelector('#guide-next');
 const guideBack = document.querySelector('#guide-back');
 const helpButton = document.querySelector('#help-button');
 let currentGuideStep = 0;
+let highestWindowZ = 60;
 
 const messages = [
   "Dear Bembun, I’m really glad I met you.",
@@ -169,7 +170,8 @@ function showWindow(id) {
   if (!target) return;
   target.classList.remove('is-hidden');
   target.classList.remove('is-minimized');
-  target.style.zIndex = String(40 + Math.floor(Math.random() * 20));
+  highestWindowZ += 1;
+  target.style.zIndex = String(highestWindowZ);
 }
 
 function closeWindow(button) {
@@ -211,6 +213,14 @@ document.querySelectorAll('[data-window-action]').forEach((button) => {
       button.textContent = targetWindow.classList.contains('is-maximized') ? '❐' : '□';
       button.setAttribute('aria-label', targetWindow.classList.contains('is-maximized') ? 'Restore friendship window' : 'Maximize friendship window');
     }
+  });
+});
+
+document.querySelectorAll('.window').forEach((windowElement) => {
+  windowElement.addEventListener('pointerdown', () => {
+    if (windowElement.closest('.guide-overlay')) return;
+    highestWindowZ += 1;
+    windowElement.style.zIndex = String(highestWindowZ);
   });
 });
 
