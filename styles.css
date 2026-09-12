@@ -448,7 +448,16 @@ h1 em { color: #ec4c91; font-style: normal; }
 .case-progress { display: flex; gap: 5px; }
 .case-progress span { width: 24px; height: 11px; border: 1px solid #e9aac4; background: #5a3043; }
 .case-progress span.is-complete { background: #ec4c91; box-shadow: inset 2px 2px #ff9dc3; }
-.mystery-screen { height: calc(100% - 58px); padding: 24px; overflow-y: auto; background: linear-gradient(rgba(255,255,255,.91), rgba(255,255,255,.91)), repeating-linear-gradient(0deg, transparent 0 27px, #efc4d6 28px); }
+.case-voice-player { min-height: 52px; padding: 7px 10px; display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; align-items: center; gap: 9px; color: #fbeaf2; border-bottom: 2px solid #6a2348; background: linear-gradient(90deg, #522039, #301621); }
+.case-voice-player button { min-height: 34px; padding: 4px 7px; color: #48162f; border: 2px solid; border-color: #fff #8d3158 #8d3158 #fff; background: #ffb8d2; font: 700 12px "Pixelify Sans", monospace; cursor: pointer; box-shadow: 2px 2px #171016; }
+.case-voice-player button.is-playing { color: white; background: #dd3d82; }
+.case-voice-info { min-width: 0; display: grid; gap: 5px; }
+.case-voice-info strong { overflow: hidden; font: 600 10px "Pixelify Sans", monospace; letter-spacing: .04em; text-overflow: ellipsis; white-space: nowrap; }
+.case-voice-track { height: 7px; overflow: hidden; border: 1px solid #e99bbb; background: #1c1016; }
+.case-voice-track span { width: 0; height: 100%; display: block; background: linear-gradient(90deg, #ed4d91, #ffb3d0); }
+.case-voice-player time { min-width: 34px; color: #e9aac4; font-size: 8px; text-align: right; }
+.case-voice-player audio { display: none; }
+.mystery-screen { height: calc(100% - 110px); padding: 24px; overflow-y: auto; background: linear-gradient(rgba(255,255,255,.91), rgba(255,255,255,.91)), repeating-linear-gradient(0deg, transparent 0 27px, #efc4d6 28px); }
 .case-panel { max-width: 650px; margin: 0 auto; animation: case-enter .25s ease-out both; }
 .case-kicker { margin: 0 0 8px; color: #b42f68; font-size: 9px; font-weight: 500; letter-spacing: .15em; }
 .case-heading { margin: 0 0 14px; color: #64213f; font: 700 clamp(30px, 6vw, 48px)/.95 "Pixelify Sans", monospace; text-shadow: 2px 2px #efb0ca; text-wrap: balance; }
@@ -692,26 +701,6 @@ h1 em { color: #ec4c91; font-style: normal; }
 .noface-mark.right { right: 5px; transform: rotate(8deg); }
 .noface-mouth { position: absolute; left: 12px; top: 43px; width: 15px; height: 5px; border-radius: 50%; background: #3c2b35; }
 .noface-hand { position: absolute; left: -9px; top: 84px; width: 23px; height: 10px; border: 2px solid #2d2230; border-radius: 60%; background: #514651; transform: rotate(-22deg); animation: noface-wave .65s ease-in-out infinite alternate; transform-origin: right; }
-
-/* Cinematic character art replaces the old flat CSS figures. */
-.totoro-walker { width: 96px; height: 116px; }
-.totoro-sprite { width: 96px; height: 116px; display: block; object-fit: contain; }
-.calcifer-camp { width: 92px; height: 98px; }
-.calcifer-roller { width: 92px; height: 98px; display: block; object-fit: contain; filter: drop-shadow(0 6px 7px rgba(105, 24, 60, .32)); animation: calcifer-roll 18s linear -2s infinite, realistic-flame-colors 8s steps(5) infinite; }
-.ponyo-swimmer { width: 118px; height: 78px; }
-.ponyo-sprite, .ponyo-fish { right: 0; top: 0; width: 118px; height: 78px; object-fit: contain; }
-.ponyo-magic { right: 51px; top: 33px; width: 8px; height: 8px; border-radius: 50%; background: white; box-shadow: 0 -13px #fff, 0 13px #fff, -13px 0 #fff, 13px 0 #fff, 0 0 10px 4px #ff65a5; }
-.noface-peeker { right: -96px; width: 104px; height: 166px; }
-.noface-cloak { right: 0; bottom: 0; width: 104px; height: 166px; display: block; object-fit: contain; border: 0; border-radius: 0; background: none; }
-
-@keyframes realistic-flame-colors {
-  0% { filter: hue-rotate(0deg) saturate(1.05) drop-shadow(0 6px 7px rgba(238, 64, 30, .45)); }
-  20% { filter: hue-rotate(165deg) saturate(1.2) drop-shadow(0 6px 7px rgba(49, 125, 255, .45)); }
-  40% { filter: hue-rotate(80deg) saturate(1.12) drop-shadow(0 6px 7px rgba(44, 211, 110, .45)); }
-  60% { filter: hue-rotate(-26deg) saturate(1.25) drop-shadow(0 6px 7px rgba(242, 45, 73, .45)); }
-  80% { filter: hue-rotate(238deg) saturate(1.2) drop-shadow(0 6px 7px rgba(163, 71, 241, .45)); }
-  100% { filter: hue-rotate(0deg) saturate(1.05) drop-shadow(0 6px 7px rgba(238, 64, 30, .45)); }
-}
 
 .totoro-walker.is-stunned,
 .totoro-walker.is-stunned *,
@@ -1018,6 +1007,9 @@ h1 em { color: #ec4c91; font-style: normal; }
   .mystery-window { width: calc(100vw - 12px); }
   .mystery-body { height: calc(100vh - 78px); }
   .mystery-screen { padding: 19px 14px 28px; }
+  .case-voice-player { grid-template-columns: 50px minmax(0, 1fr) auto; gap: 7px; padding-inline: 7px; }
+  .case-voice-player button { min-height: 32px; font-size: 10px; }
+  .case-voice-info strong { font-size: 8px; }
   .case-hud { min-height: 55px; padding: 9px 11px; }
   .case-progress { gap: 3px; }
   .case-progress span { width: 18px; height: 10px; }

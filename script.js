@@ -28,6 +28,11 @@ const calciferCamp = document.querySelector('.calcifer-camp');
 const mysteryScreen = document.querySelector('#mystery-screen');
 const caseStatus = document.querySelector('#case-status');
 const caseProgressSegments = [...document.querySelectorAll('#case-progress span')];
+const mysteryVoiceAudio = document.querySelector('#case-voice-audio');
+const mysteryVoiceToggle = document.querySelector('#case-voice-toggle');
+const mysteryVoiceLabel = document.querySelector('#case-voice-label');
+const mysteryVoiceProgress = document.querySelector('#case-voice-progress');
+const mysteryVoiceTime = document.querySelector('#case-voice-time');
 let currentGuideStep = 0;
 let highestWindowZ = 60;
 let fingerprintTimer;
@@ -167,6 +172,66 @@ const mysteryWitnesses = [
   { id: 'noface', image: 'assets/characters/no-face.webp', name: 'No-Face', role: 'Peeping witness', statement: '<strong>No-Face:</strong> “…” He points at all four suspects, then holds up a note: <strong>EVERYONE HELPED.</strong>' }
 ];
 
+const mysteryStageVoices = [
+  { src: 'assets/audio/case-intro.m4a', label: 'CASE BRIEFING' },
+  { src: 'assets/audio/evidence-search.m4a', label: 'EVIDENCE SEARCH' },
+  null,
+  { src: 'assets/audio/who-is-lying.m4a', label: 'WHO IS LYING?' },
+  { src: 'assets/audio/missing-letter.m4a', label: 'THE MISSING LETTER' },
+  { src: 'assets/audio/missing-heart.m4a', label: 'FINAL DEDUCTION' },
+  { src: 'assets/audio/case-closed.m4a', label: 'CASE CLOSED' }
+];
+
+const mysteryWitnessVoices = {
+  totoro: { src: 'assets/audio/totoro.m4a', label: 'TOTORO’S STATEMENT' },
+  ponyo: { src: 'assets/audio/ponyo.m4a', label: 'PONYO’S STATEMENT' },
+  calcifer: { src: 'assets/audio/calcifer.m4a', label: 'CALCIFER’S STATEMENT' },
+  noface: { src: 'assets/audio/no-face.m4a', label: 'NO-FACE’S STATEMENT' }
+};
+
+function formatVoiceTime(seconds) {
+  if (!Number.isFinite(seconds)) return '0:00';
+  const minutes = Math.floor(seconds / 60);
+  return `${minutes}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+}
+
+function setMysteryVoice(voice, autoplay = false) {
+  if (!voice) return;
+  mysteryVoiceAudio.pause();
+  mysteryVoiceAudio.src = voice.src;
+  mysteryVoiceAudio.load();
+  mysteryVoiceLabel.textContent = voice.label;
+  mysteryVoiceProgress.style.width = '0%';
+  mysteryVoiceTime.textContent = '0:00';
+  mysteryVoiceToggle.textContent = 'PLAY';
+  mysteryVoiceToggle.setAttribute('aria-label', `Play ${voice.label.toLowerCase()} voice-over`);
+
+  if (autoplay) {
+    mysteryVoiceAudio.play().catch(() => {
+      mysteryVoiceLabel.textContent = `${voice.label} — TAP PLAY`;
+    });
+  }
+}
+
+function playMysteryStageVoice(autoplay = true) {
+  const voice = mysteryStageVoices[mysteryStage];
+  if (voice) {
+    setMysteryVoice(voice, autoplay);
+    return;
+  }
+  if (mysteryStage === 2 && currentWitness) {
+    setMysteryVoice(mysteryWitnessVoices[currentWitness], autoplay);
+    return;
+  }
+
+  mysteryVoiceAudio.pause();
+  mysteryVoiceAudio.removeAttribute('src');
+  mysteryVoiceAudio.load();
+  mysteryVoiceLabel.textContent = 'SELECT A CHARACTER';
+  mysteryVoiceProgress.style.width = '0%';
+  mysteryVoiceTime.textContent = '0:00';
+}
+
 function makeFloatingHearts() {
   const colors = ['#ffeff6', '#ffb1cf', '#f45a9b', '#d83d82', '#ffffff'];
   const amount = window.innerWidth < 600 ? 11 : 18;
@@ -227,11 +292,17 @@ function showToast(message) {
 }
 
 document.querySelectorAll('[data-open]').forEach((button) => {
-  button.addEventListener('click', () => showWindow(button.dataset.open));
+  button.addEventListener('click', () => {
+    showWindow(button.dataset.open);
+    if (button.dataset.open === 'mystery-window') playMysteryStageVoice(true);
+  });
 });
 
 document.querySelectorAll('.close-window').forEach((button) => {
-  button.addEventListener('click', () => closeWindow(button));
+  button.addEventListener('click', () => {
+    if (button.closest('#mystery-window')) mysteryVoiceAudio.pause();
+    closeWindow(button);
+  });
 });
 
 document.querySelectorAll('[data-window-action]').forEach((button) => {
@@ -246,6 +317,7 @@ document.querySelectorAll('[data-window-action]').forEach((button) => {
     if (button.dataset.windowAction === 'minimize') {
       targetWindow.classList.toggle('is-minimized');
       button.setAttribute('aria-label', targetWindow.classList.contains('is-minimized') ? 'Restore window' : 'Minimize window');
+      if (targetWindow.id === 'mystery-window' && targetWindow.classList.contains('is-minimized')) mysteryVoiceAudio.pause();
     }
 
     if (button.dataset.windowAction === 'maximize') {
@@ -254,6 +326,45 @@ document.querySelectorAll('[data-window-action]').forEach((button) => {
       button.setAttribute('aria-label', targetWindow.classList.contains('is-maximized') ? 'Restore friendship window' : 'Maximize friendship window');
     }
   });
+});
+
+mysteryVoiceToggle.addEventListener('click', () => {
+  if (!mysteryVoiceAudio.getAttribute('src')) {
+    playMysteryStageVoice(false);
+    if (!mysteryVoiceAudio.getAttribute('src')) return;
+  }
+
+  if (mysteryVoiceAudio.paused) {
+    mysteryVoiceAudio.play().catch(() => {
+      mysteryVoiceLabel.textContent = 'TAP PLAY AGAIN';
+    });
+  } else {
+    mysteryVoiceAudio.pause();
+  }
+});
+
+mysteryVoiceAudio.addEventListener('play', () => {
+  mysteryVoiceToggle.textContent = 'PAUSE';
+  mysteryVoiceToggle.classList.add('is-playing');
+  mysteryVoiceToggle.setAttribute('aria-label', 'Pause voice-over');
+});
+
+mysteryVoiceAudio.addEventListener('pause', () => {
+  mysteryVoiceToggle.textContent = 'PLAY';
+  mysteryVoiceToggle.classList.remove('is-playing');
+  mysteryVoiceToggle.setAttribute('aria-label', 'Play voice-over');
+});
+
+mysteryVoiceAudio.addEventListener('timeupdate', () => {
+  const progress = mysteryVoiceAudio.duration ? (mysteryVoiceAudio.currentTime / mysteryVoiceAudio.duration) * 100 : 0;
+  mysteryVoiceProgress.style.width = `${progress}%`;
+  mysteryVoiceTime.textContent = formatVoiceTime(mysteryVoiceAudio.currentTime);
+});
+
+mysteryVoiceAudio.addEventListener('ended', () => {
+  mysteryVoiceAudio.currentTime = 0;
+  mysteryVoiceProgress.style.width = '0%';
+  mysteryVoiceTime.textContent = '0:00';
 });
 
 document.querySelectorAll('.window').forEach((windowElement) => {
@@ -461,6 +572,7 @@ mysteryScreen.addEventListener('click', (event) => {
     currentWitness = witnessButton.dataset.witness;
     witnessesSeen.add(currentWitness);
     renderMysteryGame();
+    setMysteryVoice(mysteryWitnessVoices[currentWitness], true);
     return;
   }
 
@@ -472,6 +584,7 @@ mysteryScreen.addEventListener('click', (event) => {
       window.setTimeout(() => {
         mysteryStage += 1;
         renderMysteryGame();
+        playMysteryStageVoice(true);
       }, 650);
     } else {
       answerButton.classList.add('is-wrong');
@@ -484,6 +597,7 @@ mysteryScreen.addEventListener('click', (event) => {
   if (actionButton.dataset.gameAction === 'start' || actionButton.dataset.gameAction === 'continue') {
     mysteryStage += 1;
     renderMysteryGame();
+    playMysteryStageVoice(true);
   }
   if (actionButton.dataset.gameAction === 'classified') {
     document.querySelector('#classified-note').classList.remove('is-hidden');
@@ -496,6 +610,7 @@ mysteryScreen.addEventListener('click', (event) => {
     evidenceSeen.clear();
     witnessesSeen.clear();
     renderMysteryGame();
+    playMysteryStageVoice(true);
   }
 });
 
