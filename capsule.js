@@ -266,10 +266,10 @@ function renderCapsuleYes() {
       </div>
       <form class="capsule-password-form" id="capsule-password-form" autocomplete="off">
         <label for="capsule-password">PASSWORD</label>
-        <input id="capsule-password" name="password" type="text" inputmode="numeric" placeholder="DD/MM/YYYY" required />
+        <input id="capsule-password" name="password" type="text" placeholder="ILAGAY ANG PASSWORD" required />
         <button class="capsule-button primary" type="submit">UNLOCK</button>
       </form>
-      <p class="capsule-password-feedback" id="capsule-password-feedback" aria-live="polite">Ang sagot ay isang petsa.</p>
+      <p class="capsule-password-feedback" id="capsule-password-feedback" aria-live="polite"></p>
     </div></section>`;
 }
 
@@ -334,7 +334,7 @@ capsuleRoot.addEventListener('submit', (event) => {
   event.target.classList.remove('is-wrong');
   if (password !== '30/08/2026') {
     event.target.classList.add('is-wrong');
-    feedback.textContent = 'Hindi iyon ang password. Tanungin si Dekdek para sa eksaktong petsa, kasama ang mga slash.';
+    feedback.textContent = 'Hindi iyon ang password. Subukan ulit ang eksaktong sagot na ibinigay ni Dekdek.';
     input.focus();
     input.select();
     return;
