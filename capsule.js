@@ -3,7 +3,13 @@ const capsuleDev = document.querySelector('#capsule-dev');
 const capsuleWindow = document.querySelector('#capsule-window');
 const capsuleMusic = document.querySelector('#capsule-music');
 const capsuleUnlockDate = new Date(2026, 9, 12, 0, 0, 0);
+const capsuleAnnouncementDate = new Date(2026, 9, 7, 0, 0, 0);
+const capsuleRevealDate = new Date(2026, 9, 11, 23, 0, 0);
 const capsuleDevMode = new URLSearchParams(window.location.search).get('capsuleDev') === 'dekdek';
+const capsuleDesktopIcon = document.querySelector('#capsule-desktop-icon');
+const capsuleUpdatePopup = document.querySelector('#capsule-update-popup');
+const capsuleUpdateTitle = document.querySelector('#capsule-update-title');
+const capsuleUpdateCopy = document.querySelector('#capsule-update-copy');
 let capsuleTimer;
 let capsuleWarningStep = 0;
 let capsuleMemoryStep = 0;
@@ -35,6 +41,31 @@ function startCapsuleMusic() {
 
 function pauseCapsuleMusic() {
   if (!capsuleMusic.paused) fadeCapsuleMusic(0, true);
+}
+
+function updateCapsuleAvailability() {
+  const now = Date.now();
+  const isReleased = now >= capsuleUnlockDate.getTime();
+  const isIconVisible = now >= capsuleRevealDate.getTime();
+  const isAnnouncementTime = now >= capsuleAnnouncementDate.getTime() && now < capsuleRevealDate.getTime();
+  const noticePhase = isReleased ? 'released' : isAnnouncementTime ? 'countdown' : '';
+
+  capsuleDesktopIcon.classList.toggle('is-hidden', !isIconVisible && !capsuleDevMode);
+  if (capsuleDevMode || !noticePhase || sessionStorage.getItem(`bembun_update_notice_${noticePhase}`) === 'seen') {
+    capsuleUpdatePopup.classList.add('is-hidden');
+    return;
+  }
+
+  capsuleUpdatePopup.dataset.noticePhase = noticePhase;
+  if (isReleased) {
+    capsuleUpdateTitle.textContent = 'The site has been updated.';
+    capsuleUpdateCopy.textContent = 'New letters and a new app have been added.';
+  } else {
+    const daysRemaining = Math.max(1, Math.ceil((capsuleUnlockDate.getTime() - now) / 86400000));
+    capsuleUpdateTitle.textContent = 'Something new is almost here.';
+    capsuleUpdateCopy.textContent = `This site is updating in ${daysRemaining} ${daysRemaining === 1 ? 'day' : 'days'}.`;
+  }
+  capsuleUpdatePopup.classList.remove('is-hidden');
 }
 
 const capsuleWarnings = [
@@ -471,6 +502,16 @@ document.addEventListener('visibilitychange', () => {
   else if (!capsuleWindow.classList.contains('is-hidden') && !capsuleWindow.classList.contains('is-minimized')) startCapsuleMusic();
 });
 
+document.querySelectorAll('[data-capsule-update-close]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const phase = capsuleUpdatePopup.dataset.noticePhase;
+    if (phase) sessionStorage.setItem(`bembun_update_notice_${phase}`, 'seen');
+    capsuleUpdatePopup.classList.add('is-hidden');
+  });
+});
+
 persistRealUnlock();
+updateCapsuleAvailability();
+window.setInterval(updateCapsuleAvailability, 60000);
 if (capsuleIsOpen()) startUnlockedCapsule();
 else renderCapsuleLocked();

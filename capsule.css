@@ -11,6 +11,15 @@
 .capsule-icon::before { content: "12"; position: absolute; inset: 11px 5px auto; padding: 2px; color: #5b1b39; background: #ffd9e8; font: 700 10px "Pixelify Sans", monospace; text-align: center; }
 .capsule-icon i { position: absolute; left: 50%; bottom: 4px; width: 8px; height: 8px; border-radius: 50%; background: #ffc967; transform: translateX(-50%); }
 
+.capsule-update-popup { position: fixed; z-index: 900; left: 50%; top: 50%; width: min(430px, calc(100vw - 24px)); transform: translate(-50%, -50%); box-shadow: 10px 11px rgba(89, 25, 57, .38); }
+.capsule-update-body { padding: 28px; text-align: center; }
+.capsule-update-body h2 { margin: 4px 0 15px; color: #a32c61; font: 700 clamp(27px, 7vw, 39px)/1 "Pixelify Sans", monospace; text-wrap: balance; }
+.capsule-update-body > p:not(.eyebrow) { color: #5a2940; font: 600 15px/1.6 Georgia, serif; }
+.capsule-update-progress { height: 16px; margin: 20px 0; padding: 2px; border: 2px inset #efa4c3; background: #fff3f8; }
+.capsule-update-progress span { width: 20%; height: 100%; display: block; background: repeating-linear-gradient(90deg, #d93f82 0 12px, #f57daf 12px 15px); animation: update-wait 1.1s steps(5) infinite alternate; }
+.capsule-update-popup[data-notice-phase="released"] .capsule-update-progress span { width: 100%; animation: none; background: repeating-linear-gradient(90deg, #b52f70 0 12px, #ee76aa 12px 15px); }
+@keyframes update-wait { to { width: 82%; } }
+
 .capsule-window { position: fixed; z-index: 48; left: 50%; top: 50%; width: min(880px, calc(100vw - 22px)); transform: translate(-50%, -50%); border-color: #77727c; box-shadow: 12px 13px rgba(20, 8, 18, .45); }
 .capsule-title-bar { color: #f2f0f2; background: linear-gradient(90deg, #08080b, #22202a 60%, #5a1f3b); }
 .capsule-title-mark { width: 23px; height: 20px; display: grid; place-items: center; color: #17131a; border-radius: 50%; background: #ded7dc; font-size: 8px; }

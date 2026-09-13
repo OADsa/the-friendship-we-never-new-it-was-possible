@@ -99,7 +99,7 @@
           <span class="mystery-icon" aria-hidden="true">?</span>
           <span>mystery.exe</span>
         </button>
-        <button class="desktop-icon" data-open="capsule-window" type="button">
+        <button class="desktop-icon is-hidden" id="capsule-desktop-icon" data-open="capsule-window" type="button">
           <span class="capsule-icon" aria-hidden="true"><i></i></span>
           <span>are_you_ready.exe</span>
         </button>
@@ -353,6 +353,20 @@
       </section>
     </main>
 
+    <section class="window capsule-update-popup is-hidden" id="capsule-update-popup" role="dialog" aria-labelledby="capsule-update-title">
+      <header class="title-bar">
+        <div class="title-bar-label"><span class="capsule-title-mark">12</span><span>update_notice.exe</span></div>
+        <div class="window-controls"><button type="button" data-capsule-update-close aria-label="Close update notice">×</button></div>
+      </header>
+      <div class="window-body capsule-update-body">
+        <p class="eyebrow">A SMALL UPDATE IS COMING</p>
+        <h2 id="capsule-update-title">Something new is almost here.</h2>
+        <p id="capsule-update-copy">This site is updating in 5 days.</p>
+        <div class="capsule-update-progress" aria-hidden="true"><span></span></div>
+        <button class="pixel-button primary-button" type="button" data-capsule-update-close>okay, I’ll wait</button>
+      </div>
+    </section>
+
     <footer class="taskbar">
       <button class="start-button" type="button" data-open="hero-window"><span>♥</span> start</button>
       <button class="taskbar-item" type="button" data-open="hero-window">friendship.exe</button>
@@ -433,6 +447,6 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="script.js?v=31"></script>
-    <script src="capsule.js?v=5"></script>
+    <script src="capsule.js?v=7"></script>
   </body>
 </html>
