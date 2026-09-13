@@ -189,17 +189,31 @@ function renderCapsuleMemory() {
       <section class="final-question"><div class="memory-shell">
         <h2>Bembun.</h2>
         <div class="final-lines">
-          <p>I don’t know what version of yourself you’ll become tomorrow.</p>
-          <p>I don’t know what you’ll discover about yourself.</p>
-          <p>I don’t know where life will take you.</p>
-          <p>But I hope you’re becoming someone you’re proud of.</p>
-          <p>Are you okay?</p>
-          <p>Have you upgraded to a better version of yourself na?</p>
-          <p class="courting-question">If yes…<br><br>Can I make the courtesy to court you?</p>
+          <p>Kung ano man ang pinagdaanan mo bago makarating sa pahinang ito, sana naging banayad ka rin sa sarili mo.</p>
+          <p>Hindi mo kailangang maging “mas magandang bersyon” ng sarili mo para maging karapat-dapat sa pag-aaruga.</p>
+          <p>Ipinagmamalaki ko ang bawat hakbang mo—pati ang maliliit at tahimik na walang ibang nakapansin.</p>
+          <p>Walang hinihinging kapalit ang pahinang ito. Masaya lamang akong narito ka.</p>
         </div>
+        <div class="capsule-actions delayed-actions">
+          <button class="capsule-button primary" type="button" data-capsule-action="memory-next">isang huling pahina</button>
+        </div>
+      </div></section>`,
+    `
+      <section class="final-question standalone-question"><div class="memory-shell">
+        <p class="capsule-eyebrow">ISANG HULING TANONG</p>
+        <div class="makata-poem">
+          <p>Kung ang oras ay ilog, hindi kita mamadaliing tumawid;</p>
+          <p>sasabay lamang ako sa agos na kaya ng iyong dibdib.</p>
+          <p>Hindi kita hihilahin sa landas na hindi mo pinili;</p>
+          <p>mag-aalay lang ako ng kamay, kung nais mo itong tanggapin.</p>
+          <p>At kung pahihintulutan, hindi pangako ang una kong dala—</p>
+          <p>kundi tiyaga, paggalang, at pusong handang makilala ka pa.</p>
+        </div>
+        <p class="courting-question">Pwede na ba akong manligaw sa’yo?</p>
+        <p class="question-reassurance">Walang maling sagot. Anuman ang piliin mo, igagalang ko.</p>
         <div class="final-response-actions delayed-actions">
-          <button class="capsule-button ghost" type="button" data-capsule-response="no">NO</button>
-          <button class="capsule-button primary" type="button" data-capsule-response="yes">YES</button>
+          <button class="capsule-button ghost" type="button" data-capsule-response="no">HINDI PA</button>
+          <button class="capsule-button primary" type="button" data-capsule-response="yes">OO</button>
         </div>
       </div></section>`
   ];
@@ -208,19 +222,38 @@ function renderCapsuleMemory() {
 }
 
 function renderCapsuleYes() {
+  localStorage.setItem('bembun_capsule_response', 'yes-pending');
+  capsuleRoot.innerHTML = `
+    <section class="final-question password-page"><div class="memory-shell">
+      <p class="capsule-eyebrow">ISANG MUNTING HULING HAKBANG</p>
+      <h2>Tanungin si Dekdek.</h2>
+      <div class="final-lines">
+        <p>I-message mo si Dekdek at itanong sa kanya:</p>
+        <p class="courting-question">“Ano ang password?”</p>
+        <p>Pagkatapos, bumalik dito at ilagay ang eksaktong sagot niya.</p>
+      </div>
+      <form class="capsule-password-form" id="capsule-password-form" autocomplete="off">
+        <label for="capsule-password">PASSWORD</label>
+        <input id="capsule-password" name="password" type="text" inputmode="numeric" placeholder="DD/MM/YYYY" required />
+        <button class="capsule-button primary" type="submit">UNLOCK</button>
+      </form>
+      <p class="capsule-password-feedback" id="capsule-password-feedback" aria-live="polite">Ang sagot ay isang petsa.</p>
+    </div></section>`;
+}
+
+function renderCapsuleYesComplete() {
   localStorage.setItem('bembun_capsule_response', 'yes');
   capsuleRoot.innerHTML = `
     <section class="final-question"><div class="memory-shell">
-      <h2>Wait.</h2>
+      <p class="capsule-eyebrow">PASSWORD ACCEPTED</p>
+      <h2>Kung gayon, oo.</h2>
       <div class="final-lines">
-        <p>Before you answer… there is one thing I want you to do.</p>
-        <p class="courting-question">Choose an Arthur Nery song.</p>
-        <p>Find the story or message behind the song.</p>
-        <p>And when you’re ready, message me:</p>
+        <p>Salamat sa pagtitiwala mo sa akin at sa sagot na ibinigay mo.</p>
+        <p>Hindi natin kailangang madaliin ang susunod. Maaari natin itong simulan nang marahan, tapat, at may paggalang.</p>
+        <p class="courting-question">I-message si Dekdek:<br>“Handa na si Bembun sa susunod na kabanata.”</p>
+        <p>Alam na niya kung ano ang ibig sabihin noon.</p>
       </div>
-      <div class="secret-phrase">“Dekdek? Bembun is now ready.”</div>
-      <div class="final-lines"><p>I’ll know what it means.</p><p>Maybe this isn’t the end of the time capsule.</p><p>Maybe it’s the beginning of the next chapter.</p></div>
-      <p class="capsule-whisper">Whatever happens next… I’ll let you write the next part.</p>
+      <p class="capsule-whisper">Ang susunod na pahina, sabay nating isusulat.</p>
     </div></section>`;
 }
 
@@ -228,23 +261,26 @@ function renderCapsuleNo() {
   localStorage.setItem('bembun_capsule_response', 'no');
   capsuleRoot.innerHTML = `
     <section class="final-question"><div class="memory-shell">
-      <h2>That’s okay.</h2>
+      <h2>Ayos lang. Totoo.</h2>
       <div class="final-lines">
-        <p>I hope you figure things out.</p>
-        <p>I hope you find the version of yourself that you’re looking for.</p>
-        <p>Take your time. You don’t owe me an answer before you’re ready.</p>
-        <p>Whatever happens, I’m still glad our story happened.</p>
-        <p>Thank you for being part of it.</p>
-        <p>This chapter will remain here. But this question is now closed.</p>
-        <p class="courting-question">Maybe another chapter someday.</p>
+        <p>Salamat sa pagiging tapat sa akin.</p>
+        <p>Hindi mo kailangang magpaliwanag, humingi ng tawad, o makonsensya sa sagot mo.</p>
+        <p>Hindi nababawasan ang halaga ng mga sandaling pinagsaluhan natin dahil lamang dito.</p>
+        <p>Masaya pa rin akong nakilala kita, at hangad ko pa ring maging mabait sa’yo ang mundo.</p>
+        <p class="courting-question">Mahalaga ka, Bembun. Walang pilitan at walang samaan ng loob.</p>
+        <p>Ang munting lugar na ito ay mananatiling pasasalamat—hindi obligasyon.</p>
       </div>
-      <p class="capsule-whisper">Whatever happens next… I’ll let you write the next part.</p>
+      <p class="capsule-whisper">Magpatuloy ka sa sarili mong oras at paraan.</p>
     </div></section>`;
 }
 
 function startUnlockedCapsule() {
   const response = localStorage.getItem('bembun_capsule_response');
   if (response === 'yes') {
+    renderCapsuleYesComplete();
+    return;
+  }
+  if (response === 'yes-pending') {
     renderCapsuleYes();
     return;
   }
@@ -254,6 +290,28 @@ function startUnlockedCapsule() {
   }
   renderCapsuleOpening();
 }
+
+capsuleRoot.addEventListener('submit', (event) => {
+  if (event.target.id !== 'capsule-password-form') return;
+  event.preventDefault();
+  const input = event.target.querySelector('#capsule-password');
+  const feedback = event.target.parentElement.querySelector('#capsule-password-feedback');
+  const password = input.value.trim().replace(/\s+/g, '');
+
+  event.target.classList.remove('is-wrong');
+  if (password !== '30/08/2026') {
+    event.target.classList.add('is-wrong');
+    feedback.textContent = 'Hindi iyon ang password. Tanungin si Dekdek para sa eksaktong petsa, kasama ang mga slash.';
+    input.focus();
+    input.select();
+    return;
+  }
+
+  input.disabled = true;
+  event.target.querySelector('button').disabled = true;
+  feedback.textContent = 'Tama. Binubuksan ang huling pahina…';
+  window.setTimeout(renderCapsuleYesComplete, 700);
+});
 
 capsuleRoot.addEventListener('click', (event) => {
   const action = event.target.closest('[data-capsule-action]')?.dataset.capsuleAction;
@@ -283,7 +341,7 @@ capsuleRoot.addEventListener('click', (event) => {
     }
   }
   if (action === 'memory-next') {
-    capsuleMemoryStep = Math.min(6, capsuleMemoryStep + 1);
+    capsuleMemoryStep = Math.min(7, capsuleMemoryStep + 1);
     renderCapsuleMemory();
   }
   if (action === 'memory-back') {
