@@ -199,6 +199,19 @@ function renderCapsuleMemory() {
         </div>
       </div></section>`,
     `
+      <section class="final-question chapter-teaser"><div class="memory-shell">
+        <p class="capsule-eyebrow">THE STORY ISN’T OVER</p>
+        <h2>Do you wanna know what the best chapter is?</h2>
+        <div class="final-lines">
+          <p>Hindi pa ito tungkol sa nakaraan.</p>
+          <p>Tungkol ito sa isang pahinang maaari pa lamang nating simulan.</p>
+        </div>
+        <div class="final-response-actions delayed-actions">
+          <button class="capsule-button ghost" type="button" data-capsule-chapter="no">NOT YET</button>
+          <button class="capsule-button primary" type="button" data-capsule-chapter="yes">YES</button>
+        </div>
+      </div></section>`,
+    `
       <section class="final-question standalone-question"><div class="memory-shell">
         <p class="capsule-eyebrow">ISANG HULING TANONG</p>
         <div class="makata-poem">
@@ -219,6 +232,25 @@ function renderCapsuleMemory() {
   ];
   capsuleRoot.innerHTML = screens[capsuleMemoryStep];
   capsuleRoot.scrollTop = 0;
+}
+
+function renderChapterNotYet() {
+  capsuleRoot.innerHTML = `
+    <section class="final-question"><div class="memory-shell">
+      <h2>Okay lang.</h2>
+      <div class="final-lines">
+        <p>Hindi ko muna bubuksan ang pahinang iyon. Walang kailangang madaliin.</p>
+        <p>Pero hindi ibig sabihin noon na titigil na akong mag-effort o bigla na lang akong lalayo.</p>
+        <p>Patuloy kitang kikilalanin, pakikinggan, at aalalahanin sa maliliit pero totoong paraan.</p>
+        <p class="courting-question">Hindi para pilitin ka—kundi para ipakita na sincere at consistent ako.</p>
+        <p>Walang panunumbat at walang hinihinging kapalit. I’ll respect your pace while still showing you that I care.</p>
+      </div>
+      <div class="capsule-actions">
+        <button class="capsule-button ghost" type="button" data-capsule-action="memory-back">balikan muna</button>
+        <button class="capsule-button primary" type="button" data-capsule-chapter="yes">sige, ano iyon?</button>
+      </div>
+      <p class="capsule-whisper">Kapag handa ka nang malaman, narito lang ang pahina.</p>
+    </div></section>`;
 }
 
 function renderCapsuleYes() {
@@ -266,11 +298,12 @@ function renderCapsuleNo() {
         <p>Salamat sa pagiging tapat sa akin.</p>
         <p>Hindi mo kailangang magpaliwanag, humingi ng tawad, o makonsensya sa sagot mo.</p>
         <p>Hindi nababawasan ang halaga ng mga sandaling pinagsaluhan natin dahil lamang dito.</p>
-        <p>Masaya pa rin akong nakilala kita, at hangad ko pa ring maging mabait sa’yo ang mundo.</p>
-        <p class="courting-question">Mahalaga ka, Bembun. Walang pilitan at walang samaan ng loob.</p>
-        <p>Ang munting lugar na ito ay mananatiling pasasalamat—hindi obligasyon.</p>
+        <p class="courting-question">Hindi ako biglang lalamig o titigil maging sincere dahil hindi ka pa handa.</p>
+        <p>Patuloy akong gagawa ng effort sa paraang komportable ka—consistent, mahinahon, at walang pangungulit.</p>
+        <p>Hindi iyon kapalit ng sagot at hindi mo iyon kailangang suklian. Gusto ko lang ipakitang totoo ang pag-aalaga ko.</p>
+        <p>Mahalaga ka, Bembun. Walang pilitan at walang samaan ng loob.</p>
       </div>
-      <p class="capsule-whisper">Magpatuloy ka sa sarili mong oras at paraan.</p>
+      <p class="capsule-whisper">I’ll respect your pace, and I’ll keep showing up with care.</p>
     </div></section>`;
 }
 
@@ -316,6 +349,16 @@ capsuleRoot.addEventListener('submit', (event) => {
 capsuleRoot.addEventListener('click', (event) => {
   const action = event.target.closest('[data-capsule-action]')?.dataset.capsuleAction;
   const response = event.target.closest('[data-capsule-response]')?.dataset.capsuleResponse;
+  const chapterChoice = event.target.closest('[data-capsule-chapter]')?.dataset.capsuleChapter;
+  if (chapterChoice === 'yes') {
+    capsuleMemoryStep = 8;
+    renderCapsuleMemory();
+    return;
+  }
+  if (chapterChoice === 'no') {
+    renderChapterNotYet();
+    return;
+  }
   if (response === 'yes') return renderCapsuleYes();
   if (response === 'no') return renderCapsuleNo();
   if (!action) return;
@@ -341,7 +384,7 @@ capsuleRoot.addEventListener('click', (event) => {
     }
   }
   if (action === 'memory-next') {
-    capsuleMemoryStep = Math.min(7, capsuleMemoryStep + 1);
+    capsuleMemoryStep = Math.min(8, capsuleMemoryStep + 1);
     renderCapsuleMemory();
   }
   if (action === 'memory-back') {
