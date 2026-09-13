@@ -1,11 +1,41 @@
 const capsuleRoot = document.querySelector('#capsule-root');
 const capsuleDev = document.querySelector('#capsule-dev');
+const capsuleWindow = document.querySelector('#capsule-window');
+const capsuleMusic = document.querySelector('#capsule-music');
 const capsuleUnlockDate = new Date(2026, 9, 12, 0, 0, 0);
 const capsuleDevMode = new URLSearchParams(window.location.search).get('capsuleDev') === 'dekdek';
 let capsuleTimer;
 let capsuleWarningStep = 0;
 let capsuleMemoryStep = 0;
 let capsuleForcedOpen = false;
+let capsuleMusicFade;
+
+function fadeCapsuleMusic(targetVolume, pauseAfter = false) {
+  window.clearInterval(capsuleMusicFade);
+  const startVolume = capsuleMusic.volume;
+  let step = 0;
+  capsuleMusicFade = window.setInterval(() => {
+    step += 1;
+    capsuleMusic.volume = Math.max(0, Math.min(1, startVolume + ((targetVolume - startVolume) * step / 12)));
+    if (step >= 12) {
+      window.clearInterval(capsuleMusicFade);
+      if (pauseAfter) capsuleMusic.pause();
+    }
+  }, 55);
+}
+
+function startCapsuleMusic() {
+  if (!capsuleMusic.paused) {
+    fadeCapsuleMusic(0.14);
+    return;
+  }
+  capsuleMusic.volume = 0;
+  capsuleMusic.play().then(() => fadeCapsuleMusic(0.14)).catch(() => {});
+}
+
+function pauseCapsuleMusic() {
+  if (!capsuleMusic.paused) fadeCapsuleMusic(0, true);
+}
 
 const capsuleWarnings = [
   { title: 'WARNING', copy: 'You are about to open something that was made specifically for you.<br><br>Are you sure you want to continue?', back: 'NO', next: 'YES' },
@@ -420,6 +450,26 @@ if (capsuleDevMode) {
     }
   });
 }
+
+document.addEventListener('click', (event) => {
+  if (event.target.closest('[data-open="capsule-window"]')) {
+    startCapsuleMusic();
+    return;
+  }
+  if (event.target.closest('#capsule-window .close-window')) {
+    pauseCapsuleMusic();
+    return;
+  }
+  if (event.target.closest('#capsule-window [data-window-action="minimize"]')) {
+    if (capsuleWindow.classList.contains('is-minimized')) pauseCapsuleMusic();
+    else startCapsuleMusic();
+  }
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) pauseCapsuleMusic();
+  else if (!capsuleWindow.classList.contains('is-hidden') && !capsuleWindow.classList.contains('is-minimized')) startCapsuleMusic();
+});
 
 persistRealUnlock();
 if (capsuleIsOpen()) startUnlockedCapsule();
