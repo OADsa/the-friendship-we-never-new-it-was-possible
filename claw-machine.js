@@ -32,17 +32,16 @@ const storyCapsuleLetters = [
   { id: 'story-1004', date: 'OCTOBER 4', title: 'Your surprise while I was travelling', rarity: 'legendary', body: `I was on the road when you sent me your Canva presentation. You even asked whether I could open it while I was travelling—HAHAHAHA, ang cute mo roon. It was the first time someone made something like that for me. You made me understand how it feels to be on the receiving end of effort, and I felt seen, remembered, and ridiculously kilig.` }
 ];
 
-const capsulePositions = [
-  [8, 6, -8], [17, 40, 7], [26, 12, -4], [35, 47, 9],
-  [44, 5, 5], [53, 38, -7], [62, 11, 10], [71, 44, -3],
-  [79, 4, 8], [86, 34, -9], [92, 9, 3], [97, 48, -5]
-];
+const capsuleVisualPalette = ['#ef6f9f', '#66baf0', '#ffd15f', '#78d59b', '#ac80e7', '#ff8b62', '#69d4d0', '#f4a2cf', '#9ab7ff', '#d8ed72'];
+const visibleCapsuleLimit = 48;
 
 let clawLetters = [];
 let clawCollected = new Set();
 let clawX = 50;
 let clawBusy = false;
 let clawMachineOrder = [];
+let clawLayout = [];
+let clawBookFilter = 'all';
 
 function rarityForLetter(number) {
   if (number === 100) return 'secret';
@@ -89,31 +88,57 @@ function buildMachineOrder() {
 function visibleClawLetters() {
   return clawMachineOrder
     .filter((id) => !clawCollected.has(id))
-    .slice(0, capsulePositions.length)
+    .slice(0, visibleCapsuleLimit)
     .map((id) => clawLetters.find((letter) => letter.id === id));
 }
 
-function nearestVisibleCapsule() {
+function capsuleColor(id) {
+  let hash = 0;
+  for (const character of id) hash = ((hash * 31) + character.charCodeAt(0)) >>> 0;
+  return capsuleVisualPalette[hash % capsuleVisualPalette.length];
+}
+
+function refreshClawLayout() {
   const visible = visibleClawLetters();
+  const positions = [];
+  let row = 0;
+  while (positions.length < visible.length) {
+    const columns = row % 2 === 0 ? 10 : 9;
+    const start = row % 2 === 0 ? 5.5 : 10.5;
+    const step = 89 / (columns - 1);
+    for (let column = 0; column < columns && positions.length < visible.length; column += 1) {
+      positions.push({
+        x: Math.max(4, Math.min(96, start + column * step + (Math.random() * 3.2 - 1.6))),
+        bottom: row * 34 + Math.random() * 6,
+        tilt: Math.round(-15 + Math.random() * 30),
+        delay: Math.random() * .35
+      });
+    }
+    row += 1;
+  }
+
+  for (let index = positions.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [positions[index], positions[swapIndex]] = [positions[swapIndex], positions[index]];
+  }
+  clawLayout = visible.map((letter, index) => ({ letter, ...positions[index] }));
+}
+
+function nearestVisibleCapsule() {
   let nearest = null;
-  visible.forEach((letter, index) => {
-    const distance = Math.abs(capsulePositions[index][0] - clawX);
-    if (!nearest || distance < nearest.distance) nearest = { letter, index, distance };
+  clawLayout.forEach((item) => {
+    const distance = Math.abs(item.x - clawX);
+    if (!nearest || distance < nearest.distance) nearest = { ...item, distance };
   });
   return nearest;
 }
 
 function renderClawCapsules() {
-  const visible = visibleClawLetters();
-  const nearest = nearestVisibleCapsule();
-  clawCapsules.innerHTML = visible.map((letter, index) => {
-    const [x, bottom, tilt] = capsulePositions[index];
-    const rarity = clawRarities[letter.rarity];
-    const targeted = nearest?.letter.id === letter.id && nearest.distance <= 6.5;
-    return `<span class="claw-capsule rarity-${letter.rarity}${targeted ? ' is-target' : ''}" data-claw-letter="${letter.id}" title="${rarity.label} capsule" style="--capsule-x:${x}%;--capsule-bottom:${bottom}px;--capsule-tilt:${tilt}deg;--capsule-color:${rarity.color}"></span>`;
+  clawCapsules.innerHTML = clawLayout.map((item) => {
+    return `<span class="claw-capsule" data-claw-letter="${item.letter.id}" title="Mystery capsule" style="--capsule-x:${item.x}%;--capsule-bottom:${item.bottom}px;--capsule-tilt:${item.tilt}deg;--capsule-color:${capsuleColor(item.letter.id)};--fall-delay:${item.delay}s"></span>`;
   }).join('');
 
-  if (!visible.length) {
+  if (!clawLayout.length) {
     clawStatus.textContent = 'You caught every capsule. The whole archive is now inside your letter book.';
     clawStatus.classList.add('is-win');
   }
@@ -121,11 +146,13 @@ function renderClawCapsules() {
 
 function renderClawBook() {
   clawBookCount.textContent = `${clawCollected.size}/${clawLetters.length}`;
-  clawBookGrid.innerHTML = clawLetters.map((letter, index) => {
+  const filteredLetters = clawBookFilter === 'all' ? clawLetters : clawLetters.filter((letter) => letter.rarity === clawBookFilter);
+  clawBookGrid.innerHTML = filteredLetters.map((letter) => {
+    const index = clawLetters.findIndex((item) => item.id === letter.id);
     const unlocked = clawCollected.has(letter.id);
     const rarity = clawRarities[letter.rarity];
     return `<button class="claw-book-card rarity-${letter.rarity}${unlocked ? '' : ' is-locked'}${letter.rarity === 'secret' ? ' is-special' : ''}" type="button" data-book-letter="${letter.id}" ${unlocked ? '' : 'disabled'}>
-      <span class="book-capsule" style="--book-color:${rarity.color}"></span>
+      <span class="book-capsule" style="--book-color:${capsuleColor(letter.id)}"></span>
       <strong>${unlocked ? letter.title : 'LOCKED'}</strong>
       <small>${unlocked ? `${rarity.label} • ${letter.date}` : `${String(index + 1).padStart(3, '0')} • ???`}</small>
     </button>`;
@@ -136,7 +163,6 @@ function setClawPosition(nextX) {
   if (clawBusy) return;
   clawX = Math.max(5, Math.min(95, nextX));
   clawRig.style.setProperty('--claw-x', `${clawX}%`);
-  renderClawCapsules();
 }
 
 function setClawControlsDisabled(disabled) {
@@ -163,6 +189,7 @@ function burstClawConfetti(rarityName) {
 function dropClaw() {
   if (clawBusy || !clawLetters.length) return;
   const target = nearestVisibleCapsule();
+  const catchIsPossible = Boolean(target && target.distance <= 3.25);
   let caughtLetter = null;
   clawBusy = true;
   setClawControlsDisabled(true);
@@ -172,13 +199,13 @@ function dropClaw() {
 
   window.setTimeout(() => {
     clawCabinet.classList.add('is-grabbing');
-    if (!target || target.distance > 6.5) {
-      clawStatus.textContent = 'Missed it. Line up the claw more carefully and try again.';
+    if (!target || target.distance > 3.25) {
+      clawStatus.textContent = 'The claw closed on empty space. It must be directly above a capsule.';
       return;
     }
 
     const capsule = clawCapsules.querySelector(`[data-claw-letter="${target.letter.id}"]`);
-    capsule?.classList.add('is-caught');
+    capsule?.classList.add('is-held');
     caughtLetter = target.letter;
     clawCollected.add(target.letter.id);
     saveCollectedLetters();
@@ -186,16 +213,47 @@ function dropClaw() {
     clawStatus.textContent = `${rarity.label} CAPSULE CAUGHT — “${target.letter.title}” was saved to the letter book!`;
     clawStatus.classList.add('is-win', `rarity-${target.letter.rarity}`);
     burstClawConfetti(target.letter.rarity);
-  }, 780);
+  }, 760);
+
+  window.setTimeout(() => {
+    if (caughtLetter) {
+      const capsule = clawCapsules.querySelector(`[data-claw-letter="${caughtLetter.id}"]`);
+      const playfield = clawCabinet.querySelector('.claw-playfield').getBoundingClientRect();
+      const travelX = ((90 - target.x) / 100) * playfield.width;
+      capsule?.style.setProperty('--prize-x', `${travelX}px`);
+      capsule?.style.setProperty('--prize-y', `${target.bottom + 67}px`);
+      capsule?.classList.add('is-lifting');
+      clawCabinet.classList.remove('is-dropping');
+    } else {
+      clawCabinet.classList.remove('is-dropping', 'is-grabbing');
+    }
+  }, 1050);
+
+  window.setTimeout(() => {
+    if (!caughtLetter) return;
+    clawRig.style.setProperty('--claw-x', '90%');
+    clawCapsules.querySelector(`[data-claw-letter="${caughtLetter.id}"]`)?.classList.add('is-to-prize');
+  }, 1800);
+
+  window.setTimeout(() => {
+    if (!caughtLetter) return;
+    clawCapsules.querySelector(`[data-claw-letter="${caughtLetter.id}"]`)?.classList.add('is-prize-drop');
+    clawCabinet.classList.remove('is-grabbing');
+  }, 2450);
 
   window.setTimeout(() => {
     clawCabinet.classList.remove('is-dropping', 'is-grabbing');
+    clawX = 50;
+    clawRig.style.setProperty('--claw-x', '50%');
     clawBusy = false;
     setClawControlsDisabled(false);
-    renderClawCapsules();
-    renderClawBook();
-    if (caughtLetter) openCollectedLetter(caughtLetter.id);
-  }, 1650);
+    if (caughtLetter) {
+      refreshClawLayout();
+      renderClawCapsules();
+      renderClawBook();
+      openCollectedLetter(caughtLetter.id);
+    }
+  }, catchIsPossible ? 3150 : 1650);
 }
 
 function switchClawView(view) {
@@ -228,6 +286,17 @@ document.querySelectorAll('[data-claw-control]').forEach((button) => {
 });
 
 document.querySelectorAll('[data-claw-view]').forEach((button) => button.addEventListener('click', () => switchClawView(button.dataset.clawView)));
+document.querySelectorAll('[data-book-filter]').forEach((button) => {
+  button.addEventListener('click', () => {
+    clawBookFilter = button.dataset.bookFilter;
+    document.querySelectorAll('[data-book-filter]').forEach((filterButton) => {
+      const active = filterButton === button;
+      filterButton.classList.toggle('is-active', active);
+      filterButton.setAttribute('aria-selected', String(active));
+    });
+    renderClawBook();
+  });
+});
 clawBookGrid.addEventListener('click', (event) => openCollectedLetter(event.target.closest('[data-book-letter]')?.dataset.bookLetter));
 clawLetterClose.addEventListener('click', () => clawLetterModal.classList.add('is-hidden'));
 clawLetterModal.addEventListener('click', (event) => { if (event.target === clawLetterModal) clawLetterModal.classList.add('is-hidden'); });
@@ -247,7 +316,9 @@ async function initializeClawMachine() {
     clawLetters = [...parseSuppliedLetters(await response.text()), ...storyCapsuleLetters];
     loadCollectedLetters();
     buildMachineOrder();
+    refreshClawLayout();
     setClawPosition(50);
+    renderClawCapsules();
     renderClawBook();
   } catch {
     clawStatus.textContent = 'The capsule letters are still being loaded. Please reopen the app in a moment.';

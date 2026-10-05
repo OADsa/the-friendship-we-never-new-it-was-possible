@@ -9,9 +9,9 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=35" />
+    <link rel="stylesheet" href="styles.css?v=36" />
     <link rel="stylesheet" href="capsule.css?v=5" />
-    <link rel="stylesheet" href="claw-machine.css?v=1" />
+    <link rel="stylesheet" href="claw-machine.css?v=2" />
   </head>
   <body>
     <div class="cleanup-lock" id="cleanup-lock" role="dialog" aria-modal="true" aria-labelledby="cleanup-lock-title">
@@ -356,13 +356,14 @@
                   <span class="claw-head"><i></i><i></i></span>
                 </div>
                 <div class="claw-capsules" id="claw-capsules" aria-label="Capsules still inside the machine"></div>
-                <div class="claw-chute"><span>PRIZE</span></div>
+                <div class="claw-chute"><span>PRIZE BAG</span></div>
                 <div class="claw-glass-shine" aria-hidden="true"></div>
               </div>
             </div>
 
             <div class="claw-status" id="claw-status" role="status">Move the claw, then press DOWN to grab a capsule.</div>
-            <div class="claw-rarity-legend" aria-label="Capsule rarity colors">
+            <p class="claw-rarity-note">Capsule colors are random. Rarity stays hidden until the claw wins it.</p>
+            <div class="claw-rarity-legend" aria-label="Possible capsule rarities">
               <span class="rarity-common">COMMON</span><span class="rarity-uncommon">UNCOMMON</span><span class="rarity-rare">RARE</span>
               <span class="rarity-epic">EPIC</span><span class="rarity-legendary">LEGENDARY</span><span class="rarity-secret">SECRET</span>
             </div>
@@ -379,6 +380,15 @@
               <p>DEKDEK’S LITTLE ARCHIVE</p>
               <h2>Letters caught for Bembun</h2>
               <span>Every capsule keeps one memory.</span>
+            </div>
+            <div class="claw-book-filters" role="tablist" aria-label="Filter letter book by rarity">
+              <button class="is-active" type="button" data-book-filter="all" role="tab" aria-selected="true">ALL</button>
+              <button type="button" data-book-filter="common" role="tab" aria-selected="false">COMMON</button>
+              <button type="button" data-book-filter="uncommon" role="tab" aria-selected="false">UNCOMMON</button>
+              <button type="button" data-book-filter="rare" role="tab" aria-selected="false">RARE</button>
+              <button type="button" data-book-filter="epic" role="tab" aria-selected="false">EPIC</button>
+              <button type="button" data-book-filter="legendary" role="tab" aria-selected="false">LEGENDARY</button>
+              <button type="button" data-book-filter="secret" role="tab" aria-selected="false">SECRET</button>
             </div>
             <div class="claw-book-grid" id="claw-book-grid"></div>
           </section>
@@ -550,7 +560,7 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="script.js?v=34"></script>
-    <script src="claw-machine.js?v=2"></script>
+    <script src="claw-machine.js?v=4"></script>
     <script src="capsule.js?v=11"></script>
   </body>
 </html>
