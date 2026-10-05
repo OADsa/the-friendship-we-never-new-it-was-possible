@@ -2,9 +2,9 @@ const capsuleRoot = document.querySelector('#capsule-root');
 const capsuleDev = document.querySelector('#capsule-dev');
 const capsuleWindow = document.querySelector('#capsule-window');
 const capsuleMusic = document.querySelector('#capsule-music');
-const capsuleUnlockDate = new Date(2026, 9, 12, 0, 0, 0);
-const capsuleAnnouncementDate = new Date(2026, 9, 7, 0, 0, 0);
-const capsuleRevealDate = new Date(2026, 9, 11, 23, 0, 0);
+const capsuleUnlockDate = new Date('2026-10-05T21:00:00+08:00');
+const capsuleAnnouncementDate = new Date('2026-10-05T00:00:00+08:00');
+const capsuleRevealDate = new Date('2026-10-05T20:00:00+08:00');
 const capsuleDevMode = new URLSearchParams(window.location.search).get('capsuleDev') === 'dekdek';
 const capsuleDesktopIcon = document.querySelector('#capsule-desktop-icon');
 const capsuleUpdatePopup = document.querySelector('#capsule-update-popup');
@@ -62,9 +62,8 @@ function updateCapsuleAvailability() {
     capsuleUpdateTitle.textContent = 'The site has been updated.';
     capsuleUpdateCopy.textContent = 'New letters and a new app have been added.';
   } else {
-    const daysRemaining = Math.max(1, Math.ceil((capsuleUnlockDate.getTime() - now) / 86400000));
     capsuleUpdateTitle.textContent = 'Something new is almost here.';
-    capsuleUpdateCopy.textContent = `This site is updating in ${daysRemaining} ${daysRemaining === 1 ? 'day' : 'days'}.`;
+    capsuleUpdateCopy.textContent = 'The new app opens tonight at 9:00 PM.';
   }
   capsuleUpdatePopup.classList.remove('is-hidden');
 }
@@ -117,7 +116,7 @@ function renderCapsuleLocked() {
           <h2>TIME CAPSULE</h2>
           <p class="capsule-subtitle">There’s something waiting for you.</p>
           <p class="capsule-date-label">OPENING DATE</p>
-          <p class="capsule-date">OCTOBER 12, 2026</p>
+          <p class="capsule-date">OCTOBER 5, 2026 • 9:00 PM</p>
           <div class="capsule-countdown" aria-label="Time remaining until the capsule opens">
             <div class="countdown-part"><strong data-countdown="days">00</strong><span>DAYS</span></div>
             <div class="countdown-part"><strong data-countdown="hours">00</strong><span>HOURS</span></div>
@@ -138,7 +137,7 @@ function renderCapsuleOpening() {
     <section class="capsule-screen">
       <div class="capsule-center">
         <div class="unlock-lines">
-          <p>OCTOBER 12, 2026</p>
+          <p>OCTOBER 5, 2026 • 9:00 PM</p>
           <p>THE TIME CAPSULE IS NOW OPEN.</p>
           <p>Are you ready?</p>
         </div>
