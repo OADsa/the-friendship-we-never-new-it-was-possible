@@ -17,6 +17,13 @@ const capsuleLastMemoryStep = 16;
 let capsuleForcedOpen = false;
 let capsuleMusicFade;
 
+function syncCapsuleYesTheme() {
+  const response = localStorage.getItem('bembun_capsule_response');
+  const isYes = response === 'yes' || response === 'yes-pending';
+  document.body.classList.toggle('capsule-yes-theme', isYes);
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isYes ? '#8bbde4' : '#ff8fbd');
+}
+
 function fadeCapsuleMusic(targetVolume, pauseAfter = false) {
   window.clearInterval(capsuleMusicFade);
   const startVolume = capsuleMusic.volume;
@@ -260,7 +267,7 @@ function renderCapsuleMemory() {
           <figcaption>Your favorite flowers—sunflowers and tulips—in one little website.</figcaption>
         </figure>
         <p class="memory-copy">Nakatulugan mo ako the night before, kaya gumawa ako ng virtual bouquet para sa’yo. Hindi para manumbat—gusto ko lang gawing something sweet ang isang gabing nabitin.</p>
-        <div class="story-beat"><strong>The next morning:</strong> Kagigising mo lang, pero nangulit agad ako tungkol sa videos. Nainis ka, nasaktan ako, at saglit tayong hindi nagkaintindihan.</div>
+        <div class="story-beat"><strong>The next morning:</strong> Kagigising mo lang. Kinulit kita na bumawi ka kasi nakatulugan mo ako—gusto kong mag-video ka para makita ko ang reaction mo habang ino-open mo yung ginawa ko. Kaso nainis ka sa pangungulit ko, nasaktan ako sa naging sagot mo, at saglit tayong hindi nagkaintindihan.</div>
         <p class="memory-copy">Pero nag-usap tayo. We listened, we softened, and we fixed it. Hindi perfect ang araw na iyon—but maybe that is why it mattered.</p>
         <p class="memory-quote">Some days become special not because nothing went wrong, but because we chose to understand each other after.</p>
         ${memoryNavigation('what you admitted')}
@@ -344,7 +351,8 @@ function renderCapsuleMemory() {
             <a href="https://www.canva.com/design/DAHXAlXODHA/EjlVS3kl9AJnu2e4sJGbkA/edit" target="_blank" rel="noopener noreferrer">open the full Canva presentation ↗</a>
           </figcaption>
         </figure>
-        <p class="memory-copy">Unexpectedly, ginawan mo ako ng presentation sa Canva. Sobrang kilig at saya ko—not only because it was beautiful, but because it was the first time someone made something like that for me.</p>
+        <p class="memory-copy">Asa biyahe ako that time nang sinend mo sa akin yung Canva presentation. Tinanong mo pa ako kung mao-open ko ba habang nasa biyahe—HAHAHAHA, ang cute mo roon.</p>
+        <p class="memory-copy">Sobrang kilig at saya ko—not only because it was beautiful, but because it was the first time someone made something like that for me.</p>
         <p class="memory-copy">For once, ako naman ang nasa receiving end ng effort. I felt seen. I felt remembered. I felt special.</p>
         <p class="memory-quote">You made me understand how it feels when someone turns their thoughts about you into something you can keep.</p>
         ${memoryNavigation('one more page')}
@@ -433,6 +441,7 @@ function renderChapterNotYet() {
 
 function renderCapsuleYes() {
   localStorage.setItem('bembun_capsule_response', 'yes-pending');
+  syncCapsuleYesTheme();
   capsuleRoot.innerHTML = `
     <section class="final-question password-page"><div class="memory-shell">
       <p class="capsule-eyebrow">ISANG MUNTING HULING HAKBANG</p>
@@ -453,6 +462,7 @@ function renderCapsuleYes() {
 
 function renderCapsuleYesComplete() {
   localStorage.setItem('bembun_capsule_response', 'yes');
+  syncCapsuleYesTheme();
   capsuleRoot.innerHTML = `
     <section class="final-question"><div class="memory-shell">
       <p class="capsule-eyebrow">PASSWORD ACCEPTED</p>
@@ -469,6 +479,7 @@ function renderCapsuleYesComplete() {
 
 function renderCapsuleNo() {
   localStorage.setItem('bembun_capsule_response', 'no');
+  syncCapsuleYesTheme();
   capsuleRoot.innerHTML = `
     <section class="final-question"><div class="memory-shell">
       <h2>Ayos lang. Totoo.</h2>
@@ -590,6 +601,7 @@ if (capsuleDevMode) {
     if (action === 'unlock' || action === 'preview') {
       capsuleForcedOpen = true;
       localStorage.removeItem('bembun_capsule_response');
+      syncCapsuleYesTheme();
       renderCapsuleOpening();
     }
     if (action === 'yes') renderCapsuleYes();
@@ -599,12 +611,14 @@ if (capsuleDevMode) {
       capsuleWarningStep = 0;
       capsuleMemoryStep = 0;
       localStorage.removeItem('bembun_capsule_response');
+      syncCapsuleYesTheme();
       renderCapsuleOpening();
     }
     if (action === 'lock') {
       capsuleForcedOpen = false;
       localStorage.removeItem('bembun_capsule_unlocked');
       localStorage.removeItem('bembun_capsule_response');
+      syncCapsuleYesTheme();
       renderCapsuleLocked();
     }
   });
@@ -638,6 +652,7 @@ document.querySelectorAll('[data-capsule-update-close]').forEach((button) => {
   });
 });
 
+syncCapsuleYesTheme();
 persistRealUnlock();
 updateCapsuleAvailability();
 window.setInterval(updateCapsuleAvailability, 60000);
