@@ -13,7 +13,23 @@ const clawLetterTitle = document.querySelector('#claw-letter-title');
 const clawLetterDate = document.querySelector('#claw-letter-date');
 const clawLetterCopy = document.querySelector('#claw-letter-copy');
 const clawLetterClose = document.querySelector('#claw-letter-close');
+const clawCharacterPrize = document.querySelector('#claw-character-prize');
+const clawCharacterImage = document.querySelector('#claw-character-image');
+const clawCharacterName = document.querySelector('#claw-character-name');
+const clawAchievement = document.querySelector('#claw-achievement');
+const clawAchievementClose = document.querySelector('#claw-achievement-close');
 const clawStorageKey = 'bembun_claw_letters_v1';
+const clawCompletionStorageKey = 'bembun_claw_completion_notified_v1';
+
+const chibiPrizes = [
+  { name: 'Tanjiro • Demon Slayer', image: 'https://www.kindpng.com/picc/m/233-2335759_kimetsunoyaiba-anime-chibi-tanjiro-cute-tanjiro-chibi-hd.png' },
+  { name: 'Totoro • My Neighbor Totoro', image: 'https://image.pngaaa.com/912/997912-middle.png' },
+  { name: 'Anya • SPY×FAMILY', image: 'https://www.pngpacks.com/uploads/data/1849/IMG_3GiiWfFinMjp.png' },
+  { name: 'Nezuko • Demon Slayer', image: 'https://image.pngaaa.com/975/7666975-middle.png' },
+  { name: 'Gojo • Jujutsu Kaisen', image: 'https://image.emojisky.com/506/1487506-middle.png' }
+];
+
+const chibiPrizeNumbers = new Map([50, 175, 300, 425, 550, 675, 800, 925, 1050, 1150].map((number, index) => [number, chibiPrizes[index % chibiPrizes.length]]));
 
 const clawRarities = {
   common: { label: 'COMMON', color: '#ef8fb8', rank: 1 },
@@ -36,7 +52,7 @@ const storyCapsuleLetters = [
 ];
 
 const capsuleVisualPalette = ['#ef6f9f', '#66baf0', '#ffd15f', '#78d59b', '#ac80e7', '#ff8b62', '#69d4d0', '#f4a2cf', '#9ab7ff', '#d8ed72'];
-const visibleCapsuleLimit = 48;
+const visibleCapsuleLimit = 28;
 const clawBookPageSize = 48;
 
 let clawLetters = [];
@@ -47,6 +63,9 @@ let clawMachineOrder = [];
 let clawLayout = [];
 let clawBookFilter = 'all';
 let clawBookPage = 0;
+let pendingAchievementLetterId = null;
+let caughtWasDuplicate = false;
+let achievementUnlockedThisTurn = false;
 
 function rarityForLetter(number) {
   if ([100, 500, 900, 1111, 1150].includes(number)) return 'secret';
@@ -65,7 +84,8 @@ function parseSuppliedLetters(text) {
       date: `LITTLE LETTER ${String(number).padStart(3, '0')}`,
       title: number === 100 ? 'A hundred still would not be enough' : `Little Letter #${String(number).padStart(3, '0')}`,
       rarity: rarityForLetter(number),
-      body: match[2].trim()
+      body: match[2].trim(),
+      character: chibiPrizeNumbers.get(number) || null
     };
   });
 }
@@ -126,7 +146,30 @@ function refreshClawLayout() {
     const swapIndex = Math.floor(Math.random() * (index + 1));
     [positions[index], positions[swapIndex]] = [positions[swapIndex], positions[index]];
   }
-  clawLayout = visible.map((letter, index) => ({ letter, ...positions[index] }));
+  clawLayout = visible.map((letter, index) => ({ letter, ...positions[index], entering: true }));
+}
+
+function settleClawLayoutAfterCatch(caughtId) {
+  const emptySlot = clawLayout.find((item) => item.letter.id === caughtId);
+  clawLayout = clawLayout
+    .filter((item) => item.letter.id !== caughtId)
+    .map((item) => ({ ...item, entering: false }));
+  if (!emptySlot) return;
+
+  const remainingIds = new Set(clawLayout.map((item) => item.letter.id));
+  const uncollected = clawLetters.filter((letter) => !clawCollected.has(letter.id) && !remainingIds.has(letter.id));
+  const duplicates = clawLetters.filter((letter) => clawCollected.has(letter.id) && !remainingIds.has(letter.id));
+  const useDuplicate = duplicates.length > 0 && (uncollected.length === 0 || Math.random() < .35);
+  const pool = useDuplicate ? duplicates : uncollected;
+  const replacement = pool[Math.floor(Math.random() * pool.length)];
+  if (!replacement) return;
+  clawLayout.push({
+    ...emptySlot,
+    letter: replacement,
+    tilt: Math.round(-15 + Math.random() * 30),
+    delay: 0,
+    entering: true
+  });
 }
 
 function nearestVisibleCapsule() {
@@ -140,7 +183,7 @@ function nearestVisibleCapsule() {
 
 function renderClawCapsules() {
   clawCapsules.innerHTML = clawLayout.map((item) => {
-    return `<span class="claw-capsule" data-claw-letter="${item.letter.id}" title="Mystery capsule" style="--capsule-x:${item.x}%;--capsule-bottom:${item.bottom}px;--capsule-tilt:${item.tilt}deg;--capsule-color:${capsuleColor(item.letter.id)};--fall-delay:${item.delay}s"></span>`;
+    return `<span class="claw-capsule${item.entering ? ' is-entering' : ''}" data-claw-letter="${item.letter.id}" title="Mystery capsule" style="--capsule-x:${item.x}%;--capsule-bottom:${item.bottom}px;--capsule-tilt:${item.tilt}deg;--capsule-color:${capsuleColor(item.letter.id)};--fall-delay:${item.delay}s"></span>`;
   }).join('');
 
   if (!clawLayout.length) {
@@ -165,6 +208,7 @@ function renderClawBook() {
     return `<button class="claw-book-card rarity-${letter.rarity}${unlocked ? '' : ' is-locked'}${letter.rarity === 'secret' ? ' is-special' : ''}" type="button" data-book-letter="${letter.id}" ${unlocked ? '' : 'disabled'}>
       <span class="book-capsule" style="--book-color:${capsuleColor(letter.id)}"></span>
       <strong>${unlocked ? letter.title : 'LOCKED'}</strong>
+      ${unlocked && letter.character ? '<em class="book-chibi-badge">CHIBI ★</em>' : ''}
       <small>${unlocked ? `${rarity.label} • ${letter.date}` : `${String(index + 1).padStart(3, '0')} • ???`}</small>
     </button>`;
   }).join('');
@@ -202,8 +246,23 @@ function dropClaw() {
   const target = nearestVisibleCapsule();
   const catchIsPossible = Boolean(target && target.distance <= 3.25);
   let caughtLetter = null;
+  caughtWasDuplicate = false;
+  achievementUnlockedThisTurn = false;
   clawBusy = true;
   setClawControlsDisabled(true);
+  if (target) {
+    const targetCapsule = clawCapsules.querySelector(`[data-claw-letter="${target.letter.id}"]`);
+    const playfield = clawCabinet.querySelector('.claw-playfield').getBoundingClientRect();
+    const capsuleRect = targetCapsule?.getBoundingClientRect();
+    if (capsuleRect) {
+      const capsuleTop = capsuleRect.top - playfield.top;
+      const dropHeadTop = Math.max(68, capsuleTop - 38);
+      const liftY = 90 - capsuleTop;
+      clawCabinet.style.setProperty('--claw-drop-head', `${dropHeadTop}px`);
+      clawCabinet.style.setProperty('--claw-drop-cable', `${dropHeadTop - 3}px`);
+      targetCapsule.style.setProperty('--lift-y', `${liftY}px`);
+    }
+  }
   clawCabinet.classList.add('is-dropping');
   clawStatus.className = 'claw-status';
   clawStatus.textContent = 'The claw is going down…';
@@ -246,10 +305,16 @@ function dropClaw() {
     clawCapsules.querySelector(`[data-claw-letter="${caughtLetter.id}"]`)?.classList.add('is-prize-drop');
     clawCabinet.classList.remove('is-grabbing');
     clawCabinet.classList.add('is-prize-hit');
-    clawCollected.add(caughtLetter.id);
-    saveCollectedLetters();
+    caughtWasDuplicate = clawCollected.has(caughtLetter.id);
+    if (!caughtWasDuplicate) {
+      clawCollected.add(caughtLetter.id);
+      saveCollectedLetters();
+      achievementUnlockedThisTurn = clawCollected.size === clawLetters.length;
+    }
     const rarity = clawRarities[caughtLetter.rarity];
-    clawStatus.textContent = `${rarity.label} CAPSULE CAUGHT — “${caughtLetter.title}” was saved to the letter book!`;
+    clawStatus.textContent = caughtWasDuplicate
+      ? `DUPLICATE ${rarity.label} — “${caughtLetter.title}” is already in your book. Keep trying!`
+      : `${rarity.label} CAPSULE CAUGHT — “${caughtLetter.title}” was saved to the letter book!`;
     clawStatus.classList.add('is-win', `rarity-${caughtLetter.rarity}`);
     burstClawConfetti(caughtLetter.rarity);
   }, 2450);
@@ -261,10 +326,11 @@ function dropClaw() {
     clawBusy = false;
     setClawControlsDisabled(false);
     if (caughtLetter) {
-      refreshClawLayout();
+      settleClawLayoutAfterCatch(caughtLetter.id);
       renderClawCapsules();
       renderClawBook();
-      openCollectedLetter(caughtLetter.id);
+      if (achievementUnlockedThisTurn) showClawAchievement(caughtLetter.id);
+      else openCollectedLetter(caughtLetter.id);
     }
   }, catchIsPossible ? 3150 : 1650);
 }
@@ -286,8 +352,40 @@ function openCollectedLetter(id) {
   clawLetterDate.textContent = `${rarity.label} CAPSULE • ${letter.date}`;
   clawLetterTitle.textContent = letter.title;
   clawLetterCopy.textContent = letter.body;
+  if (letter.character) {
+    clawCharacterImage.src = letter.character.image;
+    clawCharacterImage.alt = `${letter.character.name} chibi prize`;
+    clawCharacterName.textContent = letter.character.name;
+    clawCharacterPrize.classList.remove('is-hidden');
+  } else {
+    clawCharacterImage.removeAttribute('src');
+    clawCharacterImage.alt = '';
+    clawCharacterName.textContent = '';
+    clawCharacterPrize.classList.add('is-hidden');
+  }
   clawLetterModal.classList.remove('is-hidden');
   clawLetterClose.focus();
+}
+
+async function notifyClawCompletion() {
+  if (localStorage.getItem(clawCompletionStorageKey) === 'yes') return;
+  try {
+    const response = await fetch('/api/claw-complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completed: clawCollected.size, total: clawLetters.length })
+    });
+    if (response.ok) localStorage.setItem(clawCompletionStorageKey, 'yes');
+  } catch {
+    // The achievement remains unlocked even if the optional notification is unavailable.
+  }
+}
+
+function showClawAchievement(finalLetterId) {
+  pendingAchievementLetterId = finalLetterId;
+  clawAchievement.classList.remove('is-hidden');
+  clawAchievementClose.focus();
+  notifyClawCompletion();
 }
 
 document.querySelectorAll('[data-claw-control]').forEach((button) => {
@@ -325,6 +423,11 @@ clawBookNext.addEventListener('click', () => {
 clawBookGrid.addEventListener('click', (event) => openCollectedLetter(event.target.closest('[data-book-letter]')?.dataset.bookLetter));
 clawLetterClose.addEventListener('click', () => clawLetterModal.classList.add('is-hidden'));
 clawLetterModal.addEventListener('click', (event) => { if (event.target === clawLetterModal) clawLetterModal.classList.add('is-hidden'); });
+clawAchievementClose.addEventListener('click', () => {
+  clawAchievement.classList.add('is-hidden');
+  if (pendingAchievementLetterId) openCollectedLetter(pendingAchievementLetterId);
+  pendingAchievementLetterId = null;
+});
 
 document.addEventListener('keydown', (event) => {
   if (clawWindow.classList.contains('is-hidden') || !document.querySelector('[data-claw-panel="game"]').classList.contains('is-active')) return;

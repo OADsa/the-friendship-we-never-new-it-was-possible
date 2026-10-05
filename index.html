@@ -362,7 +362,7 @@
             </div>
 
             <div class="claw-status" id="claw-status" role="status">Move the claw, then press DOWN to grab a capsule.</div>
-            <p class="claw-rarity-note">Capsule colors are random. Rarity stays hidden until the claw wins it.</p>
+            <p class="claw-rarity-note">Capsule colors are random. Duplicates and surprise chibis can appear—rarity stays hidden until the claw wins.</p>
             <div class="claw-rarity-legend" aria-label="Possible capsule rarities">
               <span class="rarity-common">COMMON</span><span class="rarity-uncommon">UNCOMMON</span><span class="rarity-rare">RARE</span>
               <span class="rarity-epic">EPIC</span><span class="rarity-legendary">LEGENDARY</span><span class="rarity-secret">SECRET</span>
@@ -379,7 +379,7 @@
             <div class="letter-book-cover">
               <p>DEKDEK’S LITTLE ARCHIVE</p>
               <h2>Letters caught for Bembun</h2>
-              <span>Every capsule keeps one memory.</span>
+              <span>Collect every unique message. Duplicates make the hunt harder.</span>
             </div>
             <div class="claw-book-filters" role="tablist" aria-label="Filter letter book by rarity">
               <button class="is-active" type="button" data-book-filter="all" role="tab" aria-selected="true">ALL</button>
@@ -401,11 +401,26 @@
           <div class="claw-letter-modal is-hidden" id="claw-letter-modal" role="dialog" aria-modal="true" aria-labelledby="claw-letter-title">
             <button class="claw-letter-close" id="claw-letter-close" type="button" aria-label="Close collected letter">×</button>
             <article class="claw-letter-paper">
+              <div class="claw-character-prize is-hidden" id="claw-character-prize">
+                <span>BONUS CHIBI FOUND!</span>
+                <div class="claw-character-frame"><img id="claw-character-image" alt="" referrerpolicy="no-referrer"></div>
+                <strong id="claw-character-name"></strong>
+              </div>
               <p class="claw-letter-date" id="claw-letter-date"></p>
               <h2 id="claw-letter-title"></h2>
               <div id="claw-letter-copy"></div>
               <p class="claw-letter-signoff">— Dekdek</p>
             </article>
+          </div>
+
+          <div class="claw-achievement is-hidden" id="claw-achievement" role="dialog" aria-modal="true" aria-labelledby="claw-achievement-title">
+            <div class="claw-achievement-card">
+              <div class="claw-achievement-trophy" aria-hidden="true">🏆</div>
+              <p>ACHIEVEMENT UNLOCKED</p>
+              <h2 id="claw-achievement-title">The Whole Heart Archive</h2>
+              <span>You found every unique message—even through all the duplicates.</span>
+              <button id="claw-achievement-close" type="button">OPEN THE FINAL LETTER ♥</button>
+            </div>
           </div>
         </div>
       </section>
