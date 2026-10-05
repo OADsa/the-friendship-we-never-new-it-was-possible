@@ -81,6 +81,23 @@
 .timeline-marker::before, .timeline-marker::after { content: ""; height: 1px; flex: 1; background: #cc8ca7; }
 .story-beat { margin: 18px 0; padding: 18px; border-left: 4px solid #bf4679; background: rgba(255,255,255,.72); font: 500 13px/1.8 Georgia, serif; }
 .story-beat strong { color: #a12f61; }
+.memory-photo { min-height: 245px; margin: 24px 0; border: 2px solid #bd668b; background: #fff; box-shadow: 7px 7px #e1a3bc; overflow: hidden; }
+.memory-photo.is-ready { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(170px, .75fr); align-items: stretch; }
+.memory-photo img { width: 100%; height: 100%; min-height: 245px; display: block; object-fit: cover; }
+.memory-photo figcaption { padding: 22px; display: grid; place-items: center; color: #78304f; background: #fff3f8; font: italic 14px/1.65 Georgia, serif; text-align: center; }
+.memory-photo.placeholder { display: grid; place-items: center; align-content: center; gap: 10px; color: #a44770; border-style: dashed; background: linear-gradient(135deg, #fff, #f7e9ef); text-align: center; }
+.memory-photo.placeholder::before { content: "ADD PHOTO"; width: 70px; height: 54px; display: grid; place-items: center; color: #fff; border: 5px solid #fff; outline: 2px solid #cf88a6; background: #d891af; font: 700 8px "Pixelify Sans", monospace; transform: rotate(-3deg); }
+.memory-photo.placeholder span { color: #8f2c58; font: 700 14px "Pixelify Sans", monospace; letter-spacing: .08em; }
+.memory-photo.placeholder small { color: #927384; font: italic 11px Georgia, serif; }
+.confession-panel { margin: 26px 0; padding: 27px; color: #6b2746; border: 1px solid #c87298; background: linear-gradient(135deg, #fff, #fdeaf2); box-shadow: 6px 6px #e4a4bf; font: italic 700 clamp(17px, 4vw, 23px)/1.65 Georgia, serif; }
+.confession-panel p { margin: 0; }
+.confession-panel small { margin-top: 14px; display: block; color: #a85076; font: 700 9px "Pixelify Sans", monospace; letter-spacing: .14em; text-align: right; }
+.highlight-confession { margin: 24px 0; display: grid; gap: 10px; }
+.highlight-confession p { margin: 0; padding: 17px 19px; color: #fff; border-left: 5px solid #ffb8d5; background: #8a3158; font: 700 14px/1.7 Georgia, serif; box-shadow: 4px 4px #d999b4; }
+.gift-keepsake { margin: 24px auto; padding: 26px; color: #7c2c50; border: 4px double #bd6a8f; background: #fff4f8; font: 700 23px "Pixelify Sans", monospace; letter-spacing: .08em; text-align: center; transform: rotate(-1deg); }
+.gift-keepsake small { margin-top: 10px; display: block; color: #826070; font: italic 12px/1.6 Georgia, serif; letter-spacing: 0; }
+.story-date-strip { margin: 30px 0 8px; display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+.story-date-strip span { padding: 8px 10px; color: #f4dce6; border: 1px solid #6f4b5c; background: #1b1117; font: 700 9px "Pixelify Sans", monospace; }
 .empty-future { min-height: 220px; margin: 28px 0; display: grid; place-items: center; color: #a99ba3; border: 2px dashed #c497aa; background: linear-gradient(135deg, #fff, #f9eef3); font: italic 13px Georgia, serif; text-align: center; }
 .final-question { min-height: 100%; padding: clamp(35px, 7vw, 85px); display: grid; place-items: center; color: #ece7ea; background: radial-gradient(circle at 50% 55%, #24151d, #030304 65%); text-align: center; }
 .final-question .memory-shell { width: min(600px, 100%); }
@@ -125,6 +142,12 @@
   .memory-card-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .memory-title { font-size: 41px; }
   .chat-bubble { font-size: 11px; }
+  .memory-photo { min-height: 205px; }
+  .memory-photo.is-ready { grid-template-columns: 1fr; }
+  .memory-photo img { min-height: 220px; max-height: 320px; }
+  .memory-photo figcaption { padding: 15px; }
+  .confession-panel { padding: 20px; }
+  .highlight-confession p { font-size: 12px; }
   .final-response-actions { flex-direction: column; }
   .final-response-actions .capsule-button { width: 100%; }
   .makata-poem { padding: 16px 11px; }

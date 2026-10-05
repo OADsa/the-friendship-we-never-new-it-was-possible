@@ -13,6 +13,7 @@ const capsuleUpdateCopy = document.querySelector('#capsule-update-copy');
 let capsuleTimer;
 let capsuleWarningStep = 0;
 let capsuleMemoryStep = 0;
+const capsuleLastMemoryStep = 16;
 let capsuleForcedOpen = false;
 let capsuleMusicFade;
 
@@ -238,13 +239,108 @@ function renderCapsuleMemory() {
       </div></section>`,
     `
       <section class="memory-screen"><div class="memory-shell">
-        <p class="memory-date">DATE UNKNOWN</p>
-        <h2 class="memory-title">THE REST OF THE STORY</h2>
-        <div class="empty-future">This space has intentionally been left empty.</div>
-        <p class="memory-copy center">Some parts of the story haven’t happened yet.</p>
-        <p class="memory-copy center">Because they’re still waiting to be written.</p>
-        <p class="memory-quote">Maybe by you.</p>
-        ${memoryNavigation('one final page')}
+        <p class="memory-date">SEPTEMBER 18–19, 2026</p>
+        <h2 class="memory-title">THE BOUQUET THAT STARTED A BIG DAY</h2>
+        <figure class="memory-photo is-ready bouquet-memory">
+          <img src="assets/memories/virtual-bouquet.webp" alt="A bouquet of sunflowers and tulips made for Bembun" />
+          <figcaption>Your favorite flowers—sunflowers and tulips—in one little website.</figcaption>
+        </figure>
+        <p class="memory-copy">Nakatulugan mo ako the night before, kaya gumawa ako ng virtual bouquet para sa’yo. Hindi para manumbat—gusto ko lang gawing something sweet ang isang gabing nabitin.</p>
+        <div class="story-beat"><strong>The next morning:</strong> Kagigising mo lang, pero nangulit agad ako tungkol sa videos. Nainis ka, nasaktan ako, at saglit tayong hindi nagkaintindihan.</div>
+        <p class="memory-copy">Pero nag-usap tayo. We listened, we softened, and we fixed it. Hindi perfect ang araw na iyon—but maybe that is why it mattered.</p>
+        <p class="memory-quote">Some days become special not because nothing went wrong, but because we chose to understand each other after.</p>
+        ${memoryNavigation('what you admitted')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">SEPTEMBER 19, 2026 • THE HONEST PART</p>
+        <h2 class="memory-title">YOU FELT IT TOO.</h2>
+        <blockquote class="confession-panel">
+          <p>“Yes, I admit I started to feel something nung sinabi mo na you want to pursue me, na you find me interesting and you started to like me.”</p>
+          <small>— Bembun</small>
+        </blockquote>
+        <p class="memory-copy">You told me about the things you were still considering—time, distance, family, attachment, and the fear that something overwhelming might make you pull away. I did not hear a rejection. I heard honesty. I heard someone trying to protect both her heart and mine.</p>
+        <div class="highlight-confession">
+          <p>“Does it sound selfish ba if gusto kita, akin ka na lang, at ayaw kong tumingin ka sa ibang babae kahit random stranger pa ’yan?”</p>
+          <p>“Like gusto ko akin lang attention mo kahit ganito pa lang tayo.”</p>
+        </div>
+        <p class="memory-quote">That was the day “maybe” began to sound a little more like “us.”</p>
+        ${memoryNavigation('our first meeting')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">SEPTEMBER 26, 2026</p>
+        <h2 class="memory-title">THE FIRST TIME WE MET.</h2>
+        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 26</span><small>Your first-meeting photo will go here.</small></div>
+        <p class="memory-copy">Akala ko magiging awkward. Instead, nagulat ako kung gaano ka ka-clingy—and how naturally I became just as clingy with you.</p>
+        <p class="memory-copy">We hugged. I kissed your cheek. Ang daming random moments, ang daming tawa, at parang hindi iyon ang unang beses nating magkasama.</p>
+        <p class="memory-quote">Parang matagal na nating alam kung paano maging malapit sa isa’t isa.</p>
+        ${memoryNavigation('the very next day')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">SEPTEMBER 27, 2026</p>
+        <h2 class="memory-title">FRIENDS, A DEBUT, AND US.</h2>
+        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 27</span><small>The debut and the people you introduced me to.</small></div>
+        <p class="memory-copy">I met your friends for the first time, then sumama tayo sa debut ni Cycy. It felt like I was being allowed into another small part of your world.</p>
+        <p class="memory-copy">Pagkatapos noon, lumabas tayo—and the rest of that day belongs to us. No explanation needed. We both know what made it unforgettable.</p>
+        <p class="memory-quote">Some memories are sweeter when only two people know the whole story.</p>
+        ${memoryNavigation('the unexpected visit')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">SEPTEMBER 28, 2026 • LATE AT NIGHT</p>
+        <h2 class="memory-title">THE “STRANGER” WHO CAME TO SEE YOU.</h2>
+        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 28</span><small>The low-key stranger picture belongs here.</small></div>
+        <p class="memory-copy">You felt lonely. I missed you too. So pinuntahan kita—with a random picture pretending I was some stranger, low-key kunwari. HAHAHA.</p>
+        <p class="memory-copy">It was not a grand plan. I just knew I did not want you to feel alone if I could be there.</p>
+        <p class="memory-quote">Sometimes care looks like showing up late at night with a ridiculous disguise.</p>
+        ${memoryNavigation('our one-month mark')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">SEPTEMBER 30, 2026 • ONE MONTH</p>
+        <h2 class="memory-title">A MONTH OF US TALKING.</h2>
+        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 30</span><small>Your one-month memory will go here.</small></div>
+        <p class="memory-copy">One month since we started talking. We found a quiet, hidden place, stayed inside a tent, and made a memory that does not need to be explained to anyone else.</p>
+        <p class="memory-copy">A month sounds short on a calendar. Somehow, with you, it already held so many conversations, feelings, and versions of us.</p>
+        <p class="memory-quote">Thirty days—and already a hundred little reasons to remember.</p>
+        ${memoryNavigation('the day everything changed')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">OCTOBER 3, 2026</p>
+        <h2 class="memory-title">YOU SAID I COULD COURT YOU.</h2>
+        <div class="memory-photo placeholder"><span>PHOTO SLOT • OCTOBER 3</span><small>The day you gave me your answer.</small></div>
+        <p class="memory-copy">That day became one of the most special parts of our story. You decided na pwede na akong manligaw sa’yo.</p>
+        <p class="memory-copy">Hindi ko tinitingnan iyon bilang finish line. It was your trust—something I want to honor slowly, sincerely, and consistently.</p>
+        <div class="gift-keepsake">GOODBYE GIFT<br><small>Something I will treasure for a very, very long time.</small></div>
+        <p class="memory-quote">You did not just give me permission to pursue you. You gave me a chance to prove how gently I can care for you.</p>
+        ${memoryNavigation('your surprise for me')}
+      </div></section>`,
+    `
+      <section class="memory-screen"><div class="memory-shell">
+        <p class="memory-date">OCTOBER 4, 2026</p>
+        <h2 class="memory-title">THEN YOU MADE SOMETHING FOR ME.</h2>
+        <div class="memory-photo placeholder"><span>PHOTO SLOT • OCTOBER 4</span><small>A screenshot from your Canva presentation will go here.</small></div>
+        <p class="memory-copy">Unexpectedly, ginawan mo ako ng presentation sa Canva. Sobrang kilig at saya ko—not only because it was beautiful, but because it was the first time someone made something like that for me.</p>
+        <p class="memory-copy">For once, ako naman ang nasa receiving end ng effort. I felt seen. I felt remembered. I felt special.</p>
+        <p class="memory-quote">You made me understand how it feels when someone turns their thoughts about you into something you can keep.</p>
+        ${memoryNavigation('one more page')}
+      </div></section>`,
+    `
+      <section class="final-question chapter-teaser"><div class="memory-shell">
+        <p class="capsule-eyebrow">AUGUST 30 — OCTOBER 4 — AND EVERYTHING BETWEEN</p>
+        <h2>The best chapter is the one we’re writing now.</h2>
+        <div class="final-lines">
+          <p>Marami pang araw ang hindi naisama rito. Marami pang tawanan, tampuhan, late-night talks, random updates, at maliliit na sandaling walang litrato.</p>
+          <p>Pero special pa rin ang mga iyon—kasi sa halos bawat araw na iyon, ikaw ang pinakamaraming umokupa sa isip at oras ko.</p>
+          <p>Konti man ang nailagay ko rito, hindi konti ang halaga mo sa akin.</p>
+        </div>
+        <div class="story-date-strip" aria-label="Important dates in our story">
+          <span>AUG 30</span><span>SEP 19</span><span>SEP 26</span><span>SEP 27</span><span>SEP 28</span><span>SEP 30</span><span>OCT 3</span><span>OCT 4</span>
+        </div>
+        ${memoryNavigation('the last page')}
       </div></section>`,
     `
       <section class="final-question"><div class="memory-shell">
@@ -265,7 +361,7 @@ function renderCapsuleMemory() {
         <h2>Do you wanna know what the best chapter is?</h2>
         <div class="final-lines">
           <p>Hindi pa ito tungkol sa nakaraan.</p>
-          <p>Tungkol ito sa isang pahinang maaari pa lamang nating simulan.</p>
+          <p>Tungkol ito sa pahinang pinili nating simulan—at gusto kong itanong muli nang maayos.</p>
         </div>
         <div class="final-response-actions delayed-actions">
           <button class="capsule-button ghost" type="button" data-capsule-chapter="no">NOT YET</button>
@@ -369,19 +465,6 @@ function renderCapsuleNo() {
 }
 
 function startUnlockedCapsule() {
-  const response = localStorage.getItem('bembun_capsule_response');
-  if (response === 'yes') {
-    renderCapsuleYesComplete();
-    return;
-  }
-  if (response === 'yes-pending') {
-    renderCapsuleYes();
-    return;
-  }
-  if (response === 'no') {
-    renderCapsuleNo();
-    return;
-  }
   renderCapsuleOpening();
 }
 
@@ -412,7 +495,7 @@ capsuleRoot.addEventListener('click', (event) => {
   const response = event.target.closest('[data-capsule-response]')?.dataset.capsuleResponse;
   const chapterChoice = event.target.closest('[data-capsule-chapter]')?.dataset.capsuleChapter;
   if (chapterChoice === 'yes') {
-    capsuleMemoryStep = 8;
+    capsuleMemoryStep = capsuleLastMemoryStep;
     renderCapsuleMemory();
     return;
   }
@@ -445,7 +528,7 @@ capsuleRoot.addEventListener('click', (event) => {
     }
   }
   if (action === 'memory-next') {
-    capsuleMemoryStep = Math.min(8, capsuleMemoryStep + 1);
+    capsuleMemoryStep = Math.min(capsuleLastMemoryStep, capsuleMemoryStep + 1);
     renderCapsuleMemory();
   }
   if (action === 'memory-back') {
