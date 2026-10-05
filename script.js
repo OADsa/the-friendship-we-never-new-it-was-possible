@@ -1,14 +1,43 @@
 const heartField = document.querySelector('#heart-field');
 const cleanupLock = document.querySelector('#cleanup-lock');
 const cleanupCountdown = document.querySelector('#cleanup-countdown');
-const cleanupUnlockDate = new Date('2026-10-05T20:50:00+08:00');
+const cleanupLockTitle = document.querySelector('#cleanup-lock-title');
+const cleanupLockCopy = document.querySelector('#cleanup-lock-copy');
+const cleanupUnlockDate = new Date('2026-10-05T20:57:00+08:00');
 const cleanupDevBypass = new URLSearchParams(window.location.search).get('capsuleDev') === 'dekdek';
+let cleanupIsReleasing = false;
+
+function revealCleanSite() {
+  cleanupLock.classList.add('is-open');
+  document.body.classList.remove('site-is-locked');
+}
+
+function releaseCleanupLock() {
+  if (cleanupIsReleasing) return;
+  if (sessionStorage.getItem('bembun_cleanup_reveal') === 'seen') {
+    revealCleanSite();
+    return;
+  }
+
+  cleanupIsReleasing = true;
+  document.body.classList.add('site-is-locked');
+  cleanupLock.classList.add('is-releasing');
+  cleanupLockTitle.textContent = 'Demon cleared!';
+  cleanupLockCopy.textContent = 'Asta found something hiding in the demon dust… a new application!';
+  cleanupCountdown.previousElementSibling?.classList.add('is-complete');
+  cleanupCountdown.textContent = 'NEW APP FOUND';
+  sessionStorage.setItem('bembun_cleanup_reveal', 'seen');
+  window.setTimeout(revealCleanSite, 3200);
+}
 
 function updateCleanupLock() {
   const remaining = cleanupUnlockDate.getTime() - Date.now();
-  if (cleanupDevBypass || remaining <= 0) {
-    cleanupLock.classList.add('is-open');
-    document.body.classList.remove('site-is-locked');
+  if (cleanupDevBypass) {
+    revealCleanSite();
+    return;
+  }
+  if (remaining <= 0) {
+    releaseCleanupLock();
     return;
   }
 
