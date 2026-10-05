@@ -9,10 +9,24 @@
       content="A tiny pink place for the friendship we never knew was possible."
     />
     <title>The friendship we never new it was possible.</title>
-    <link rel="stylesheet" href="styles.css?v=32" />
+    <link rel="stylesheet" href="styles.css?v=33" />
     <link rel="stylesheet" href="capsule.css?v=4" />
   </head>
   <body>
+    <div class="cleanup-lock" id="cleanup-lock" role="dialog" aria-modal="true" aria-labelledby="cleanup-lock-title">
+      <div class="cleanup-lock-card">
+        <p class="cleanup-lock-eyebrow">EMERGENCY SITE CLEANUP</p>
+        <img src="assets/characters/anime/asta-chibi.webp" alt="A tiny chibi Asta holding his sword" />
+        <h1 id="cleanup-lock-title">Asta killed a demon.</h1>
+        <p class="cleanup-lock-copy">He saved the site—but left demon dust everywhere. It needs a quick cleanup before Bembun can enter.</p>
+        <div class="cleanup-countdown" aria-live="polite">
+          <span>THE SITE OPENS IN</span>
+          <strong id="cleanup-countdown">--:--:--</strong>
+        </div>
+        <p class="cleanup-lock-note">Access returns at 8:50 PM, ten minutes before the surprise.</p>
+      </div>
+    </div>
+
     <div class="wallpaper-noise" aria-hidden="true"></div>
     <div id="heart-field" class="heart-field" aria-hidden="true"></div>
 
@@ -456,7 +470,7 @@
     </div>
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="script.js?v=31"></script>
+    <script src="script.js?v=32"></script>
     <script src="capsule.js?v=10"></script>
   </body>
 </html>

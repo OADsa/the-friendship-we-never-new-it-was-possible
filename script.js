@@ -1,4 +1,27 @@
 const heartField = document.querySelector('#heart-field');
+const cleanupLock = document.querySelector('#cleanup-lock');
+const cleanupCountdown = document.querySelector('#cleanup-countdown');
+const cleanupUnlockDate = new Date('2026-10-05T20:50:00+08:00');
+const cleanupDevBypass = new URLSearchParams(window.location.search).get('capsuleDev') === 'dekdek';
+
+function updateCleanupLock() {
+  const remaining = cleanupUnlockDate.getTime() - Date.now();
+  if (cleanupDevBypass || remaining <= 0) {
+    cleanupLock.classList.add('is-open');
+    document.body.classList.remove('site-is-locked');
+    return;
+  }
+
+  document.body.classList.add('site-is-locked');
+  cleanupLock.classList.remove('is-open');
+  const hours = Math.floor(remaining / 3600000);
+  const minutes = Math.floor((remaining % 3600000) / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+  cleanupCountdown.textContent = [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':');
+}
+
+updateCleanupLock();
+window.setInterval(updateCleanupLock, 1000);
 const celebrateButton = document.querySelector('#celebrate-button');
 const toast = document.querySelector('#toast');
 const noteText = document.querySelector('#note-text');
