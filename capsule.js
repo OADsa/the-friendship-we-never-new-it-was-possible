@@ -10,12 +10,28 @@ const capsuleDesktopIcon = document.querySelector('#capsule-desktop-icon');
 const capsuleUpdatePopup = document.querySelector('#capsule-update-popup');
 const capsuleUpdateTitle = document.querySelector('#capsule-update-title');
 const capsuleUpdateCopy = document.querySelector('#capsule-update-copy');
+const desktopRevealCountdown = document.querySelector('#desktop-reveal-countdown');
+const desktopRevealTime = document.querySelector('#desktop-reveal-time');
 let capsuleTimer;
 let capsuleWarningStep = 0;
 let capsuleMemoryStep = 0;
 const capsuleLastMemoryStep = 16;
 let capsuleForcedOpen = false;
 let capsuleMusicFade;
+
+function updateDesktopRevealCountdown() {
+  const remaining = capsuleUnlockDate.getTime() - Date.now();
+  if (remaining <= 0) {
+    desktopRevealCountdown.classList.add('is-finished');
+    return;
+  }
+
+  desktopRevealCountdown.classList.remove('is-finished');
+  const hours = Math.floor(remaining / 3600000);
+  const minutes = Math.floor((remaining % 3600000) / 60000);
+  const seconds = Math.floor((remaining % 60000) / 1000);
+  desktopRevealTime.textContent = [hours, minutes, seconds].map((value) => String(value).padStart(2, '0')).join(':');
+}
 
 function syncCapsuleYesTheme() {
   const response = localStorage.getItem('bembun_capsule_response');
@@ -653,6 +669,8 @@ document.querySelectorAll('[data-capsule-update-close]').forEach((button) => {
 });
 
 syncCapsuleYesTheme();
+updateDesktopRevealCountdown();
+window.setInterval(updateDesktopRevealCountdown, 1000);
 persistRealUnlock();
 updateCapsuleAvailability();
 window.setInterval(updateCapsuleAvailability, 60000);
