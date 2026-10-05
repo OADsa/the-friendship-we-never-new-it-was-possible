@@ -11,6 +11,7 @@
     <title>The friendship we never new it was possible.</title>
     <link rel="stylesheet" href="styles.css?v=35" />
     <link rel="stylesheet" href="capsule.css?v=5" />
+    <link rel="stylesheet" href="claw-machine.css?v=1" />
   </head>
   <body>
     <div class="cleanup-lock" id="cleanup-lock" role="dialog" aria-modal="true" aria-labelledby="cleanup-lock-title">
@@ -21,8 +22,8 @@
           <i></i><i></i><i></i><i></i>
           <span class="cleanup-slash"></span>
           <span class="cleanup-reveal-app">
-            <span class="capsule-icon"><i></i></span>
-            <b>are_you_ready.exe</b>
+            <span class="claw-machine-icon" aria-hidden="true"><i></i><i></i></span>
+            <b>claw_machine.exe</b>
           </span>
         </div>
         <h1 id="cleanup-lock-title">Asta killed a demon.</h1>
@@ -145,6 +146,10 @@
         <button class="desktop-icon" data-open="thank-you-window" type="button">
           <span class="mail-icon" aria-hidden="true">✉</span>
           <span>thank_you.doc</span>
+        </button>
+        <button class="desktop-icon" data-open="claw-machine-window" type="button">
+          <span class="claw-machine-icon" aria-hidden="true"><i></i><i></i></span>
+          <span>claw_machine.exe</span>
         </button>
       </section>
 
@@ -327,6 +332,69 @@
         </div>
       </section>
 
+      <section class="window claw-machine-window is-hidden" id="claw-machine-window" aria-labelledby="claw-machine-title">
+        <header class="title-bar claw-title-bar">
+          <div class="title-bar-label"><span class="claw-title-mark" aria-hidden="true">CLAW</span><span id="claw-machine-title">claw_machine.exe</span></div>
+          <div class="window-controls">
+            <button type="button" data-window-action="minimize" aria-label="Minimize claw machine">_</button>
+            <button class="close-window" type="button" aria-label="Close claw machine">×</button>
+          </div>
+        </header>
+        <div class="window-body claw-machine-body">
+          <div class="claw-tabs" role="tablist" aria-label="Claw machine pages">
+            <button class="is-active" type="button" data-claw-view="game" role="tab" aria-selected="true">PLAY</button>
+            <button type="button" data-claw-view="book" role="tab" aria-selected="false">LETTER BOOK <span id="claw-book-count">0/108</span></button>
+          </div>
+
+          <section class="claw-view is-active" id="claw-game-view" data-claw-panel="game" role="tabpanel">
+            <div class="claw-cabinet" id="claw-cabinet">
+              <div class="claw-marquee"><span>CAPSULES FOR BEMBUN</span><small>CATCH A MEMORY • KEEP A LETTER</small></div>
+              <div class="claw-playfield">
+                <div class="claw-rail"></div>
+                <div class="claw-rig" id="claw-rig" aria-hidden="true">
+                  <span class="claw-cable"></span>
+                  <span class="claw-head"><i></i><i></i></span>
+                </div>
+                <div class="claw-capsules" id="claw-capsules" aria-label="Capsules still inside the machine"></div>
+                <div class="claw-chute"><span>PRIZE</span></div>
+                <div class="claw-glass-shine" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="claw-status" id="claw-status" role="status">Move the claw, then press DOWN to grab a capsule.</div>
+            <div class="claw-rarity-legend" aria-label="Capsule rarity colors">
+              <span class="rarity-common">COMMON</span><span class="rarity-uncommon">UNCOMMON</span><span class="rarity-rare">RARE</span>
+              <span class="rarity-epic">EPIC</span><span class="rarity-legendary">LEGENDARY</span><span class="rarity-secret">SECRET</span>
+            </div>
+            <div class="claw-controls" aria-label="Claw controls">
+              <button type="button" data-claw-control="left" aria-label="Move claw left">←<span>LEFT</span></button>
+              <button type="button" data-claw-control="down" aria-label="Lower claw">↓<span>DOWN</span></button>
+              <button type="button" data-claw-control="right" aria-label="Move claw right">→<span>RIGHT</span></button>
+            </div>
+            <p class="claw-key-hint">You can also use the ← ↓ → keys.</p>
+          </section>
+
+          <section class="claw-view" id="claw-book-view" data-claw-panel="book" role="tabpanel">
+            <div class="letter-book-cover">
+              <p>DEKDEK’S LITTLE ARCHIVE</p>
+              <h2>Letters caught for Bembun</h2>
+              <span>Every capsule keeps one memory.</span>
+            </div>
+            <div class="claw-book-grid" id="claw-book-grid"></div>
+          </section>
+
+          <div class="claw-letter-modal is-hidden" id="claw-letter-modal" role="dialog" aria-modal="true" aria-labelledby="claw-letter-title">
+            <button class="claw-letter-close" id="claw-letter-close" type="button" aria-label="Close collected letter">×</button>
+            <article class="claw-letter-paper">
+              <p class="claw-letter-date" id="claw-letter-date"></p>
+              <h2 id="claw-letter-title"></h2>
+              <div id="claw-letter-copy"></div>
+              <p class="claw-letter-signoff">— Dekdek</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
       <section class="window letter-window long-message-window is-hidden" id="long-message-window" aria-labelledby="long-message-title">
         <header class="title-bar">
           <div class="title-bar-label"><span>💌</span><span id="long-message-title">A Long Message for Bembun.doc</span></div>
@@ -482,6 +550,7 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="script.js?v=34"></script>
+    <script src="claw-machine.js?v=2"></script>
     <script src="capsule.js?v=11"></script>
   </body>
 </html>
