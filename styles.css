@@ -69,7 +69,6 @@ body.site-is-locked { overflow: hidden; }
 .cleanup-countdown { margin: 22px auto 17px; padding: 17px; border: 1px solid #4f6d93; background: rgba(12, 22, 40, .9); }
 .cleanup-countdown span { display: block; margin-bottom: 8px; color: #7899bd; font-size: 8px; letter-spacing: .2em; }
 .cleanup-countdown strong { display: block; color: #b9dcfa; font: 700 clamp(32px, 9vw, 52px)/1 "Pixelify Sans", monospace; letter-spacing: .08em; }
-.cleanup-lock-note { margin: 0; color: #7187a2; font: italic 11px/1.6 Georgia, serif; }
 @keyframes cleanup-asta-bob { to { transform: translateY(-7px) rotate(1deg); } }
 
 body {
