@@ -343,7 +343,7 @@
         <div class="window-body claw-machine-body">
           <div class="claw-tabs" role="tablist" aria-label="Claw machine pages">
             <button class="is-active" type="button" data-claw-view="game" role="tab" aria-selected="true">PLAY</button>
-            <button type="button" data-claw-view="book" role="tab" aria-selected="false">LETTER BOOK <span id="claw-book-count">0/108</span></button>
+            <button type="button" data-claw-view="book" role="tab" aria-selected="false">LETTER BOOK <span id="claw-book-count">0/1158</span></button>
           </div>
 
           <section class="claw-view is-active" id="claw-game-view" data-claw-panel="game" role="tabpanel">
@@ -389,6 +389,11 @@
               <button type="button" data-book-filter="epic" role="tab" aria-selected="false">EPIC</button>
               <button type="button" data-book-filter="legendary" role="tab" aria-selected="false">LEGENDARY</button>
               <button type="button" data-book-filter="secret" role="tab" aria-selected="false">SECRET</button>
+            </div>
+            <div class="claw-book-pager" aria-label="Letter book pages">
+              <button id="claw-book-prev" type="button" aria-label="Previous page">← PREV</button>
+              <span id="claw-book-page">PAGE 1 / 1</span>
+              <button id="claw-book-next" type="button" aria-label="Next page">NEXT →</button>
             </div>
             <div class="claw-book-grid" id="claw-book-grid"></div>
           </section>

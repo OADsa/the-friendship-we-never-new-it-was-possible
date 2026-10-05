@@ -5,6 +5,9 @@ const clawCapsules = document.querySelector('#claw-capsules');
 const clawStatus = document.querySelector('#claw-status');
 const clawBookGrid = document.querySelector('#claw-book-grid');
 const clawBookCount = document.querySelector('#claw-book-count');
+const clawBookPrev = document.querySelector('#claw-book-prev');
+const clawBookNext = document.querySelector('#claw-book-next');
+const clawBookPageLabel = document.querySelector('#claw-book-page');
 const clawLetterModal = document.querySelector('#claw-letter-modal');
 const clawLetterTitle = document.querySelector('#claw-letter-title');
 const clawLetterDate = document.querySelector('#claw-letter-date');
@@ -34,6 +37,7 @@ const storyCapsuleLetters = [
 
 const capsuleVisualPalette = ['#ef6f9f', '#66baf0', '#ffd15f', '#78d59b', '#ac80e7', '#ff8b62', '#69d4d0', '#f4a2cf', '#9ab7ff', '#d8ed72'];
 const visibleCapsuleLimit = 48;
+const clawBookPageSize = 48;
 
 let clawLetters = [];
 let clawCollected = new Set();
@@ -42,10 +46,11 @@ let clawBusy = false;
 let clawMachineOrder = [];
 let clawLayout = [];
 let clawBookFilter = 'all';
+let clawBookPage = 0;
 
 function rarityForLetter(number) {
-  if (number === 100) return 'secret';
-  if ([46, 48, 51, 52, 54, 85, 99].includes(number)) return 'legendary';
+  if ([100, 500, 900, 1111, 1150].includes(number)) return 'secret';
+  if ([46, 48, 51, 52, 54, 85, 99].includes(number) || number % 50 === 0) return 'legendary';
   if ([38, 47, 50, 53, 56, 86].includes(number) || number % 13 === 0) return 'epic';
   if (number % 7 === 0) return 'rare';
   if (number % 3 === 0) return 'uncommon';
@@ -147,7 +152,13 @@ function renderClawCapsules() {
 function renderClawBook() {
   clawBookCount.textContent = `${clawCollected.size}/${clawLetters.length}`;
   const filteredLetters = clawBookFilter === 'all' ? clawLetters : clawLetters.filter((letter) => letter.rarity === clawBookFilter);
-  clawBookGrid.innerHTML = filteredLetters.map((letter) => {
+  const pageCount = Math.max(1, Math.ceil(filteredLetters.length / clawBookPageSize));
+  clawBookPage = Math.min(clawBookPage, pageCount - 1);
+  clawBookPageLabel.textContent = `PAGE ${clawBookPage + 1} / ${pageCount}`;
+  clawBookPrev.disabled = clawBookPage === 0;
+  clawBookNext.disabled = clawBookPage >= pageCount - 1;
+  const pageLetters = filteredLetters.slice(clawBookPage * clawBookPageSize, (clawBookPage + 1) * clawBookPageSize);
+  clawBookGrid.innerHTML = pageLetters.map((letter) => {
     const index = clawLetters.findIndex((item) => item.id === letter.id);
     const unlocked = clawCollected.has(letter.id);
     const rarity = clawRarities[letter.rarity];
@@ -207,12 +218,7 @@ function dropClaw() {
     const capsule = clawCapsules.querySelector(`[data-claw-letter="${target.letter.id}"]`);
     capsule?.classList.add('is-held');
     caughtLetter = target.letter;
-    clawCollected.add(target.letter.id);
-    saveCollectedLetters();
-    const rarity = clawRarities[target.letter.rarity];
-    clawStatus.textContent = `${rarity.label} CAPSULE CAUGHT — “${target.letter.title}” was saved to the letter book!`;
-    clawStatus.classList.add('is-win', `rarity-${target.letter.rarity}`);
-    burstClawConfetti(target.letter.rarity);
+    clawStatus.textContent = 'Got it! Carrying the capsule to the prize bag…';
   }, 760);
 
   window.setTimeout(() => {
@@ -239,10 +245,17 @@ function dropClaw() {
     if (!caughtLetter) return;
     clawCapsules.querySelector(`[data-claw-letter="${caughtLetter.id}"]`)?.classList.add('is-prize-drop');
     clawCabinet.classList.remove('is-grabbing');
+    clawCabinet.classList.add('is-prize-hit');
+    clawCollected.add(caughtLetter.id);
+    saveCollectedLetters();
+    const rarity = clawRarities[caughtLetter.rarity];
+    clawStatus.textContent = `${rarity.label} CAPSULE CAUGHT — “${caughtLetter.title}” was saved to the letter book!`;
+    clawStatus.classList.add('is-win', `rarity-${caughtLetter.rarity}`);
+    burstClawConfetti(caughtLetter.rarity);
   }, 2450);
 
   window.setTimeout(() => {
-    clawCabinet.classList.remove('is-dropping', 'is-grabbing');
+    clawCabinet.classList.remove('is-dropping', 'is-grabbing', 'is-prize-hit');
     clawX = 50;
     clawRig.style.setProperty('--claw-x', '50%');
     clawBusy = false;
@@ -289,6 +302,7 @@ document.querySelectorAll('[data-claw-view]').forEach((button) => button.addEven
 document.querySelectorAll('[data-book-filter]').forEach((button) => {
   button.addEventListener('click', () => {
     clawBookFilter = button.dataset.bookFilter;
+    clawBookPage = 0;
     document.querySelectorAll('[data-book-filter]').forEach((filterButton) => {
       const active = filterButton === button;
       filterButton.classList.toggle('is-active', active);
@@ -296,6 +310,17 @@ document.querySelectorAll('[data-book-filter]').forEach((button) => {
     });
     renderClawBook();
   });
+});
+clawBookPrev.addEventListener('click', () => {
+  if (clawBookPage === 0) return;
+  clawBookPage -= 1;
+  renderClawBook();
+  clawBookGrid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+});
+clawBookNext.addEventListener('click', () => {
+  clawBookPage += 1;
+  renderClawBook();
+  clawBookGrid.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
 });
 clawBookGrid.addEventListener('click', (event) => openCollectedLetter(event.target.closest('[data-book-letter]')?.dataset.bookLetter));
 clawLetterClose.addEventListener('click', () => clawLetterModal.classList.add('is-hidden'));
@@ -311,9 +336,14 @@ document.addEventListener('keydown', (event) => {
 
 async function initializeClawMachine() {
   try {
-    const response = await fetch('assets/claw-letters.txt');
-    if (!response.ok) throw new Error('letters unavailable');
-    clawLetters = [...parseSuppliedLetters(await response.text()), ...storyCapsuleLetters];
+    const responses = await Promise.all([
+      fetch('assets/claw-letters.txt'),
+      fetch('assets/claw-letters-101-1150.txt')
+    ]);
+    if (responses.some((response) => !response.ok)) throw new Error('letters unavailable');
+    const suppliedLetters = (await Promise.all(responses.map((response) => response.text())))
+      .flatMap((text) => parseSuppliedLetters(text));
+    clawLetters = [...suppliedLetters, ...storyCapsuleLetters];
     loadCollectedLetters();
     buildMachineOrder();
     refreshClawLayout();
