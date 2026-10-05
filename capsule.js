@@ -172,6 +172,21 @@ function memoryNavigation(nextLabel = 'continue') {
   </div>`;
 }
 
+function memoryGallery(folder, count, label) {
+  const photos = Array.from({ length: count }, (_, index) => {
+    const number = String(index + 1).padStart(2, '0');
+    const src = `assets/memories/${folder}/photo-${number}.jpg`;
+    const alt = `${label}, photo ${index + 1} of ${count}`;
+    return `<button class="memory-snapshot" type="button" data-memory-photo="${src}" data-memory-alt="${alt}" aria-label="Enlarge ${alt}">
+      <img src="${src}" alt="${alt}" loading="lazy" />
+      <span>${number}</span>
+    </button>`;
+  }).join('');
+
+  return `<div class="memory-gallery" aria-label="${label} photo gallery">${photos}</div>
+    <p class="gallery-hint">Swipe through the photos • tap one to enlarge</p>`;
+}
+
 function renderCapsuleMemory() {
   const screens = [
     `
@@ -271,7 +286,7 @@ function renderCapsuleMemory() {
       <section class="memory-screen"><div class="memory-shell">
         <p class="memory-date">SEPTEMBER 26, 2026</p>
         <h2 class="memory-title">THE FIRST TIME WE MET.</h2>
-        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 26</span><small>Your first-meeting photo will go here.</small></div>
+        ${memoryGallery('sep-26', 5, 'September 26 first meeting')}
         <p class="memory-copy">Akala ko magiging awkward. Instead, nagulat ako kung gaano ka ka-clingy—and how naturally I became just as clingy with you.</p>
         <p class="memory-copy">We hugged. I kissed your cheek. Ang daming random moments, ang daming tawa, at parang hindi iyon ang unang beses nating magkasama.</p>
         <p class="memory-quote">Parang matagal na nating alam kung paano maging malapit sa isa’t isa.</p>
@@ -281,7 +296,7 @@ function renderCapsuleMemory() {
       <section class="memory-screen"><div class="memory-shell">
         <p class="memory-date">SEPTEMBER 27, 2026</p>
         <h2 class="memory-title">FRIENDS, A DEBUT, AND US.</h2>
-        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 27</span><small>The debut and the people you introduced me to.</small></div>
+        ${memoryGallery('sep-27', 4, 'September 27 debut')}
         <p class="memory-copy">I met your friends for the first time, then sumama tayo sa debut ni Cycy. It felt like I was being allowed into another small part of your world.</p>
         <p class="memory-copy">Pagkatapos noon, lumabas tayo—and the rest of that day belongs to us. No explanation needed. We both know what made it unforgettable.</p>
         <p class="memory-quote">Some memories are sweeter when only two people know the whole story.</p>
@@ -291,7 +306,7 @@ function renderCapsuleMemory() {
       <section class="memory-screen"><div class="memory-shell">
         <p class="memory-date">SEPTEMBER 28, 2026 • LATE AT NIGHT</p>
         <h2 class="memory-title">THE “STRANGER” WHO CAME TO SEE YOU.</h2>
-        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 28</span><small>The low-key stranger picture belongs here.</small></div>
+        ${memoryGallery('sep-28', 1, 'September 28 late-night visit')}
         <p class="memory-copy">You felt lonely. I missed you too. So pinuntahan kita—with a random picture pretending I was some stranger, low-key kunwari. HAHAHA.</p>
         <p class="memory-copy">It was not a grand plan. I just knew I did not want you to feel alone if I could be there.</p>
         <p class="memory-quote">Sometimes care looks like showing up late at night with a ridiculous disguise.</p>
@@ -301,7 +316,7 @@ function renderCapsuleMemory() {
       <section class="memory-screen"><div class="memory-shell">
         <p class="memory-date">SEPTEMBER 30, 2026 • ONE MONTH</p>
         <h2 class="memory-title">A MONTH OF US TALKING.</h2>
-        <div class="memory-photo placeholder"><span>PHOTO SLOT • SEPTEMBER 30</span><small>Your one-month memory will go here.</small></div>
+        ${memoryGallery('sep-30', 10, 'September 30 one-month memory')}
         <p class="memory-copy">One month since we started talking. We found a quiet, hidden place, stayed inside a tent, and made a memory that does not need to be explained to anyone else.</p>
         <p class="memory-copy">A month sounds short on a calendar. Somehow, with you, it already held so many conversations, feelings, and versions of us.</p>
         <p class="memory-quote">Thirty days—and already a hundred little reasons to remember.</p>
@@ -311,7 +326,7 @@ function renderCapsuleMemory() {
       <section class="memory-screen"><div class="memory-shell">
         <p class="memory-date">OCTOBER 3, 2026</p>
         <h2 class="memory-title">YOU SAID I COULD COURT YOU.</h2>
-        <div class="memory-photo placeholder"><span>PHOTO SLOT • OCTOBER 3</span><small>The day you gave me your answer.</small></div>
+        ${memoryGallery('oct-03', 10, 'October 3, the day you gave me your answer')}
         <p class="memory-copy">That day became one of the most special parts of our story. You decided na pwede na akong manligaw sa’yo.</p>
         <p class="memory-copy">Hindi ko tinitingnan iyon bilang finish line. It was your trust—something I want to honor slowly, sincerely, and consistently.</p>
         <div class="gift-keepsake">GOODBYE GIFT<br><small>Something I will treasure for a very, very long time.</small></div>
@@ -322,7 +337,14 @@ function renderCapsuleMemory() {
       <section class="memory-screen"><div class="memory-shell">
         <p class="memory-date">OCTOBER 4, 2026</p>
         <h2 class="memory-title">THEN YOU MADE SOMETHING FOR ME.</h2>
-        <div class="memory-photo placeholder"><span>PHOTO SLOT • OCTOBER 4</span><small>A screenshot from your Canva presentation will go here.</small></div>
+        <figure class="canva-memory-card">
+          <img src="assets/memories/oct-04/canva-cover.png" alt="Cover of Bembun's Canva presentation, To My Dearest Bubba" loading="lazy" />
+          <figcaption>
+            <strong>FOR BUBBA • BY SHIZUKA SAMONTE</strong>
+            <span>The presentation that made me feel remembered, seen, and ridiculously kilig.</span>
+            <a href="https://www.canva.com/design/DAHXAlXODHA/EjlVS3kl9AJnu2e4sJGbkA/edit" target="_blank" rel="noopener noreferrer">open the full Canva presentation ↗</a>
+          </figcaption>
+        </figure>
         <p class="memory-copy">Unexpectedly, ginawan mo ako ng presentation sa Canva. Sobrang kilig at saya ko—not only because it was beautiful, but because it was the first time someone made something like that for me.</p>
         <p class="memory-copy">For once, ako naman ang nasa receiving end ng effort. I felt seen. I felt remembered. I felt special.</p>
         <p class="memory-quote">You made me understand how it feels when someone turns their thoughts about you into something you can keep.</p>
@@ -491,6 +513,26 @@ capsuleRoot.addEventListener('submit', (event) => {
 });
 
 capsuleRoot.addEventListener('click', (event) => {
+  const lightboxClose = event.target.closest('[data-memory-lightbox-close]');
+  if (lightboxClose || event.target.classList.contains('memory-lightbox')) {
+    event.target.closest('.memory-lightbox')?.remove();
+    return;
+  }
+
+  const memoryPhoto = event.target.closest('[data-memory-photo]');
+  if (memoryPhoto) {
+    const lightbox = document.createElement('div');
+    lightbox.className = 'memory-lightbox';
+    lightbox.setAttribute('role', 'dialog');
+    lightbox.setAttribute('aria-modal', 'true');
+    lightbox.setAttribute('aria-label', memoryPhoto.dataset.memoryAlt);
+    lightbox.innerHTML = `<button type="button" data-memory-lightbox-close aria-label="Close enlarged photo">×</button>
+      <img src="${memoryPhoto.dataset.memoryPhoto}" alt="${memoryPhoto.dataset.memoryAlt}" />`;
+    capsuleRoot.appendChild(lightbox);
+    lightbox.querySelector('button').focus();
+    return;
+  }
+
   const action = event.target.closest('[data-capsule-action]')?.dataset.capsuleAction;
   const response = event.target.closest('[data-capsule-response]')?.dataset.capsuleResponse;
   const chapterChoice = event.target.closest('[data-capsule-chapter]')?.dataset.capsuleChapter;
@@ -535,6 +577,10 @@ capsuleRoot.addEventListener('click', (event) => {
     capsuleMemoryStep = Math.max(0, capsuleMemoryStep - 1);
     renderCapsuleMemory();
   }
+});
+
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') capsuleRoot.querySelector('.memory-lightbox')?.remove();
 });
 
 if (capsuleDevMode) {

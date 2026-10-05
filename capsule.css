@@ -89,6 +89,23 @@
 .memory-photo.placeholder::before { content: "ADD PHOTO"; width: 70px; height: 54px; display: grid; place-items: center; color: #fff; border: 5px solid #fff; outline: 2px solid #cf88a6; background: #d891af; font: 700 8px "Pixelify Sans", monospace; transform: rotate(-3deg); }
 .memory-photo.placeholder span { color: #8f2c58; font: 700 14px "Pixelify Sans", monospace; letter-spacing: .08em; }
 .memory-photo.placeholder small { color: #927384; font: italic 11px Georgia, serif; }
+.memory-gallery { margin: 24px -4px 7px; padding: 7px 4px 14px; display: grid; grid-auto-columns: minmax(210px, 43%); grid-auto-flow: column; gap: 13px; overflow-x: auto; overscroll-behavior-inline: contain; scroll-snap-type: inline mandatory; scrollbar-color: #c3608b #f4dbe5; }
+.memory-snapshot { position: relative; height: 265px; padding: 7px; overflow: hidden; border: 1px solid #b45a82; background: #fff; box-shadow: 5px 6px #e0a0bb; cursor: zoom-in; scroll-snap-align: start; transform: rotate(var(--photo-tilt, -1deg)); }
+.memory-snapshot:nth-child(even) { --photo-tilt: 1deg; }
+.memory-snapshot img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.memory-snapshot > span { position: absolute; right: 12px; bottom: 12px; min-width: 25px; padding: 4px 6px; color: #fff; border: 1px solid rgba(255,255,255,.65); background: rgba(80, 23, 49, .76); font: 700 8px "Pixelify Sans", monospace; }
+.memory-snapshot:hover, .memory-snapshot:focus { outline: 3px solid #e989b2; outline-offset: -3px; }
+.gallery-hint { margin: 0 0 22px; color: #9b6b80; font: italic 10px Georgia, serif; text-align: center; }
+.memory-lightbox { position: fixed; z-index: 90; inset: 0; padding: 52px 18px 18px; display: grid; place-items: center; background: rgba(5, 3, 5, .91); backdrop-filter: blur(8px); animation: capsule-fade .25s ease both; cursor: zoom-out; }
+.memory-lightbox img { max-width: 100%; max-height: 100%; display: block; border: 7px solid #fff; box-shadow: 0 20px 55px #000; object-fit: contain; }
+.memory-lightbox button { position: absolute; z-index: 2; top: 10px; right: 13px; width: 36px; height: 36px; color: #fff; border: 1px solid #f2b0cd; background: #6f2445; font: 25px/1 Georgia, serif; cursor: pointer; }
+.canva-memory-card { margin: 25px 0; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(185px, .65fr); overflow: hidden; border: 2px solid #9d6bb5; background: #f7ebff; box-shadow: 7px 7px #d5a8df; }
+.canva-memory-card img { width: 100%; height: 100%; min-height: 260px; display: block; object-fit: cover; }
+.canva-memory-card figcaption { padding: 22px; display: grid; align-content: center; gap: 13px; color: #55305f; }
+.canva-memory-card strong { font: 700 15px/1.3 "Pixelify Sans", monospace; }
+.canva-memory-card span { font: italic 12px/1.6 Georgia, serif; }
+.canva-memory-card a { padding: 11px 12px; color: #fff; border: 1px solid #6a3679; background: #86509a; font: 700 10px/1.35 "Pixelify Sans", monospace; text-align: center; text-decoration: none; }
+.canva-memory-card a:hover, .canva-memory-card a:focus { color: #4d235a; background: #f0c9ff; outline: 2px solid #ad72c1; }
 .confession-panel { margin: 26px 0; padding: 27px; color: #6b2746; border: 1px solid #c87298; background: linear-gradient(135deg, #fff, #fdeaf2); box-shadow: 6px 6px #e4a4bf; font: italic 700 clamp(17px, 4vw, 23px)/1.65 Georgia, serif; }
 .confession-panel p { margin: 0; }
 .confession-panel small { margin-top: 14px; display: block; color: #a85076; font: 700 9px "Pixelify Sans", monospace; letter-spacing: .14em; text-align: right; }
@@ -146,6 +163,11 @@
   .memory-photo.is-ready { grid-template-columns: 1fr; }
   .memory-photo img { min-height: 220px; max-height: 320px; }
   .memory-photo figcaption { padding: 15px; }
+  .memory-gallery { grid-auto-columns: 82%; }
+  .memory-snapshot { height: 340px; }
+  .canva-memory-card { grid-template-columns: 1fr; }
+  .canva-memory-card img { min-height: 0; aspect-ratio: 16 / 9; }
+  .canva-memory-card figcaption { padding: 17px; }
   .confession-panel { padding: 20px; }
   .highlight-confession p { font-size: 12px; }
   .final-response-actions { flex-direction: column; }
